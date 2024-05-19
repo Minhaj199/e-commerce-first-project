@@ -2,9 +2,7 @@ const mongo = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration.env" });
 
-const db = process.env.DB_STRING;
 
-mongo.connect(db).then(() => {});
 
 const productsSchema = new mongo.Schema({
   Name: {

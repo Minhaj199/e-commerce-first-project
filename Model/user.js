@@ -2,7 +2,11 @@ const mongo = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration.env" });
 
-const db = process.env.DB_STRING;
+
+
+// const db = process.env.DB_STRING;
+// const db =
+ const db= "mongodb+srv://minhajpuzhakkal:Minhaj12315%40@mfashion.qgkekxv.mongodb.net/?retryWrites=true&w=majority&appName=mfashion";
 
 mongo.connect(db).then(() => {});
 

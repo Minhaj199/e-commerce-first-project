@@ -265,6 +265,7 @@ module.exports = {
       if (req.files.length > 0) {
         for (const file of files) {
           const { path } = file;
+          
 
           const newPath = await uploader(path);
 
