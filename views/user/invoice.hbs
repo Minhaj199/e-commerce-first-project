@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/invoice.css">
+    <title>generate Invoice</title>
+</head>
+
+<body>
+    <div style="height:100vh;" class="container-fluid ">
+        <div class="row first">
+            <div class="table-form">
+                <div class="col-12 heading">
+                    <h5>Tax Invoice</h5>
+                </div>
+                <div class="col-12 solodBy">
+                    <div class="col-4 soldBy-box">
+                        <h5>Sold By: </h5>
+                        <p >{{invoiceData.soldBy}} Private limited</p>
+
+                        <h5>Invoice Number:</h5>
+                        <p>{{invoiceData.invoice}}</p>
+                    
+                    </div>
+                    <div class="col-4 orderID">
+                        <h5>OrderID :</h5>
+                        <p style="margin-bottom: 10px;">{{invoiceData.orderID}}</p>
+                        <h5>Order Date:</h5>
+                        <p>{{invoiceData.orderDate}}</p>
+
+                    </div>
+                    <div class="col-4 orderID">
+                        <h5>Billing Address</h5>
+                        <h6>Name:{{invoiceData.address.Name}}</h6>
+                        <p>Email:{{invoiceData.address.Email}}</p>
+                        <p>Mobile:{{invoiceData.address.Mobile}},secondary:{{invoiceData.address.Aleternative_mobile}}</p>
+                        <p>Town:{{invoiceData.address.Town}},Locality:{{invoiceData.address.Locality}},Pin:{{invoiceData.address.Pin}}</p>
+                        <p>Address:{{invoiceData.address.address}}</p>
+                    </div>
+
+                </div>
+                
+                <div class="col-12" style="height: 5%;display: flex;align-items: end;">
+                    <h6 style="padding-left: 13px;">Invoice Data:24/03/21</div></h6>
+                    
+
+                <div style="padding: 0;" class="col-12 item-table">
+                    <table style="width: 100%;border-bottom:1px solid black;">
+                        <thead style="border-bottom: 1px solid ;border-top: 1px solid ">
+                            <tr>
+                                <th>No</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Gross Total</th>
+                                <th>Discount</th>
+                                <th>Taxable Value</th>
+                                <th>IGST</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="height: 200px;">
+                                <td>1</td>
+                                <td>{{invoiceData.productName}}</td>
+                                <td>{{invoiceData.orderQty}}</td>
+                                <td>{{invoiceData.grossTotal}}</td>
+                                <td>{{invoiceData.discount}}</td>
+                                <td>{{invoiceData.taxable_value}}</td>
+                                <td>{{invoiceData.tax}}</td>
+                                <td>{{invoiceData.Total}}/-</td>
+                            </tr>
+                            
+
+
+                        </tbody>
+
+                    </table>
+                    {{!-- <div class="col-12" style="height: 20%;display: flex;padding:0;border-bottom:1px solid">
+                        <div style=" height: 100%;" class="col-3"></div>
+                        <div style=" height: 100%;display: flex;padding:0; " class="col-9 second-heading">
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:14%;">
+                                <p>Total</p>
+                            </div>
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:14%;padding-right:20px">
+                                <p>{{invoiceData.orderQty}}</p>
+                            </div>
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:14%;">
+                                <p>{{invoiceData.grossTotal}}</p>
+                            </div>
+
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:16%;padding-left: 20px;">
+                                <p>{{invoiceData.discount}}</p>
+                            </div>
+
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:14%;padding-left: 30px;">
+                                <p>{{invoiceData.taxable_value}}</p>
+                            </div>
+
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:19%;">
+                                <p style="padding-left: 52%;">{{invoiceData.tax}}</p>
+                            </div>
+                            <div
+                                style="display: flex;align-items: center;justify-content: center; height: 100;width:9%;padding-right:30px">
+                                <p>{{invoiceData.Total}}/-</p>
+                            </div>
+                        </div>
+                    </div> --}}
+
+                </div>
+                <div class="col-12" style="height:30%;padding:0;">
+                    <div class="col-12"
+                        style="height: 50%;justify-content: end;display: flex;border-bottom:1px solid ;display:flex;align-items: center;">
+                        <h4>Grand Total :{{invoiceData.Total}}/-</h4>
+                    </div>
+                    <div class="col-12"
+                        style="height: 50%;display:flex;justify-content: end;align-items: end;border-bottom: 1px solid;">
+                        <p>Authorized signatry</p>
+                    </div>
+
+                </div>
+                <div class="col-12" style="height: 20%;background-color:;boder-bottom:1px solid">
+                    <p>Thank you form Purchasin M-Fashion</p>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="/js/invoice.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sonsie+One&family=Sorts+Mill+Goudy&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/Wallet.css">
+     <title>Wallet</title>
+    
+</head>
+<body>
+  {{> userHeader}}
+    <div class="container-fluid main-cont">
+        <div class="row">
+                 <div class=" admin-option">
+                
+                    <dir class="  admin-profile">
+                        <img class="admin-logo" src="/images/Icons/profile-1-Buw.png" alt="">
+                        <p class="user-name">{{userData.first_name}}</p>
+                    </dir>
+                    <dir class=" admin-categories">
+                        <div class="category"><a href="/user/getUserProfile">User Information</a></div>
+                        <div class="category"><a href="/user/getpages?from=getMyOrder">My Order</a> </div>
+                        <div class="category"> <a href="/user/getManageAddress?from=getManage">Manage Address</a></div>
+                        <div class="category"><a href=""></a>Wallet</div>
+                        <div  class="category"> <a href="/user/logOut">Log Out</a></div>
+                        <div style="display: none"; class="category"> <a href="">Category</a></div>
+                        <div style="display: none"; class="category"> <a href="">Orders</a></div>
+                        <div style="display: none"; class="category"> <a href="">Coupen</a></div>
+                        <div style="display: none"; class="category"> <a href="">Banner</a></div>
+                        <div style="display: none"; class="category"><a href="">Brand</a></div>
+                    </dir>
+                   
+
+                </div>
+            
+                <div  class="main-content">
+                    <div style="height: 25%;width: 100%;" class="col-12">
+                        <div style="" class="col-12 titleBox">
+                                <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;">Wallet</h3>
+                        </div>
+                        <div  class="col-12 addBox">
+                           
+                           <div style="height: 100%;background-image: linear-gradient(to right, red , yellow);border-radius: 30px;display: flex;flex-direction: column;justify-content: center;align-items: center;" class="col-4">
+                              <h2 style="color: white;">BALANCE</h2>
+                              <h3  style="text-align: center;padding-top: 5%;font-weight: bolder;">₹ {{walletData.Amount}} </h3>
+                              </div>
+                           <div style="height: 100%;" class="col-7"></div>
+                        </div>
+                    </div>
+                   
+                    <div style="height: 60%;width: 100%;background-color: ;" class="col-12">
+                        <div class="addressBox" >
+                            <div class="col-12" style="height: 120px;display: flex;justify-content: center;align-items: center;">
+                                <h2>Transactions</h2>
+                            </div>
+                            <div    class="col-12 addressBoxInnerContainer">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">No</th>
+                                            <th scope="col">ID</th>
+                                            <th>Date</th>
+                                            <th scope="col">Stasut</th>
+                                            <th scope="col">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each walletData.transaction}}
+                                        <tr>
+                                            <th scope="row">{{increment @index}}</th>
+                                            <td><a href="/user/getpages?proID={{this.id}}&from=orderProductDetails">{{this.id}}</a></td>
+                                            <td>{{this.formatedDate}}</td>
+                                            <td>{{this.status}}</td>
+                                            <td>{{this.amount}}</td>
+                                        </tr>
+                                       {{/each}}
+                                        
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <script src="/js/addressManagementOtpion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

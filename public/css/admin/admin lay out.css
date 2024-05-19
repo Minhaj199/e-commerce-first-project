@@ -1,0 +1,65 @@
+  .main-cont {
+      height:800px;
+  }
+  .admin-option{
+    background-color: blue;
+    height:750px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+        
+}
+.row-1{
+    height:100%
+  }
+  .admin-profile{
+    height: 30%;
+    width: 100%;
+    background-color: rgb(186, 186, 186);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+.admin-logo{
+    width: 50%;
+
+}
+.user-name{
+    font-weight: bolder;
+}
+.admin-categories{
+    height: 70%;
+    margin: 0;
+    padding: 0;
+}
+.category{
+    height: 10%;
+    width: 100%;
+    background:#f6f6f6;
+    border: .5px rgb(237, 237, 237);
+    border-style: inset; 
+    padding: 0; 
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-content{
+  width:80%;
+  height:750px;
+ 
+}
+
+@media screen and (max-width:1190px) {
+ 
+ .category{
+  font-size: 50%;
+ }
+ .user-name{
+  font-size: 50%;
+ }
+
+}

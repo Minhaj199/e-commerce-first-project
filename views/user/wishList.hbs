@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wish list</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Css Styles -->
+
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style3.css" type="text/css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+   
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li><a href="#"><span class="icon_heart_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+            <li><a href="#"><span class="icon_bag_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+        </ul>
+
+        <div id="mobile-menu-wrap"></div>
+
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    {{>headerPartial}}
+    <!-- Breadcrumb End -->
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each data}}
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img style="width: 100px;" src={{this.product.images.path.[0]}} alt="">
+                                        <div class="cart__product__item__title">
+                                            <a href="/user/productData/{{this.product._id}}">{{this.product.Name}}</a>
+
+                                        </div>
+                                    </td>
+                                    {{#if this.product.offer_rate}}
+                                    <td class="cart__price">{{calculatePersatage this.product.offer_rate this.product.price}}</td>
+                                    {{else}}
+                                    <td class="cart__price">{{ this.product.price}}</td>
+                                    {{/if}}
+
+                                    <td class="cart__close" onclick='removeFromWishList("{{this._id}}")'><span class="icon_close"></span></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="cart__btn">
+                        <a class="addToCart">Add To Cart</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                
+                
+            </div>
+        </div>
+    </section>
+    <!-- Shop Cart Section End -->
+
+    <!-- Instagram Begin -->
+    
+    <!-- Instagram End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-7">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="/">
+                                <h1 class="m-fashion-logo">M-fashion</h1>
+                            </a>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            cilisis.</p>
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-5">
+                    <div class="footer__widget">
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="footer__widget">
+                        <h6>Account</h6>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-8">
+                    <div class="footer__newslatter">
+                        <h6>NEWSLETTER</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Email">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/temp/jquery-3.3.1.min.js"></script>
+    <script src="/js/temp/bootstrap.min.js"></script>
+    <script src="/js/temp/jquery.magnific-popup.min.js"></script>
+    <script src="/js/temp/jquery-ui.min.js"></script>
+    <script src="/js/temp/mixitup.min.js"></script>
+    <script src="/js/temp/jquery.countdown.min.js"></script>
+    <script src="/js/temp/jquery.slicknav.js"></script>
+    <script src="/js/temp/owl.carousel.min.js"></script>
+    <script src="/js/temp/jquery.nicescroll.min.js"></script>
+    <script src="/js/temp/main.js"></script>
+    <script src="/js/wishList.js"></script>
+</body>
+
+</html>

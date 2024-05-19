@@ -1,0 +1,117 @@
+  .main-cont {
+      height:800px;
+  }
+  .admin-option{
+    background-color: blue;
+    height:750px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+        
+}
+.row-1{
+    height:100%
+  }
+  .admin-profile{
+    height: 30%;
+    width: 100%;
+    background-color: rgb(186, 186, 186);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+.admin-logo{
+    width: 50%;
+
+}
+.user-name{
+    font-weight: bolder;
+}
+.admin-categories{
+    height: 70%;
+    margin: 0;
+    padding: 0;
+}
+.category{
+    height: 10%;
+    width: 100%;
+    background:#f6f6f6;
+    border: .5px rgb(237, 237, 237);
+    border-style: inset; 
+    padding: 0; 
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-content{
+  width:80%;
+  height:750px;
+ 
+}
+.main-heading{
+  height:15%;
+  background-color: cadetblue;
+  display:flex ;
+  justify-content: center;
+  align-items: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.tabel{
+  height: 85%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-box{
+  width: 50%;
+  height: 50%;
+  box-shadow: 0 0 10px rgb(203, 202, 202);
+  
+}
+.table-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+.t-form{
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.txt-inp{
+padding: 5% 10%;
+border-color: cadetblue;
+border-style: solid;
+border-radius: 10px;
+}
+label{
+  color: burlywood;
+  font-size: 20px;
+}
+.back-btn{
+  color: black;
+  text-decoration: none;
+}
+.submit-btn{
+  padding: 2% 5%;
+  border-radius: 50px;
+  border: none;
+  background-color: rgb(226, 143, 55);
+}
+@media screen and (max-width:1190px) {
+ 
+ .category{
+  font-size: 50%;
+ }
+ .user-name{
+  font-size: 50%;
+ }
+
+}

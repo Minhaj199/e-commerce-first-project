@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product Datails</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+            {{!---------- axios ----------}}
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Css Styles -->
+<link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li><a href="#"><span class="icon_heart_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+            <li><a href="#"><span class="icon_bag_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+        </ul>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+   {{>headerPartial}}
+    <!-- Header Section End -->
+
+  
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__left product__thumb nice-scroll">
+                            <a class="pt active" href="#product-1">
+                                <img style="border:1px solid black;" src='{{Data.images.path.[2]}}' alt="">
+                            </a>
+                            <a class="pt" href="#product-2">
+                                <img src="{{Data.images.path.[1]}}" alt="">
+                            </a>
+                            <a class="pt" href="#product-3">
+                                <img src="{{Data.images.path.[2]}}" alt="">
+                            </a>
+                        </div>
+                        <div class="product__details__slider__content">
+                            <div class="product__details__pic__slider owl-carousel">
+                                <img data-hash="product-1" class="product__big__img"
+                                    src="{{Data.images.path.[3]}}" alt="">
+                                <img data-hash="product-2" class="product__big__img"
+                                    src="{{Data.images.path.[4]}}" alt="">
+                                <img data-hash="product-3" class="product__big__img"
+                                    src="{{Data.imags.path.[1]}}" alt="">
+                                <img data-hash="product-4" class="product__big__img"
+                                    src="{{Data.images.path.[2]}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>{{Data.Name}} <span>Brand: {{Data.brand}}</span></h3>
+                        
+                        {{#if Data.offer_rate}}
+                        <div class="rating">
+                            <p style="font-size: medium;color:slateblue;font-weight: bolder;text-decoration: line-through;">₹{{Data.price}}</span></p>
+                            <span style="text-decoration: none;font-weight: bold;">%{{Data.offer_rate}} OFF
+                        </div>
+                        {{/if}}
+                        {{#if Data.offer_rate}}
+                        
+                        <div class="product__details__price">₹{{calculatePersatage Data.offer_rate Data.price}}</div>
+                        
+                        {{else}}
+                        <div class="product__details__price">₹{{Data.price}}</div>
+                        {{/if}}
+                        {{!-- <div class="product__details__price">₹{{Data.price}} </div> --}}
+                        <p>{{Data.description}}</p>
+                        <div class="product__details__button">
+                            <div class="quantity">
+                               
+                                <span>Quantity:</span>
+                                <div class="pro-qty">
+                                    
+                                    <input id="quatity" `type="number"  value="1">
+                                    
+                                </div>
+                                
+                            </div>
+                            <a onclick='result("{{Data._id}}")'   class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            
+                            <ul>
+                                <li><a class="wishlist"  href="#"><span class="icon_heart_alt"></span></a></li>
+                            </ul>
+                        </div>
+                            <div id="myModal" class="modal"  >
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <p>Please select size and color!</p>
+                                    <select class="color-drop" name="color" id="">
+                                        <option value="red">Red</option>
+                                        <option value="black">Black</option>
+                                        <option value="white">White</option>
+                                    </select>
+                                    <select class="size-drop" name="size" id="">
+                                        <option value="small">Small</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                    <button data-id="{{Data._id}}" class="mod-btn">Submit</button>
+                                </div>
+                            </div>
+
+                        <div class="product__details__widget">
+                            <ul>
+                                <li>
+                                </li>
+                                <li>
+                                    <p id="size-color"></p>
+                                    <p id="stock" ></p>
+                                </li>
+                                <li>
+                                    <span>Available color:</span>
+                                    <div class="color__checkbox"> 
+                                        <label for="red">
+                
+                                           
+                                            <input type="radio"  onclick="color('red','{{Data._id}}')" name="color__radio" value="red" id="red" >
+                                            <span class="checkmark red-bg"></span>
+                                        </label>
+                                        <label for="black">
+                                            <input type="radio"  onclick="color('black','{{Data._id}}')" name="color__radio" value="black" id="black">
+                                                                                              
+                                            <span class="checkmark black-bg"></span>
+                                        </label>
+                                        <label for="grey">
+                                            <input type="radio" name="color__radio"  onclick="color('white','{{Data._id}}')" value="white" id="grey" >
+                                            <span class="checkmark grey-bg"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Available size:</span>
+                                    <div class="size__btn">
+                                        <label for="s-btn">
+                                            <input class="size" onclick="Size('small','{{Data._id}}')" type="radio" id="s-btn" name="size-option">
+                                            s
+                                        </label>
+                                        <label for="m-btn">
+                                            <input type="radio" class="size"  onclick="Size('medium','{{Data._id}}')" id="m-btn" name="size-option">
+                                            m
+                                        </label>
+                                        <label for="l-btn">
+                                            <input type="radio" id="l-btn"  class="size" onclick="Size('large','{{Data._id}}')" name="size-option">
+                                            l
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Promotions:</span>
+                                    <p>Free shipping</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                               
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="related__title">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                 {{#each relatedData}}
+                <div class="col-lg-3 col-md-4 col-sm-6" >
+                
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg={{this.images.path.[0]}}>
+                            <ul class="product__hover">
+                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="/user/productData/{{this._id}}">{{this.Name}}</a></h6>
+                            <div class="rating">
+                                {{#if this.offer_rate}}
+                                &nbsp; <span style="font-weight: bolder;color:silver;text-decoration: line-through;">{{this.price}}</span> <span
+                                    style="color:teal;font-weight: bolder;padding-left: 10px;">{{this.offer_rate}}%</span>
+                                {{else}}
+                                {{this.brand}}
+                                {{/if}}
+                                </div>
+                                {{#if this.offer_rate}}
+                                <div style="color: red;" class="product__price">₹{{calculatePersatage this.offer_rate this.price}} </div>
+                                {{else}}
+                                <div class="product__price">₹{{this.price}}</div>
+                                {{/if}}
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                
+               
+    <!-- Product Details Section End -->
+
+    
+<!-- Instagram End -->
+
+<!-- Footer Section Begin -->
+<footer class="footer" style="border-top: 1px solid black;">
+    <div class="container" >
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-7">
+                <div class="footer__about">
+                    <div class="footer__logo">
+                        <a href="/">
+                            <h1 class="m-fashion-logo">M-fashion</h1>
+                        </a>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        cilisis.</p>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-5">
+                <div class="footer__widget">
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                <div class="footer__widget">
+                    <h6>Account</h6>
+                    <ul>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Orders Tracking</a></li>
+                        <li><a href="#">Checkout</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-8 col-sm-8">
+                <div class="footer__newslatter">
+                    <h6>NEWSLETTER</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Email">
+                        <button type="submit" class="site-btn">Subscribe</button>
+                    </form>
+                    <div class="footer__social">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-youtube-play"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+            </div>
+        </div>
+    </div>
+</footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form" action="/user/all">
+                <input type="text" name="search" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/temp/cart.js"></script>
+    <script src="/js/temp/jquery-3.3.1.min.js"></script>
+    <script src="/js/temp/bootstrap.min.js"></script>
+    <script src="/js/temp/jquery.magnific-popup.min.js"></script>
+    <script src="/js/temp/jquery-ui.min.js"></script>
+    <script src="/js/temp/mixitup.min.js"></script>
+    <script src="/js/temp/jquery.countdown.min.js"></script>
+    <script src="/js/temp/jquery.slicknav.js"></script>
+    <script src="/js/temp/owl.carousel.min.js"></script>
+    <script src="/js/temp/jquery.nicescroll.min.js"></script>
+   <script src="/js/temp/main.js"></script>
+</body>
+
+</html>

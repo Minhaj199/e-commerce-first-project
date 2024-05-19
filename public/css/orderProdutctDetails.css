@@ -1,0 +1,160 @@
+.first-row{
+    width: 100%;
+    height: 1100px;
+   
+}
+.main-content{
+    
+height: 1000px;
+
+
+
+
+}
+.main-cont-inner{
+    height: 90%;
+    margin-top: 2%;
+   
+}
+.titile-box{
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    
+}
+.titile-box h2{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    
+}
+.address{
+    margin-top: 30px;
+    margin-left: 10px;
+    height: 25%;
+
+}
+
+
+.address-box{
+    width: 100%;
+    height: 80%;
+   background-color: aliceblue;
+    box-shadow: 0 0 10px rgb(176, 176, 176);
+    display: flex;
+    
+
+    
+    
+}
+.button-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    border-right: 1px solid blanchedalmond;
+}
+.address-inner-box{
+    height: 100%;
+    padding: 0;
+}
+
+.order{
+    max-height: 200px;
+    background:white;    
+    margin-left: 1%;
+}
+th{
+    padding-left: 20px;
+    color:teal;
+}
+td{
+    padding-left: 20px;
+    padding-top: 20px;
+
+}
+.name{
+    width:30%;
+    word-wrap:normal;
+    
+}
+.change-btn{
+    border: none;
+    background-color: crimson;
+    border-radius: 30px;
+    padding: 10px 20px;
+}
+.padding-right{
+    padding-right: 5px;
+}
+
+
+.return{
+    border: none;
+    border-radius: 50px;
+    padding: 10px 15px;
+    background-color: chartreuse;
+    
+}
+.cancel{
+  border: none;
+    border-radius: 50px;
+    padding: 10px 15px;
+    background-color:rgb(252, 26, 26);
+    
+}
+
+
+.billing-colum{
+    height: 100%;
+   
+}
+.final-order-heading{
+    padding-left:1px ;color:rgb(136, 6, 6);padding-top: 20px;
+}
+
+.submit{
+    margin-top: 10px;
+    margin-left: 100px;
+    border: none;
+    background-color:rgb(136, 6, 6) ;
+    color: white;
+    padding: 5px 10px;
+}
+.modalin{
+     display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    margin-bottom: 100%;
+    
+}
+.contene-modalin{
+    width: 80%;
+    padding: 20px;
+    background-color: white;
+    margin: 15px auto;
+    box-shadow: 0 0 10px  tomato;
+}
+.close{
+    float: left;
+}
+.contene-modalin input{
+    width: 100%;
+}
+.contene-modalin button{
+    margin-left: 50%;
+    margin-top: 5%;
+    border: none;
+    background: white;
+    box-shadow: 0 0 10px  tomato;
+    padding: 10px;
+    color: black;
+}
+.contene-modalin p{
+    color: black;
+}

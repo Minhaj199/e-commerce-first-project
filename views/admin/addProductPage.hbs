@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sonsie+One&family=Sorts+Mill+Goudy&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admin/addProduct.css">
+     <title>Add product</title>
+    
+</head>
+<body>
+  {{> adminHeader}}
+    <div class="container-fluid main-cont">
+        <div class="row">
+                 <div class=" admin-option">
+                
+                    <dir class="  admin-profile">
+                        <img class="admin-logo" src="/images/Icons/profile-1-Buw.png" alt="">
+                        <p class="user-name">Admin Name</p>
+                    </dir>
+                    <dir class=" admin-categories">
+                        <div class="category"><a href="">Dashbord</a></div>
+                        <div class="category"><a href="/admin/product-management">Product Details </a> </div>
+                        <div class="category"> <a href="">Sales Report</a></div>
+                        <div class="category"><a href="/admin/userManagemnent">User Management</a></div>
+                        <div class="category"> <a href="">Offers</a></div>
+                        <div class="category"> <a href="">Orders</a></div>
+                        <div class="category"> <a href="/admin/manageCategory">Category</a></div>
+                        <div class="category"> <a href="">Coupen</a></div>
+                        <div class="category"> <a href="">Banner</a></div>
+                        <div class="category"><a href="/admin/getBrandPages?To=brand">Brand</a></div>
+                    </dir>
+             
+
+                </div>
+            <div class="main-content" >
+                <div class="col-12 title-box" >
+                    <p>Add Product</p>
+                </div>
+                <form style="height: 100%;" onsubmit='return validate()' method="post" action="/admin/add-Product"  enctype="multipart/form-data" >
+                  <div  class="col-12 name-box" style=" border:1px solid rgb(218, 218, 218)" >
+                    <label for="">Product name</label>
+                    <input autofocus type="text" id="name" name="Name" minlength="3" maxlength="35" required>
+                  </div>
+                  <div  class="col-12 brand-category-box" style="border:1px solid rgb(218, 218, 218)">
+                   <div  class="row brand-category-box-row  ">
+                    <div  class="col-4 brand-box ">
+                        <label for="">Brand</label>
+                        <select name="brand" id="" class="brand-dropdown">
+                            
+                            {{#each categoryCollection.brand }}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div  class="col-4 category-box" >
+                        <label for="">Category</label>
+                        <select name="category" id="" class="brand-dropdown">
+                            {{#each categoryCollection.category}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                        
+                    </div>
+                    <div class="col-4" style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                        <label style="color: black;font-weight: bold;" for="">Selling price</label>
+                        <input type="number" min="1" required style=" width: 127px;display: block;height: 43px;" name="price">
+                    </div>
+                   </div>
+                  </div>
+                  <div  class="col-12 size-and-color-box"style="border:1px solid rgb(218, 218, 218)" >
+                    <div class="row six-color-row" >
+                        <div class="col-4 small-size" style="padding: 0;">
+                            
+                           <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
+                            <p style="font-weight: bolder;">Small Size</p>
+                           </div>
+                           <div  style="height: 70%;" class="col-12 small-inpu-dive" >
+                            <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
+                                <label style="color: rgb(5, 116, 90);" for="">White</label>
+                                <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="small_white">
+                            </div>
+                            <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;" class="col-4">
+                                    <label style="color: black;" for="">Black</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="small_black">
+                            </div>
+                            <div style="height: 100%;display: flex;flex-direction: column;" class="col-4"  >
+                                 <label style="color:Red" for="">Red</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="small_red">
+                            </div>
+                           </div>
+                           
+                        </div>
+                        <div class="col-4" style="border-right: 1px solid rgb(202, 202, 202);border-left:  1px solid rgb(202, 202, 202);">
+                            <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
+                                <p style="font-weight: bolder;font-size: 20px;">Medium Size</p>
+                            </div>
+                            <div style="height: 70%;" class="col-12 small-inpu-dive">
+                                <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
+                                    <label style="color: rgb(5, 116, 90);" for="">White</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number"  name="medium_white">
+                                </div>
+                                <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;"
+                                    class="col-4">
+                                    <label style="color: black;" for="">Black</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="medium_black">
+                                </div>
+                                <div style="height: 100%;display: flex;flex-direction: column;" class="col-4">
+                                    <label style="color:Red" for="">Red</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="medium_red">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-4">
+                            <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
+                                <p style="font-weight: bolder;font-size:20px">Large size</p>
+                            </div>
+                            <div style="height: 70%;" class="col-12 small-inpu-dive">
+                                <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
+                                    <label style="color: rgb(5, 116, 90);" for="">White</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="large_white">
+                                </div>
+                                <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;"
+                                    class="col-4">
+                                    <label style="color: black;" for="">Black</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="large_black">
+                                </div>
+                                <div style="height: 100%;display: flex;flex-direction: column;" class="col-4">
+                                    <label style="color:Red" for="">Red</label>
+                                    <input min="0" step="1" style="width:60px;height: 40px;" type="number" name="large_red">
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-12 discriptionInput-box"style="border:1px solid rgb(218, 218, 218)" >
+                    <label style="display: block;margin-bottom: 20px;" for="">Discription</label>
+                    <textarea  class="dis-input" name="description" rows="4" cols="50"></textarea>
+
+                  </div>
+                  <div class="col-12 image-input-box" style="border:1px solid rgb(218, 218, 218)" >
+                    <div style="height: 10%;" class="row"> <p style="font-weight: bolder;color:rgb(5, 116, 90) ;">Photo upload</p> </div>
+                    <div class="row" style="height: 90%;display: flex;justify-content: space-evenly;">
+                        
+                        <div style="height: 100%;"  class="col-2 ">
+                            <div id="close-container"></div>
+                            <label for="field-1" >
+                                
+                                <input type="file"   name="image"   accept="image/*" id="field-1" hidden >
+                                </dir>
+                                <dir style="height: 200px;width: 150px;display: flex; flex-direction: column;align-items: center;justify-content: flex-start;flex-wrap: wrap;align-content: flex-end">
+                                    <img style="width: 110px; height: 110px; "; src="../../images/Icons/cloud-upload-a30f385a928e44e199a62210d578375a.jpg" id="field-1-img" class="imagePreview1"  alt="">
+                                    <p id="click-me">Click here</p>
+                                </dir>
+                            </label>
+                        </div>
+                        <div  style="height: 100%;" class="col-2">
+                            <div id="close-container-2"></div>
+                            <div style="height: 100%;" class="col-2 ">
+                                <label for="field-2">
+                                    <input type="file"  name="image" accept="image/*" id="field-2" hidden>
+                                    </dir>
+                                    <dir
+                                        style="height: 200px;width: 150px;display: flex; flex-direction: column;align-items: center;justify-content: flex-start;flex-wrap: wrap;align-content: flex-end">
+                                        <img style="width: 110px; height: 110px; " ; src="../../images/Icons/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"
+                                            id="field-2-img" class="imagePreview1" alt="">
+                                        <p id="click-me-2">Click here</p>
+                                    </dir>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="height: 100%;" class="col-2">
+                            <div  style="height: 100%;" class="col-2 ">
+                                <div id="close-container-3"></div>
+                                <label for="field-3">
+                                    <input type="file"  name="image"  accept="image/*"  id="field-3" hidden>
+                                    </dir>
+                                    <dir
+                                        style="height: 200px;width: 150px;display: flex; flex-direction: column;align-items: center;justify-content: flex-start;flex-wrap: wrap;align-content: flex-end">
+                                        <img style="width: 110px; height: 110px; " ; src="../../images/Icons/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"
+                                            id="field-3-img" class="imagePreview1" alt="">
+                                        <p id="click-me-3">Click here</p>
+                                    </dir>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="height: 100%;" class="col-2">
+                            <div  style="height: 100%;" class="col-2 ">
+                                <div id="close-container-4"></div>
+                                <label for="field-4">
+                                    <input type="file"  name="image" accept="image/*" id="field-4" hidden>
+                                    </dir>
+                                    <dir
+                                        style="height: 200px;width: 150px;display: flex; flex-direction: column;align-items: center;justify-content: flex-start;flex-wrap: wrap;align-content: flex-end">
+                                        <img style="width: 110px; height: 110px; " ; src="../../images/Icons/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"
+                                            id="field-4-img" class="imagePreview1" alt="">
+                                        <p id="click-me-4">Click here</p>
+                                    </dir>
+                                </label>
+                            </div>
+                        </div>
+                        <div  style="height: 100%;" class="col-2">
+                            <div style="height: 100%;" class="col-2 ">
+                            <div id="close-container-5"></div>
+                                <label for="field-5">
+                                    <input type="file" name="image" accept="image/*" id="field-5" hidden>
+                                    </dir>
+                                    <dir
+                                        style="height: 200px;width: 150px;display: flex; flex-direction: column;align-items: center;justify-content: flex-start;flex-wrap: wrap;align-content: flex-end">
+                                        <img style="width: 110px; height: 110px; " ; src="../../images/Icons/cloud-upload-a30f385a928e44e199a62210d578375a.jpg"
+                                            id="field-5-img" class="imagePreview1" alt="">
+                                        <p id="click-me-5">Click here</p>
+                                    </dir>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-12 submit-box" ><button class="sub-brn" type="submit">submit</button></div>
+                </form>
+            </div>
+            </div>
+               
+                       
+        </div>
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/addProductPage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

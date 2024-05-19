@@ -1,0 +1,27 @@
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+}
+
+.card-registration .select-arrow {
+    top: 13px;
+}
+.passoword{
+    width: 200px;
+    display: inline-block;
+}
+.Conform-Password{
+    display: block;
+}
+.back{
+    display: inline-block;
+        margin-top: 13px;
+        margin-left: -44px;
+}
+.div-height{
+    height: 120px;
+}
+
+        

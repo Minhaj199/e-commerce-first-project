@@ -1,0 +1,129 @@
+ body{
+            background-color: rgb(224, 224, 224);
+}
+p{
+    margin-bottom: 0;
+}
+
+div{
+    box-sizing: border-box;
+}      
+
+.main-box{
+    height: 550px;
+    background: white;
+   box-sizing: border-box;
+}
+
+.row1{
+    display: flex;
+    justify-content: center;
+}
+.row-2{
+    display: flex;
+    flex-direction: column ;
+    height: 550px;    
+}
+.upper-level{
+    height:50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    min-height: 50%;
+}
+.main-heading{
+    font-size: 50px;
+    font-family: Georgia, 'Times New Roman', Times, serif, Helvetica, sans-serif;
+}
+.sub-heading{
+    font-size: 25px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.error{
+    width: 200px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   color: red; 
+   font-size: 15px;
+   font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif, Helvetica, sans-serif;
+}
+.lower-class{
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height:38%;
+    align-items: center;
+    justify-content: center;
+}
+
+.email,.password{
+    
+    height: 60px;
+    width: 70%;
+    border: .5px solid rgb(198, 198, 198);
+    
+
+}
+.password{
+    margin-top: 5%;
+}
+.submit{
+    background-color: rgb(73, 73, 249);
+    border: none;
+    padding: 2% 25%;
+    border-radius: 50px;
+    margin-top: 10%;
+}
+::placeholder{
+    padding-left:3% ;
+    font-size: 20px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+.form-style{
+    display: flex;flex-direction: column;
+    width:100% ;
+    align-items: center
+}
+ @media screen and (max-width:1000px) {
+  .main-heading{
+    font-size:30px;
+}
+.sub-heading{
+    font-size: 15px;
+    
+}
+}
+@media screen and (max-width:565px) {
+  .main-heading{
+    font-size:20px;
+}
+.sub-heading{
+    font-size: 10px;
+    
+}
+
+ .email,.password{
+    
+    height: 30px;
+    width: 40%;
+    border: .5px solid rgb(198, 198, 198);
+    
+
+} 
+.submit{
+   padding: 1% 15%;
+    border-radius: 50px;
+    margin-top: 5%;
+}
+
+::placeholder{
+    padding-left:3% ;
+    font-size: 10px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}  
+}

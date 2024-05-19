@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sonsie+One&family=Sorts+Mill+Goudy&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admin/addCategory.css">
+     <title>Add Category</title>
+    
+</head>
+<body>
+  {{> adminHeader}}
+    <div class="container-fluid main-cont">
+        <div class="row">
+                 <div class=" admin-option">
+                
+                    <dir class="  admin-profile">
+                        <img class="admin-logo" src="/images/Icons/profile-1-Buw.png" alt="">
+                        <p class="user-name">Admin Name</p>
+                    </dir>
+                    <dir class=" admin-categories">
+                        <div class="category"><a href="/admin/datashBord">Dashbord</a></div>
+                        <div class="category"><a href="/admin/product-management">Product Details </a> </div>
+                        <div class="category"> <a href="/admin/getPages?from=Sale report">Sales Report</a></div>
+                        <div class="category"><a href="/admin/userManagemnent">User Management</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=offer">Offers</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=orders">Orders</a></div>
+                        <div class="category"> <a href="/admin/manageCategory">Category</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=coupen">Coupen</a></div>
+                        <div class="category"> <a href="">Banner</a></div>
+                        <div class="category"><a href="/admin/getBrandPages?To=brand">Brand</a></div>
+                    </dir>
+             
+
+                </div>
+                <div class="main-content">
+                    <div class="col-12 main-heading" >
+                        <h1>Edit Category</h1>
+                    </div>
+                    <div class="col-12 back">
+                        <a class="back-btn" href="/admin/manageCategory">&lt;Back<a>
+                    </div>
+                    <div class="col-12 tabel">
+                        <div class="table-box" >
+                            <form class="t-form" onsubmit="return validate()" action= "/admin/category-edit/{{categoryIndex}}?_method=PUT" method="POST">
+                                <label for="">Enter name of category</label>
+                                <input class="txt-inp" type="text" id="category" minlength="3" maxlength ="10" name="cate" value="{{element}}">
+                                <input class="submit-btn" type="submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+               
+                       
+        </div>
+
+    </div>
+    <script>
+        function validate(){
+           
+            const category=document.getElementById('category').value
+            if(category.trim()===''){
+                showToast('Blank space not allowed')
+                return false
+            }
+            return true
+
+            function showToast(message) {
+                Toastify({
+                    text: message,
+                    duration: 4000,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                }).showToast();
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,138 @@
+    body {
+    background-color: rgb(197, 192, 192);
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.row {
+    justify-content: center;
+}
+
+.photo {
+    height: 500px;
+    padding: 0px;
+    margin: 0px;
+}
+
+img {
+    height: 500px;
+    width: 100%
+}
+
+.back {
+    height: 10%;
+
+}
+
+.titile {
+    height: 30%;
+    align-items: center;
+    display: flex;
+    background-color: blue;
+
+}
+
+.reset-title {
+    font-size: 30px;
+}
+
+
+
+.col12-1 {
+    height: 50px;
+    display: flex;
+    align-items: center;
+ }
+
+.col12-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 200px;
+       }
+
+.box-3 {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formRow {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    
+}
+
+.timer {
+    font-size: 40px;
+    font-weight: 700;
+}
+.resent-div{
+    height: 92px;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    height: 114px;
+    justify-content: space-around;
+}
+
+.otp-box {
+    height: 50px;
+    background-color: rgb(230, 230, 230);
+    border: none;
+    width: 100px;
+}
+
+.R-otp {
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+}
+.R-otp:active,.R-otp:focus{
+background-color: transparent;
+border: none;
+outline: none;
+}
+.R-otp:hover{
+text-decoration: none;
+color: black;
+}
+::placeholder {
+    color: black;
+    text-align: center;
+}
+
+.submit {
+    height: 50px;
+    width: 100px;
+    border-radius: 50px;
+    border: none;
+    background: rgb(54, 54, 255);
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.aTagSubmit{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 3px;
+    
+}
+
+
+@media screen and (max-width:1015px) {
+    .form {
+        display: flex;
+        flex: 1;
+    }
+}

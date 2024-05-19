@@ -1,0 +1,56 @@
+.contain{
+height:2000px;
+
+
+}
+.first{
+ height:1100px;
+   
+}
+.table-form{
+    height: 100%;
+    width: 100%;
+    
+
+}
+.heading{
+    height: 5%;
+    text-align: center;
+  
+}
+.solodBy{
+    height: 15%;  
+    display: flex;
+    justify-content: space-between;
+}
+
+.id-box{
+    height: 100%;
+}
+.address-box{
+    height: 100%;
+    background-color: yellow;
+}
+.orderID p{
+margin-bottom:0 ;
+}
+.soldBy-box{
+   margin-bottom:0 ;
+}
+.item-table{
+    height: 30%;
+    
+}
+.item-table th{
+   
+    font-size: 20px;
+   
+}
+.item-table td{
+   
+    vertical-align: top;
+   
+}
+.second-heading>div>p{
+    font-weight: bolder;
+}

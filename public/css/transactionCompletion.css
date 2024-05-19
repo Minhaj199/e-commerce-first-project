@@ -1,0 +1,114 @@
+.first-row{
+    width: 100%;
+    height: 1000px;
+   
+}
+.main-content{
+    
+height: 1000px;
+
+
+
+}
+.main-cont-inner{
+    height: 90%;
+    margin-top: 2%;
+}
+.titile-box{
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    
+}
+.titile-box h2{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    
+}
+.address{
+    height: 50%;
+    
+   
+      
+}
+.successMessage{
+    height: 55%;
+    
+    margin-bottom: 10px;
+   
+    
+}
+.successMessage h2{
+    color:white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.address-box{
+    width: 100%;
+    height: 40%;
+   background-color: aliceblue;
+    box-shadow: 0 0 10px rgb(176, 176, 176);
+    display: flex;
+    
+
+    
+    
+}
+.button-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    border-right: 1px solid blanchedalmond;
+}
+.address-inner-box{
+    height: 100%;
+    padding: 0;
+}
+
+.order{
+    max-height: 200px;
+    background:white;    
+    margin-left: 3%;
+}
+th{
+    padding-left: 50px;
+    color:teal;
+}
+td{
+    padding-left: 50px;
+    padding-top: 20px;
+
+}
+.name{
+    width:30%;
+    word-wrap: break-word;
+}
+.change-btn{
+    border: none;
+    background-color: crimson;
+    border-radius: 30px;
+    padding: 10px 20px;
+}
+
+
+
+
+
+
+
+.billing-colum{
+    height: 100%;
+   
+}
+.final-order-heading{
+    padding-left:1px ;color:rgb(136, 6, 6);padding-top: 20px;
+}
+
+.submit{
+    margin-top: 10px;
+    margin-left: 100px;
+    border: none;
+    background-color:rgb(136, 6, 6) ;
+    color: white;
+    padding: 5px 10px;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="salesChart"></canvas>
+        <div>
+            <label for="filter">Filter:</label>
+            <select id="filter">
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+    </div>
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            let salesChart;
+
+            const data = {
+                labels: [], // Will be populated based on filter
+                datasets: [{
+                    label: 'Expected Sales',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    data: [] // Will be populated based on filter
+                }, {
+                    label: 'Actual Sales',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    data: [] // Will be populated based on filter
+                }]
+            };
+
+            // Fetch data from server or use sample data
+            // Replace this with your actual data fetching logic
+            function fetchData(filter) {
+                // Sample data
+                const monthlyData = {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    expected: [1000, 1500, 2000, 1800, 2500, 2200, 2100, 2300, 2800, 3000, 3200, 3500],
+                    actual: [900, 1400, 1900, 1750, 2400, 2100, 2000, 2200, 2700, 2900, 3100, 3400]
+                };
+
+                const yearlyData = {
+                    labels: ['2021', '2022', '2023', '2024'], // Example years
+                    expected: [22000, 28000, 32000, 36000], // Example yearly expected sales
+                    actual: [21000, 27000, 31000, 35000] // Example yearly actual sales
+                };
+
+                return filter === 'monthly' ? monthlyData : yearlyData;
+            }
+
+            function updateChart(filter) {
+                const { labels, expected, actual } = fetchData(filter);
+                data.labels = labels;
+                data.datasets[0].data = expected;
+                data.datasets[1].data = actual;
+
+                if (salesChart) {
+                    salesChart.destroy();
+                }
+
+                salesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: false,
+                            },
+                            y: {
+                                stacked: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial chart rendering
+            updateChart(document.getElementById('filter').value);
+
+            // Event listener for filter change
+            document.getElementById('filter').addEventListener('change', function () {
+                updateChart(this.value);
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>

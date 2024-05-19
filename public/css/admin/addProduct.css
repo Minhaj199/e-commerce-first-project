@@ -1,0 +1,217 @@
+  .main-cont {
+      height:1500px;
+  }
+  .admin-option{
+    background-color: blue;
+    height:750px;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+        
+}
+.row-1{
+    height:100%
+  }
+  .admin-profile{
+    height: 30%;
+    width: 100%;
+    background-color: rgb(186, 186, 186);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+.admin-logo{
+    width: 50%;
+
+}
+.user-name{
+    font-weight: bolder;
+}
+.admin-categories{
+    height: 70%;
+    margin: 0;
+    padding: 0;
+}
+.category{
+    height: 10%;
+    width: 100%;
+    background:#f6f6f6;
+    border: .5px rgb(237, 237, 237);
+    border-style: inset; 
+    padding: 0; 
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-content{
+  width:80%;
+  height:1500px;
+}
+
+/* //////////////content dives///////// */
+
+.title-box{
+  min-height: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border:1px solid rgb(218, 218, 218);
+  align-items: center;
+}
+.title-box p{
+  font-size: 30px;
+  color:black;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  
+  
+}
+.name-box{
+  height:9%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+ label{
+  display: block;
+  font-size: 15px;
+  color: rgb(5, 116, 90);
+}
+.name-box input{
+  display: block;
+  width: 50%;
+  height: 30%;
+  font-size: 15px;
+  border-color:rgb(140, 136, 136);
+  border-style: solid ;
+  
+}
+.brand-category-box{
+  height: 9%;
+
+}
+.brand-category-box-row{
+  height: 100%;
+}
+
+.size-and-color-box{
+  height: 15%;
+}
+.brand-box{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.brand-dropdown{
+  display: block;
+  width: 150px;
+  height: 30px;
+  border-radius: 20px;
+  padding-left: 10%;
+  border: 3px solid rgb(97, 96, 96);
+  font-size: 12px;
+  
+}
+.six-color-row{
+  height: 100%;
+}
+.small-size{
+  padding: 0;
+}
+
+.small-size p{
+font-size: 20px;
+
+}
+.small-inpu-dive{
+  display: flex;
+  justify-content: space-evenly;
+}
+.small-inpu-dive label{
+  color: black;
+  font-size: 20px
+}
+.category-box{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.discriptionInput-box{
+  height:13%;
+  
+}
+.dis-input{
+  display: block;
+   width: 80%;
+  height: 130px; 
+  
+}
+.image-input-box{
+ height:16% ;
+  
+}
+.close-icons{
+  width:30px;
+  height: auto;
+  display: block;
+}
+#close-container{
+  height: 50px;
+  width:50px;
+  overflow: hidden;
+}
+#close-container-2{
+  height: 50px;
+  width:50px;
+  overflow: hidden;
+}
+#close-container-3{
+  height: 50px;
+  width:50px;
+  overflow: hidden;
+}
+#close-container-4{
+  height: 50px;
+  width:50px;
+  overflow: hidden;
+}
+#close-container-5{
+  height: 50px;
+  width:50px;
+  overflow: hidden;
+}
+.click-me-added{
+  color: red;
+}
+.submit-box{
+height: 10%;
+
+border:1px solid rgb(218, 218, 218);
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.sub-brn{
+  padding: 13px 225px;
+  border-radius: 20px;
+  border: none;
+  background: orange;
+}
+
+
+
+@media screen and (max-width:1190px) {
+ 
+ .category{
+  font-size: 50%;
+ }
+ .user-name{
+  font-size: 50%;
+ }
+
+}

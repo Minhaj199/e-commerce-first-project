@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sonsie+One&family=Sorts+Mill+Goudy&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admin/categoryMgt.css">
+    <title>Brand Management</title>
+
+</head>
+
+<body>
+    {{> adminHeader}}
+    <div class="container-fluid main-cont">
+        <div class="row">
+            <div class=" admin-option">
+
+                <dir class="  admin-profile">
+                    <img class="admin-logo" src="/images/Icons/profile-1-Buw.png" alt="">
+                    <p class="user-name">Admin Name</p>
+                </dir>
+                <dir class=" admin-categories">
+                    <div class="category"><a href="/admin/datashBord">Dashbord</a></div>
+                    <div class="category"><a href="/admin/product-management">Product Details </a> </div>
+                    <div class="category"> <a href="/admin/getPages?from=Sale report">Sales Report</a></div>
+                    <div class="category"><a href="/admin/userManagemnent">User Management</a></div>
+                    <div class="category"> <a href="/admin/getPages?from=offer">Offers</a></div>
+                    <div class="category"> <a href="/admin/getPages?from=orders">Orders</a></div>
+                    <div class="category"> <a href="/admin/manageCategory">Category</a></div>
+                    <div class="category"> <a href="/admin/manageCategory">Coupen</a></div>
+                    <div class="category"> <a href="">Banner</a></div>
+                    <div class="category"><a href="/admin/getBrandPages?To=brand">Brand</a></div>
+                </dir>
+
+
+            </div>
+            <div class="main-content">
+                <div class="col-12 title-row">
+                    <h1>Brand Management</h1>
+                </div>
+                <div class="col-12 btn-row"  >
+                    <button class="add-btn" ><a href="/admin/getBrandPages?from=addButton">Add</a></button>
+                </div>
+                <div class="col 12" style="height:15%;width:100%;padding-top: 2%;">
+                    {{#if brandAddedMessage}}
+                        <div class="alert alert-success" role="alert">
+                            {{brandAddedMessage}}
+                        </div>
+                    {{/if}}
+                    {{#if brandEditedMessage}}
+                        
+
+                        <div class="alert alert-primary" role="alert">
+                        {{brandEditedMessage}}
+                        </div>
+                    {{/if}}
+
+                    {{#if dltMessage}}
+                            <div class="alert alert-danger" role="alert">
+                                {{dltMessage}}
+                            </div>
+                        
+                    {{/if}}
+                </div>
+                <div class="container-fluid form-main-container-f">
+                    <div class="container form-main-container" >
+                        
+                                <table class="table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Brand</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                                {{#each newdoc.brand}}
+                                                <tr>
+                                            
+                                                    <td>{{this}}</td>
+                                                    <td><div class="btn-group" role="group" aria-label="Basic example">
+                                                        <form action="/admin/getBrandPages">
+                                                            <input type="hidden" name="from" value="editButton">
+                                                            <input type="hidden" name="index" value="{{@index}}">
+                                                            <button type="Submit" class="btn btn-warning">Edit</button>
+                                                        </form>
+                                                        <form action='/admin/getBrandPages'>
+                                                            <input type="hidden" name="from" value="DeleteButton">
+                                                            <input type="hidden" name="index" value="{{@index}}">
+                                                            <button type="Submit" class="btn btn-danger">Delete</button>
+                                                        </form></td>
+                                                </tr>
+                                        
+                                        
+                                    </tbody>
+                                    {{/each}}
+                                </table>
+                            </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+
+
+

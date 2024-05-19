@@ -1,0 +1,35 @@
+.nav-bar {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: start;
+
+}
+
+.M-fashion {
+
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    
+}
+
+.m {
+    display: inline;
+    font-weight: bolder;
+    font-family: 'Sonsie One', system-ui;
+    vertical-align: middle;
+    font-size: 3.5em;
+    color: black;
+}
+
+.f {
+    font-family: 'Sorts Mill Goudy', serif !important;
+    display: inline;
+    margin-left: .2em;
+    font-size: 2em;
+    margin-top: 3vh;
+    padding-left: .7vh;
+    color: black;
+}

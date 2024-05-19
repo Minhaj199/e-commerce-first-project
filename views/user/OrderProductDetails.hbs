@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ashion Template">
+    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Order Datails</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/orderProdutctDetails.css">
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li><a href="#"><span class="icon_heart_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+            <li><a href="#"><span class="icon_bag_alt"></span>
+                    <div class="tip">2</div>
+                </a></li>
+        </ul>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__auth">
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </div>
+    </div>
+
+
+    <!-- Header Section Begin -->
+    {{> adminHeader}}
+    <!-- Header Section End -->
+    <div id="my-modalin" class="modalin" >
+        <div class="contene-modalin">
+            <span class="close">&times;</span>
+            <p>Please type you reason</p>
+            <input type="text"  class="reason">
+            <br>
+            <button class="submit">Submit</button>
+           
+        </div>
+    </div>
+    <div  class="row first-row" >
+        
+        <div style="padding: 0;" class="col-9 main-content" >
+           
+            
+            <div class="col-12 titile-box">
+                <h2>Order Product Datails</h2>
+            </div>
+            <div style="" class="continer-fuid main-cont-inner">
+
+                <div  class="col-12 address " > 
+                    
+                    <div class="address-box">
+                       
+
+                            <div style="" class="col-2 button-box">
+                               <h5>Billed Address</h5>
+                            
+                            </div>
+                        <div style="" class="col-10 address-inner-box">
+                            <h3 style="margin-top: 2%;font-weight: bolder;">{{orderData.[0].address.Name}}</h3>
+                            <p style="color: black;margin-top: 1%;">Phone:{{orderData.[0].address.Mobile}}&nbsp;&nbsp;&nbsp;Aleternative mobile:{{orderData.[0].address.Aleternative_mobile}} </p>
+                            <p style="color: black;margin-top: 1%;" >Town:{{orderData.[0].address.Town}}&nbsp;&nbsp;Locality:{{orderData.[0].address.Locality}}&nbsp;&nbsp;Land mark:{{orderData.[0].address.Land_mark}}</p>
+                            <p style="color: black;margin-top: 1%;" >Adress:{{orderData.[0].address.Address}}</p>
+                        </div>
+
+                       
+                        
+
+                        
+                    </div>
+                <div style="height: 50px;width:80%;margin-top: 2%; ">
+                
+                </div>
+                </div>
+               
+                <div id="oderId" class="col-12  order">
+                    
+                    <div style="height:100px;display: flex;justify-content: center;align-items: center;" class="col-12">
+                        <h2>Order Detail</h2>
+                    </div>
+                    
+                <div class="col-12" style="height: 500px;overflow: auto;padding: 0; ">
+
+                    <table style="background-color: rgb(233, 233, 233);width: 100%;">
+                       <thead style="border-bottom: 1px solid rgb(144, 143, 143);">
+                        <tr>
+                            <th>NO</th>
+                            <th >Product</th>
+                            <th style="width: 20%;">Name</th>
+                            <th class="padding-right">Color</th>
+                            <th class="padding-right">Size</th>
+                            <th class="padding-right">Price</th>
+                            <th class="padding-right">Quantity</th>
+                            <th class="padding-right">Total</th>
+                            <th>Status</th>
+                            
+                            <th></th>
+                           
+                        </tr>
+                       </thead>
+                        <tbody>
+                            {{#each ProductData}}
+                            <tr>
+                                
+                                <td>{{increment @index}}</td>
+                                <td><img style="width: 100px;" src="{{this.ProductDetails.images.path.[0]}}" alt=""></td>
+                                <td class="name">{{this.ProductDetails.Name}}</th>
+                                
+                                <td data-id="{{this.Order.ProductID}}" class="All-total color">{{this.Order.color}}</td>
+                                <td class="All-total size">{{this.Order.size}}</td>
+                                <td class='price'>{{this.Order.price}}</td>
+                                
+                                <td class='quatity'>{{this.Order.quantity}}</td>
+                                <td class='quatity'>{{this.Order.total}}</td>
+                                <td>{{this.Order.status}}</td>
+                                
+                                
+                                {{#isEqual this.Order.status 'Delivered' }}
+                                <td><button onclick='returnProduct("{{@index}}")' class="return">Return</button></td>
+                                <td><button style="background-color: slateblue;" onclick='generateInvoice("{{@index}}")' class="return">Invoice</button></td>
+                                {{/isEqual}}
+                                {{#isEqual this.Order.status 'Return Reject'}}
+                            <td><button style="background-color: slateblue;" onclick='generateInvoice("{{@index}}")' class="return">Invoice</button>
+                            </td>
+                                {{/isEqual}}
+                                
+                                
+                                {{#isEqual this.Order.status 'Pending' }}
+                                {{!-- <button id="cancel{{@index}}" onclick='deleteFunction("{{this._id}}")' class="cancel-btn">Cancel</button> --}}
+                                <td><button  onclick='cancel("{{@index}}")' class="cancel">Cancel</button></td>
+
+                                    
+                                {{/isEqual}}
+                                {{#isEqual this.Order.status "Requested for Cancelation"}}
+                                    <td><button style="display:none;" onclick='cancel("{{@index}}")' class="cancel">Cancel</button></td>
+                                
+                                {{/isEqual}}
+                                
+                            </tr>
+                            {{/each}}
+                                <input id="orderID" value="{{orderData.[0]._id}}" type="text"  hidden>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                
+            </div>
+       
+
+        </div>
+        <div class="col-3 billing-colum">
+            <div style="width: 100%;height: 50%;background-color: rgb(226, 226, 226);margin-top: 23%;">
+                <div style="height: 10%;display: flex;justify-content: center;align-items: center;" class="col-12">
+                    <h2 style="font-family: Georgia, 'Times New Roman', Times, serif;">Your Order</h2>
+                    
+                </div>
+                <div style="height: 80%;" class="col-12" >
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th  style="padding-left:1px ;color:#880606">Sub Totoal</th>
+                                <th id="add-sub-total" style="padding-left: 120px; color: black;">{{orderData.[0].SubTotal}}</th>
+                                
+                            </tr>
+                            <tr >
+                                <th class="final-order-heading" >Discount</th>
+                                <th id="discount" style="padding-left: 120px;padding-top:20px;color: black    ;">{{orderData.[0].Discount}}</th>
+                            
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgb(181, 179, 179);">
+                                <th class="final-order-heading">Shipping Charge</th>
+                                <th id="shipping-charge" style="padding-left: 120px;padding-top:20px;color: black    ;">60</th>
+                            
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgb(181, 179, 179);;">
+                                
+                                <th class="final-order-heading">Total</th>
+                                <th id="Total" style="padding-left: 120px;padding-top:30px;color: black    ;">{{orderData.[0].TotalOrderPrice}}</th>
+                                
+                            </tr>
+                            
+                            </tr>
+                            <tr>
+                                {{!-- {{#isEqual {{orderData.[0].PaymentOption}} 'Cash on delevery'}} --}}
+                            <hr>
+                                <th class="final-order-heading">Payment</th>
+                                <th style="padding-left: 70px;padding-top:30px;color: black    ;word-break:keep-all;">{{orderData.[0].PaymentOption}}</th>
+                                
+                            </tr>
+                           
+                        </thead>
+                    </table>
+                    
+                    
+                </div>
+               
+            </div>
+            <div class="col-12" style="height: 5%;display:flex;justify-content: center;align-items: center;margin-top: 2%;">
+                {{#isEqual orderData.[0].PaymentOption "payment-Failed"}}
+                <button
+                    onclick='retrayPayment("{{orderData.[0]._id}}","{{orderData.[0].TotalOrderPrice}}","{{orderData.[0].coupenID}}")'
+                    style="border: none;padding: 5% 10%;background: violet;font-weight: bold;">RETRY PAYMENT
+                    </button>
+                    
+            </div>
+            
+            
+            {{/isEqual}}
+            
+        </div>
+    </div>
+
+
+    
+    <!-- Instagram End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer" >
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-7">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            cilisis.</p>
+                        <div class="footer__payment">
+                            <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
+                            <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-5">
+                    <div class="footer__widget">
+                        <h6>Quick links</h6>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blogs</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="footer__widget">
+                        <h6>Account</h6>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-8">
+                    <div class="footer__newslatter">
+                        <h6>NEWSLETTER</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Email">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <div class="footer__copyright__text">
+                        <p>Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                            template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                    </div>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form" method="#">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    {{!-- <script src="/js/transactionCompletion.js"></script> --}}
+    <script src="/js/temp/jquery-3.3.1.min.js"></script>
+    <script src="/js/temp/bootstrap.min.js"></script>
+    <script src="/js/temp/jquery.magnific-popup.min.js"></script>
+    <script src="/js/temp/jquery-ui.min.js"></script>
+    <script src="/js/temp/mixitup.min.js"></script>
+    <script src="/js/temp/jquery.countdown.min.js"></script>
+    <script src="/js/temp/jquery.slicknav.js"></script>
+    <script src="/js/temp/owl.carousel.min.js"></script>
+    <script src="/js/temp/jquery.nicescroll.min.js"></script>
+    <script src="/js/temp/main.js"></script>
+    <script src="/js/myOrder.js"></script>
+    <script src="/js/failedPayment.js"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</body>
+
+</html>
