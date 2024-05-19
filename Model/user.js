@@ -4,9 +4,9 @@ dotenv.config({ path: "./configaration.env" });
 
 
 
-// const db = process.env.DB_STRING;
-// const db =
- const db= "mongodb+srv://minhajpuzhakkal:Minhaj12315%40@mfashion.qgkekxv.mongodb.net/?retryWrites=true&w=majority&appName=mfashion";
+
+
+ const db = process.env.DB_STRING
 
 mongo.connect(db).then(() => {});
 
