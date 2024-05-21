@@ -23,7 +23,7 @@ app.use(require("./middleware/cacheControl"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//// Temporary///////
+
 
 app.get("/", async (req, res) => {
   res.redirect("/user");
@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
 // routes require
 dotenv.config({ path: "./configaration.env" });
 
-app.use(methodOverride("_method"));
+app.use(methodOverride("_method"))
 
 app.use("/user", require("./router/user"));
 app.use("/admin", require("./router/admin"));

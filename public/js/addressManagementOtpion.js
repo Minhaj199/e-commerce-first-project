@@ -36,37 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-//delete///
 
-// document.addEventListener("DOMContentLoaded", function() {
-
-//     const dltElements = document.querySelectorAll(".dlt-botton");
-
-//     dltElements.forEach(function(dltElements) {
-//         dltElements.addEventListener("click", function() {
-//             const id = this.getAttribute('alt');
-
-//             fetch('/sss', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({ id,from:'selectBotton'})
-//             })
-//             .then(response => {
-//                 if (response.ok) {
-//                     console.log('Server responded successfully');
-
-//                 } else {
-//                     console.error('Server response error');
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error('Error occurred while communicating with the server:', error);
-//             });
-//         });
-//     });
-// });
 
 function deleteAddress(element) {
   const permission = confirm("Are you want to delete the Address");
