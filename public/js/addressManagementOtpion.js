@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-function deleteAddress(element) {
-  const permission = confirm("Are you want to delete the Address");
+async function deleteAddress(element) {
+  const permission =await showAlertPropt("Are you want to delete the Address");
   if (permission) {
     const id = element;
     fetch("/user/deleteAddress", {
@@ -67,5 +67,26 @@ function deleteAddress(element) {
           error
         );
       });
+  }
+}
+async function showAlertPropt(message, icon) {
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure ?",
+      text: message,
+      icon: icon,
+      showCancelButton: true,
+      confirmButtonColor: "#b50c00",
+      cancelButtonColor: "##bfbcbb",
+      confirmButtonText: "Confirm",
+    });
+    if (result.isConfirmed) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    alert("internal server error");
+    return false;
   }
 }
