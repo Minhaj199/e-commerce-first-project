@@ -418,22 +418,26 @@ module.exports = {
           { $sort: { createdAt: -1 } },
           { $limit: 1 },
         ]);
+        if (last_otp[0]?.otp){
+          if (last_otp[0].otp === req.body.userOTP) {
+            const hashedpassword = await bcrypt.hash(data.password, 10);
+            data.password = hashedpassword;
+            const userData = await user.insertMany([data]);
 
-        if (last_otp[0].otp === req.body.userOTP) {
-          const hashedpassword = await bcrypt.hash(data.password, 10);
-          data.password = hashedpassword;
-          const userData = await user.insertMany([data]);
+            const walletData = {
+              UserID: userData[0]._id,
+              Amount: 0,
+            };
+            await walletModel.create(walletData);
 
-          const walletData = {
-            UserID: userData[0]._id,
-            Amount: 0,
-          };
-          await walletModel.create(walletData);
-
-          res.render("user/login", { error: "Account created successfull" });
-        } else {
-          res.render("user/otpEnterForReg", { error: "Invalid OTP" });
+            res.render("user/login", { error: "Account created successfull" });
+          } else {
+            res.render("user/otpEnterForReg", { error: "Invalid OTP" });
+          }
+        }else{
+          res.render("user/otpEnterForReg", { error: "Invalid Expired" });
         }
+          
       } catch (error) {
         console.log(error);
       }

@@ -51,8 +51,11 @@ async function edit(ID) {
   });
   const message = await response.json();
   if (message === "success") {
-    alert("updated");
-    location.reload();
+    showToast("updated");
+    setTimeout(() => {
+    location.reload();  
+    }, 1000);
+    
   } else {
     alert("error");
   }
