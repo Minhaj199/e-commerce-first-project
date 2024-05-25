@@ -46,7 +46,7 @@
                     <div class="category"> <a href="/admin/getPages?from=orders">Orders</a></div>
                     <div class="category"> <a href="/admin/manageCategory">Category</a></div>
                     <div class="category"> <a href="/admin/getPages?from=coupen">Coupon</a></div>
-                    <div class="category"> <a href="">Banner</a></div>
+                    <div class="category" style="display: none;"> <a href="">Banner</a></div>
                     <div class="category"><a href="/admin/getBrandPages?To=brand">Brand</a></div>
                 </dir>
 
@@ -164,47 +164,7 @@
 
                             </tr>
                             {{/each}}
-                            {{!-- <div class="modal" id="myEditModal">
-                                <div class="modal-content">
-                                    <span id="edit-close" class="close">&times;</span>
-                                    <div class="col-11">
                             
-                            
-                                        <h3>ADD OFFER</h3>
-                            
-                                        <label for="">Title</label>
-                                        <br>
-                                        <input type="text" name="title" id="edit-title" required>
-                                        <br>
-                                        <label for="">Category</label>
-                                        <br>
-                                        <select id="edit-Category" name="category" onchange="editSelectCategory()"
-                                            style="width: 80%;margin-left: 10%;height: 12%;" required>
-                                            <option value="">Select Category</option>
-                                            {{#each category.category}}
-                                            <option value={{this}}>{{this}}</option>
-                                            
-                                            {{/each}}
-                                        </select>
-                                        <br>
-                                        <label for="">Rate(in %)</label>
-                                        <br>
-                                        <input type="number" name="rate" id="edit-amount" max="100" min="0" required>
-                                        <br>
-                                        <label for="">Products</label>
-                                        <br>
-                                        <select multiple name="productsID" id="edit-Prodcuct" style="width:80%;height: 20%;margin-left: 10%"
-                                            required>
-                            
-                                        </select>
-                                        <br>
-                                        <button type="submit"  id="edit-submit">Submit</button>
-                            
-                                    </div>
-                                </div>
-                            
-                            </div> --}}
-
 
                         </tbody>
                     </table>

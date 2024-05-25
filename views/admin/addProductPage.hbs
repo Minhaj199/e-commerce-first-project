@@ -25,15 +25,15 @@
                         <p class="user-name">Admin Name</p>
                     </dir>
                     <dir class=" admin-categories">
-                        <div class="category"><a href="">Dashbord</a></div>
+                        <div class="category"><a href="/admin/datashBord">Dashbord</a></div>
                         <div class="category"><a href="/admin/product-management">Product Details </a> </div>
-                        <div class="category"> <a href="">Sales Report</a></div>
-                        <div class="category"><a href="/admin/userManagemnent">User Management</a></div>
-                        <div class="category"> <a href="">Offers</a></div>
-                        <div class="category"> <a href="">Orders</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=Sale report">Sales Report</a></div>
+                        <div class="category"><a href="/admin/product-management">User Management</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=offer">Offers</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=orders">Orders</a></div>
                         <div class="category"> <a href="/admin/manageCategory">Category</a></div>
-                        <div class="category"> <a href="">Coupen</a></div>
-                        <div class="category"> <a href="">Banner</a></div>
+                        <div class="category"> <a href="/admin/getPages?from=coupen">Coupen</a></div>
+                        <div class="category" style="display: none;"> <a href="">Banner</a></div>
                         <div class="category"><a href="/admin/getBrandPages?To=brand">Brand</a></div>
                     </dir>
              
@@ -52,17 +52,21 @@
                    <div  class="row brand-category-box-row  ">
                     <div  class="col-4 brand-box ">
                         <label for="">Brand</label>
-                        <select name="brand" id="" class="brand-dropdown">
+                        <select name="brand" id="" class="brand-dropdown" required>
                             
+                            <option value="" disabled selected>Choose Brand</option>
                             {{#each categoryCollection.brand }}
+                            
                             <option value="{{this}}">{{this}}</option>
                             {{/each}}
                         </select>
                     </div>
                     <div  class="col-4 category-box" >
                         <label for="">Category</label>
-                        <select name="category" id="" class="brand-dropdown">
+                        <select name="category" id="" class="brand-dropdown" required>
+                            <option value="" disabled selected>Choose category</option>
                             {{#each categoryCollection.category}}
+                            
                             <option value="{{this}}">{{this}}</option>
                             {{/each}}
                         </select>
