@@ -3,13 +3,17 @@
 let modal = document.getElementById("myModal");
 let close = document.querySelector(".close");
 let cropper
+let dataURL;
 
 console.log(close)
 close.addEventListener('click',()=>{
   modal.style.display='none'
    document.querySelector(".main-content").style.display = "block";
    document.getElementById("cropeCanvas").style.display = "none";
-
+  if(cropper){
+    cropper.destroy()
+    cropper=null
+  }
 
 })
 
@@ -23,10 +27,8 @@ const field_1 = document.getElementById("field-1");
 field_1.addEventListener("change", function (event) {
 
   if (count_1 === 0) {
-    let croppedImageDisplay=document.getElementById('field-1-img')
     modal.style.display = "block";
     const file = event.target.files[0];
-    document.getElementById("img-t-A").src=file
     if (file) {
       const image = document.getElementById("img-t-A");
       count_1++;
@@ -41,9 +43,9 @@ field_1.addEventListener("change", function (event) {
              const canvas = cropper.getCroppedCanvas({
                fillColor: "transparent",
              });
-             const dataURL = canvas.toDataURL("image/jpeg"); 
-             croppedImageDisplay.src = dataURL; // Set data URL as src of the display image
-             croppedImageDisplay.style.display = "block"; // Show the display image
+              dataURL = canvas.toDataURL("image/jpeg"); 
+             
+           
            },
          });
       };
@@ -53,6 +55,7 @@ field_1.addEventListener("change", function (event) {
 
       document.getElementById("crop").addEventListener('click',()=>{
         if (cropper) {
+          let croppedImageDisplay = document.getElementById("field-1-img");
           const canvas = cropper.getCroppedCanvas({
             fillerColor: "transparent",
           });
@@ -64,16 +67,22 @@ field_1.addEventListener("change", function (event) {
             dataTransfer.items.add(file);
             field_1.files = dataTransfer.files;
           }, "image/png");
+           croppedImageDisplay.src = dataURL;
+           const img = document.createElement("img");
+           img.src = "/images/Icons/delete_14025328.png";
+
+           img.classList.add("close-icons");
+           const container = document.getElementById("close-container");
+           container.appendChild(img);
         }
         modal.style.display='none'
+        if(cropper){
+          cropper.destroy()
+          cropper=null
+        }
       });
       
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container");
-      container.appendChild(img);
+      
     }
   } else {
     const click_me = document.getElementById("click-me");
@@ -91,6 +100,10 @@ document.getElementById("close-container").addEventListener("click", () => {
   const click_me = document.getElementById("click-me");
   click_me.innerHTML = "Click here";
   click_me.classList.remove("click-me-added");
+  if(cropper){
+    cropper.destroy()
+    cropper=null
+  }
 });
 
 document.getElementById("field-2").addEventListener("change", function (event) {
@@ -269,6 +282,23 @@ function validate() {
   }
   return true;
 }
+
+///modal cancel button//
+
+document.getElementById("cancel-modal").addEventListener('click',()=>{
+   count_1 = 0;
+   count_2 = 0;
+   count_3 = 0;
+   count_4 = 0;
+   count_5 = 0;
+if(cropper){
+    cropper.destroy()
+    cropper=null
+  }
+  modal.style.display='none'
+});
+
+
 // Get the modal
 
 
