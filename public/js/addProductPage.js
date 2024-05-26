@@ -1,20 +1,76 @@
+
+
+let modal = document.getElementById("myModal");
+let close = document.querySelector(".close");
+let cropper
+
+console.log(close)
+close.addEventListener('click',()=>{
+  modal.style.display='none'
+   document.querySelector(".main-content").style.display = "block";
+   document.getElementById("cropeCanvas").style.display = "none";
+
+
+})
+
 let count_1 = 0;
 let count_2 = 0;
 let count_3 = 0;
 let count_4 = 0;
 let count_5 = 0;
-document.getElementById("field-1").addEventListener("change", function (event) {
+const field_1 = document.getElementById("field-1");
+
+field_1.addEventListener("change", function (event) {
+
   if (count_1 === 0) {
+    let croppedImageDisplay=document.getElementById('field-1-img')
+    modal.style.display = "block";
     const file = event.target.files[0];
+    document.getElementById("img-t-A").src=file
     if (file) {
+      const image = document.getElementById("img-t-A");
       count_1++;
       const reader = new FileReader();
       reader.onload = function (e) {
-        document.getElementById("field-1-img").src = e.target.result;
+        image.src = e.target.result;
+         cropper = new Cropper(image, {
+           aspectRatio: 0,
+           viewMode: 0,
+           background: false, 
+           crop(event) {
+             const canvas = cropper.getCroppedCanvas({
+               fillColor: "transparent",
+             });
+             const dataURL = canvas.toDataURL("image/jpeg"); 
+             croppedImageDisplay.src = dataURL; // Set data URL as src of the display image
+             croppedImageDisplay.style.display = "block"; // Show the display image
+           },
+         });
       };
       reader.readAsDataURL(file);
+
+      
+
+      document.getElementById("crop").addEventListener('click',()=>{
+        if (cropper) {
+          const canvas = cropper.getCroppedCanvas({
+            fillerColor: "transparent",
+          });
+          canvas.toBlob((blob) => {
+            const file = new File([blob], "cropped_image.png", {
+              type: "image/png",
+            }); 
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            field_1.files = dataTransfer.files;
+          }, "image/png");
+        }
+        modal.style.display='none'
+      });
+      
       const img = document.createElement("img");
       img.src = "/images/Icons/delete_14025328.png";
+
       img.classList.add("close-icons");
       const container = document.getElementById("close-container");
       container.appendChild(img);
@@ -213,6 +269,11 @@ function validate() {
   }
   return true;
 }
+// Get the modal
+
+
+// Function to open the modal
+
 
 function showToast(message) {
   console.log("inside tost");
