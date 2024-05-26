@@ -1,173 +1,87 @@
-let count_1 = 0;
-let count_2 = 0;
-let count_3 = 0;
-let count_4 = 0;
-let count_5 = 0;
+let oldImages = [];
+let counts = [0, 0, 0, 0, 0];
 
-document.getElementById("field-1").addEventListener("change", function (event) {
-  if (count_1 === 0) {
-    oldImage = document.getElementById("field-1-img").src;
-    const file = event.target.files[0];
-    if (file) {
-      count_1++;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("field-1-img").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container");
-      container.appendChild(img);
-    }
-  } else {
-    const click_me = document.getElementById("click-me");
-    click_me.innerHTML = "Close image";
-    click_me.classList.add("click-me-added");
-  }
-});
-document.getElementById("close-container").addEventListener("click", () => {
-  document.getElementById("field-1").value = "";
-  document.getElementById("field-1-img").src = oldImage;
-  document.getElementById("close-container").innerHTML = "";
-  count_1 = 0;
-  const click_me = document.getElementById("click-me");
-  click_me.innerHTML = "Click here";
-  click_me.classList.remove("click-me-added");
+const fields = ["field-1", "field-2", "field-3", "field-4", "field-5"];
+const clickMeIds = [
+  "click-me",
+  "click-me-2",
+  "click-me-3",
+  "click-me-4",
+  "click-me-5",
+];
+const imgIds = [
+  "field-1-img",
+  "field-2-img",
+  "field-3-img",
+  "field-4-img",
+  "field-5-img",
+];
+const closeContainerIds = [
+  "close-container",
+  "close-container-2",
+  "close-container-3",
+  "close-container-4",
+  "close-container-5",
+];
+
+fields.forEach((fieldId, index) => {
+  document
+    .getElementById(fieldId)
+    .addEventListener("change", (event) => handleFieldChange(event, index));
+  document
+    .getElementById(closeContainerIds[index])
+    .addEventListener("click", () => resetField(index));
+  oldImages[index] = document.getElementById(imgIds[index]).src;
 });
 
-document.getElementById("field-2").addEventListener("change", function (event) {
-  if (count_2 === 0) {
-    oldImage = document.getElementById("field-2-img").src;
-    const file = event.target.files[0];
-    if (file) {
-      count_2++;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("field-2-img").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container-2");
-      container.appendChild(img);
-    }
-  } else {
-    const click_me = document.getElementById("click-me-2");
-    click_me.innerHTML = "Close image";
-    click_me.classList.add("click-me-added");
-  }
-});
-document.getElementById("close-container-2").addEventListener("click", () => {
-  document.getElementById("field-2").value = "";
-  document.getElementById("field-2-img").src = oldImage;
-  document.getElementById("close-container-2").innerHTML = "";
-  count_2 = 0;
-  const click_me = document.getElementById("click-me-2");
-  click_me.innerHTML = "Click here";
-  click_me.classList.remove("click-me-added");
-});
+ function handleFieldChange(event, index) {
+   const file = event.target.files[0];
+   let cropper;
 
-document.getElementById("field-3").addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  oldImage = document.getElementById("field-1-img").src;
-  if (count_3 === 0) {
-    if (file) {
-      count_3++;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("field-3-img").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container-3");
-      container.appendChild(img);
-    }
-  } else {
-    const click_me = document.getElementById("click-me-3");
-    click_me.innerHTML = "Close image";
-    click_me.classList.add("click-me-added");
-  }
-});
-document.getElementById("close-container-3").addEventListener("click", () => {
-  document.getElementById("field-3").value = "";
-  document.getElementById("field-3-img").src = oldImage;
-  document.getElementById("close-container-3").innerHTML = "";
-  count_3 = 0;
-  const click_me = document.getElementById("click-me-3");
-  click_me.innerHTML = "Click here";
-  click_me.classList.remove("click-me-added");
-});
+   if (counts[index] === 0) {
+     if (file) {
+       const reader = new FileReader();
+       reader.onload = function (e) {
+         document.getElementById(imgIds[index]).src = e.target.result;
 
-document.getElementById("field-4").addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  oldImage = document.getElementById("field-1-img").src;
-  if (count_4 === 0) {
-    if (file) {
-      count_4++;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("field-4-img").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container-4");
-      container.appendChild(img);
-    }
-  } else {
-    const click_me = document.getElementById("click-me-4");
-    click_me.innerHTML = "Close image";
-    click_me.classList.add("click-me-added");
-  }
-});
-document.getElementById("close-container-4").addEventListener("click", () => {
-  document.getElementById("field-4").value = "";
-  document.getElementById("field-4-img").src = oldImage;
-  document.getElementById("close-container-4").innerHTML = "";
-  count_4 = 0;
-  const click_me = document.getElementById("click-me-4");
-  click_me.innerHTML = "Click here";
-  click_me.classList.remove("click-me-added");
-});
+         cropper = new Cropper(document.getElementById(imgIds[index]), {
+           aspectRatio: 1, // You can set the aspect ratio as needed
+           viewMode: 1,
+           background: false,
+           crop(event) {
+             // Handle cropping if needed
+           },
+         });
 
-document.getElementById("field-5").addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  oldImage = document.getElementById("field-1-img").src;
-  if (count_5 === 0) {
-    if (file) {
-      count_5++;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("field-5-img").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      const img = document.createElement("img");
-      img.src = "/images/Icons/delete_14025328.png";
-      img.classList.add("close-icons");
-      const container = document.getElementById("close-container-5");
-      container.appendChild(img);
-    }
-  } else {
-    const click_me = document.getElementById("click-me-5");
-    click_me.innerHTML = "Close image";
-    click_me.classList.add("click-me-added");
-  }
-});
-document.getElementById("close-container-5").addEventListener("click", () => {
-  document.getElementById("field-5").value = "";
-  document.getElementById("field-5-img").src = oldImage;
-  document.getElementById("close-container-5").innerHTML = "";
-  count_5 = 0;
-  const click_me = document.getElementById("click-me-5");
-  click_me.innerHTML = "Click here";
-  click_me.classList.remove("click-me-added");
-});
+         croppers[index] = cropper;
+       };
+       reader.readAsDataURL(file);
+
+       counts[index]++;
+     }
+   } else {
+     const clickMe = document.getElementById(clickMeIds[index]);
+     clickMe.innerHTML = "Close image";
+     clickMe.classList.add("click-me-added");
+   }
+ }
+
+ function resetField(index) {
+   document.getElementById(fields[index]).value = "";
+   document.getElementById(imgIds[index]).src = oldImages[index];
+   document.getElementById(closeContainerIds[index]).innerHTML = "";
+   counts[index] = 0;
+
+   const clickMe = document.getElementById(clickMeIds[index]);
+   clickMe.innerHTML = "Click here";
+   clickMe.classList.remove("click-me-added");
+
+   // Destroy the cropper instance
+   if (croppers[index]) {
+     croppers[index].destroy();
+     croppers[index] = null;
+   }
+ }
 document.querySelector(".dis-input").addEventListener("input", function () {
   const Text = this.value;
 

@@ -1,13 +1,13 @@
 let modal = document.getElementById("myModal");
 let close = document.querySelector(".close");
-let cancelBtn = document.getElementById("cancel-modal"); 
+let cancelBtn = document.getElementById("cancel-modal");
 let cropper;
 let dataURL;
-const fieldCounts = [0, 0, 0, 0, 0]; const minAspectRatio = 1; 
+const fieldCounts = [0, 0, 0, 0, 0]; // To track the counts for each field
 
 const fields = ["field-1", "field-2", "field-3", "field-4", "field-5"];
 const clickMeIds = [
-  "click-me-1",
+  "click-me",
   "click-me-2",
   "click-me-3",
   "click-me-4",
@@ -32,10 +32,6 @@ close.addEventListener("click", () => {
   closeModal();
 });
 
-cancelBtn.addEventListener("click", () => {
-  closeModal(); // Call the closeModal function when cancel button is clicked
-});
-
 fields.forEach((fieldId, index) => {
   document
     .getElementById(fieldId)
@@ -56,28 +52,33 @@ function handleFieldChange(event, index) {
     cropper = null;
   }
 
-  if (fieldCounts[index] === 0) {
+  // if (fieldCounts[index] === 0) {
     openModal();
     const file = event.target.files[0];
     if (file) {
       const image = document.getElementById("img-t-A");
-      fieldCounts[index]++;
+      // fieldCounts[index]++;
       const reader = new FileReader();
       reader.onload = function (e) {
         image.src = e.target.result;
         cropper = new Cropper(image, {
-          aspectRatio: minAspectRatio, // Set initial aspect ratio
+          aspectRatio: 0,
           viewMode: 0,
           background: false,
-          crop(event) {
-            let cropBoxData = cropper.getCropBoxData();
-            let aspectRatio = cropBoxData.width / cropBoxData.height;
-            if (aspectRatio < minAspectRatio) {
-              let newWidth = cropBoxData.height * minAspectRatio;
-              cropBoxData.left -= (newWidth - cropBoxData.width) / 2;
-              cropBoxData.width = newWidth;
-              cropper.setCropBoxData(cropBoxData);
-            }
+          cropmove: function (event) {
+          var cropBoxData = cropper.getCropBoxData();
+
+          if (cropBoxData.width < 300) {
+            cropBoxData.width = 300;
+          }
+
+          if (cropBoxData.height < 500) {
+            cropBoxData.height = 500;
+          }
+
+          cropper.setCropBoxData(cropBoxData);
+        },
+          crop() {
             const canvas = cropper.getCroppedCanvas({
               fillColor: "transparent",
             });
@@ -87,14 +88,13 @@ function handleFieldChange(event, index) {
       };
       reader.readAsDataURL(file);
     }
-  } else {
-    const clickMe = document.getElementById(clickMeIds[index])
-    if(clickMe){
-      clickMe.innerHTML = "Close image";
-      clickMe.classList.add("click-me-added");
-    }
-    
-  }
+  
+  // else {
+  //   // const clickMe = document.getElementById(clickMeIds[index]);
+  //   // clickMe.innerHTML = "Close image";
+  //   // clickMe.classList.add("click-me-added");
+  //   location.reload()
+  // }
 
   cropBtn.removeEventListener("click", handleCrop);
   cropBtn.addEventListener("click", handleCrop);
@@ -120,9 +120,15 @@ function handleCrop() {
     const img = document.createElement("img");
     img.src = "/images/Icons/delete_14025328.png";
     img.classList.add("close-icons");
-    document
-      .getElementById(closeContainerIds[activeFieldIndex])
-      .appendChild(img);
+    let container = document.getElementById(
+      closeContainerIds[activeFieldIndex]
+    );
+    
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    } 
+    
+    container.appendChild(img)
   }
   closeModal();
 }
@@ -134,11 +140,8 @@ function resetField(index) {
   document.getElementById(closeContainerIds[index]).innerHTML = "";
   fieldCounts[index] = 0;
   const clickMe = document.getElementById(clickMeIds[index]);
-  if(clickMe){
-    clickMe.innerHTML = "Click here";
-    clickMe.classList.remove("click-me-added");
-  }
-  
+  clickMe.innerHTML = "Click here";
+  clickMe.classList.remove("click-me-added");
   if (cropper) {
     cropper.destroy();
     cropper = null;
@@ -167,6 +170,11 @@ function closeModal() {
     cropper = null;
   }
 }
+
+document.getElementById("cancel-modal").addEventListener('click',()=>{
+  closeModal()
+  modal.style.display='none'
+});
 
 function validate() {
   const name = document.getElementById("name").value;
