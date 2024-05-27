@@ -262,7 +262,13 @@ module.exports = {
 
       let urls = [];
       const files = req.files;
+      
+      let newPhoto=[]
+       
       if (req.files.length > 0) {
+         for(let i=0;i<req.files.length;i++){
+          newPhoto.push(parseInt(req.files[i].originalname));
+         }
         for (const file of files) {
           const { path } = file;
           
@@ -273,10 +279,23 @@ module.exports = {
           fs.unlinkSync(path);
         }
       }
-
+     
       const imagePaths = urls.map((item) => item.url);
       const finalImage = imagePaths.slice(0, 5);
       const oldData = await productModel.findById({ _id: req.params.id });
+      let updatedPhotos=oldData.images.path
+        console.log(finalImage)
+      
+         if (finalImage.length > 0) {
+         
+           for (let i = 0; i < imagePaths.length; i++) {
+             updatedPhotos[newPhoto[i]] = finalImage[i]
+           }
+         
+         }
+      
+     
+      
 
       const productData = {
         Name: req.body.Name,
@@ -302,10 +321,10 @@ module.exports = {
         price: req.body.price,
         description: req.body.description,
         images: {
-          path: finalImage.length > 0 ? finalImage : oldData.images.path,
+          path: finalImage.length > 0 ? updatedPhotos : oldData.images.path,
         },
       };
-
+   
       await productModel
         .findOneAndUpdate({ _id: req.params.id }, { $set: productData })
         .then((result) => {
@@ -318,12 +337,14 @@ module.exports = {
             `/admin/product-management?updtErrMessage=Updated Successfully`
           );
         });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
   getDeletePage: async (req, res) => {
     const ProductData = await productModel.findById(req.params.id);
     res.render("admin/ProductDelete", { ProductData });
-    //  res.render('viewPhoto',{ProductData})
+  
   },
   deleteProduct: async (req, res) => {
     try {

@@ -1,11 +1,14 @@
 const express=require('express')
 const router=express.Router()
-const productModel = require('../Model/product')
 const adminCon=require('../controller/adminCon')
 const upload=require('../middleware/multer')
+
+
 const isAdminAuthenticated=require('../middleware/isAdminAuthenticated')
 const AdminAuthenticated=require('../middleware/adminAuthenticated')
-const path=require('path')
+
+
+
 
 
  
@@ -36,9 +39,9 @@ router.post('/add-Product',AdminAuthenticated,upload.array('image'),adminCon.pro
 router.post('/editProduct/:id',AdminAuthenticated,adminCon.getEditPage)
 router.post('/deleteProduct/:id',AdminAuthenticated,adminCon.getDeletePage)
 router.delete('/DeleteProduct/:id',AdminAuthenticated,adminCon.deleteProduct)
-router.put('/editProduct/:id',AdminAuthenticated,upload.array('image'),adminCon.putEditPage)
+router.put('/editProduct/:id',AdminAuthenticated,upload.array('image'), adminCon.putEditPage)
 
-
+// 
 /////////category management////////////
 router.post('/addCat',AdminAuthenticated,adminCon.addCategory)
 router.get('/manageCategory',AdminAuthenticated,adminCon.getCategoryManagement)

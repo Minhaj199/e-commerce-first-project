@@ -124,7 +124,7 @@ function handleCrop() {
     
     const canvas = cropper.getCroppedCanvas({ fillColor: "transparent" });
     canvas.toBlob((blob) => {
-      const file = new File([blob], "cropped_image.png", { type: "image/png" });
+      const file = new File([blob], `${activeFieldIndex}`, { type: "image/png" });
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(file);
       document.getElementById(fields[activeFieldIndex]).files =
