@@ -18,8 +18,10 @@ const coupenTrackingModel = require("../Model/coupenTracking");
 const offerModel = require("../Model/offer");
 const coupenModel = require("../Model/coupen");
 const capitalisation = require("../utility/makeCapitalLetter");
+const forgotEmail=require('../Model/otp/forgoEmail')
 
 const dateFunction = require("../utility/DateFormating");
+
 
 let email;
 let data = "";
@@ -302,7 +304,12 @@ module.exports = {
     }
   },
   getLogin: (req, res) => {
-    res.render("./user/login");
+    let message;
+    if(req.session.successOfReset){
+      message=req.session.successOfReset
+      delete req.session.successOfReset
+    }
+    res.render("./user/login",{message});
   },
   postLogin: async (req, res, next) => {
     try {
@@ -343,13 +350,14 @@ module.exports = {
 
     res.render("user/forgot/forgotEmail");
   },
-  postOtpEnter: async (req, res, next) => {
+  postOtpEnter: async (req, res) => {
     try {
       const email = await user.findOne({ Email: req.body.email });
       globalEmail = email;
       if (!email) {
         res.render("user/forgot/forgotEmail", { error: "user not found" });
       } else {
+        res.redirect("/log-in/OTP")
       }
     } catch (error1) {
       const error = new Error("internal server error");
@@ -361,6 +369,22 @@ module.exports = {
     try {
       const email = req.body.email;
       globalEmail = email;
+      const ifUser=await forgotEmail.findOne({email:email})
+      let EmailOfUser;
+      if(ifUser){
+          EmailOfUser=ifUser.email
+          req.session.emialId=ifUser._id
+      }else{
+       EmailOfUser= await forgotEmail.create({email}
+       )
+        req.session.emialId = EmailOfUser._id;
+      }
+      
+     
+      ;
+    
+     
+      
       const isUser = await user.findOne({ Email: email });
       if (isUser) {
         const otp = otpGenerator.generate(6, {
@@ -370,18 +394,19 @@ module.exports = {
         });
         const userData = { email, otp };
         await OTP.create(userData);
-        res.render("user/forgot/otpEnter", { email });
+        res.render("user/forgot/otpEnter");
       } else {
         res.render("user/forgot/forgotEmail", { error: "Email not found" });
       }
     } catch (error1) {
+      console.log(error1)
       const error = new Error(error1);
       error.statusCode = 500;
       next(error);
     }
   },
   resetOTP: async (req, res) => {
-    if (req.params.email === "register") {
+    if (req.query.from === "register") {
       try {
         const otp = otpGenerator.generate(6, {
           upperCaseAlphabets: false,
@@ -401,8 +426,7 @@ module.exports = {
           lowerCaseAlphabets: false,
           specialChars: false,
         });
-        const email = req.params.email;
-        const globalEmail = email;
+        const email = req.session.emialId
         const userData = { email, otp };
         await otpSchema.create(userData);
         res.render("user/forgot/otpEnter");
@@ -412,10 +436,10 @@ module.exports = {
     }
   },
   validateOTP: async (req, res) => {
-    if (req.params.id === "Register") {
+    if (req.query.from === "Register") {
       try {
         const last_otp = await OTP.aggregate([
-          { $sort: { createdAt: -1 } },
+          { $sort: { _id: -1 } },
           { $limit: 1 },
         ]);
         if (last_otp[0]?.otp){
@@ -443,13 +467,14 @@ module.exports = {
       }
     } else {
       try {
+        
         const last_otp = await OTP.findOne({ otp: req.body.userOTP })
-          .sort({ createdAt: -1 })
+          .sort({ _id: -1 })
           .limit(1);
         if (last_otp) {
-          res.render("user/forgot/resetPassword", { globalEmail });
+          res.render("user/forgot/resetPassword");
         } else {
-          res.render("user/forgot/otpEnter", { message: "invalid otp" });
+          res.render("user/forgot/otpEnter", { message: "invalid otp or OTP Expired" });
         }
       } catch (error) {
         console.log(error);
@@ -458,7 +483,12 @@ module.exports = {
   },
   endOfPassReset: async (req, res) => {
     try {
-      const email = req.params.email;
+      
+      const emailObj = await forgotEmail.findById(req.session.emialId);
+      
+     
+      const email=emailObj.email
+      
       const newPassword = req.body.password;
 
       const saltRounds = 10;
@@ -467,9 +497,13 @@ module.exports = {
         { Email: email },
         { $set: { password: hashedpassword } }
       );
-
+      req.session.successOfReset='Password resetted successfully'
       res.redirect("/user/log-in");
     } catch (error) {
+      console.log(error)
+      await forgotEmail.deleteMany({_id:req.session.emialId})
+      delete req.session.emialId
+    
       console.log("error in the password updation");
     }
   },

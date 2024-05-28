@@ -35,12 +35,12 @@ router.post('/log-in/forgotOtpEnter',userAuthenticated,userControl.postOtpEnter)
 //forgot
 router.get('/log-in/forgot',isUserBlocked,userControl.getForgot)
 router.post('/log-in/forgotOtpEnter',isUserBlocked,userAuthenticated,userControl.postOtpEnter)
-router.post('/log-in/validateOTP/:id',isUserBlocked,userAuthenticated,userControl.validateOTP)
+router.post('/log-in/validateOTP',isUserBlocked,userAuthenticated,userControl.validateOTP)
 //router.get('/log-in/passwordChanged',userControl.getPasswordChange)
 router.post('/log-in/OTP',isUserBlocked,userControl.getOTP)
-router.post('/log-in/otpResend/:email',isUserBlocked,userControl.resetOTP)
+router.post('/log-in/otpResend',isUserBlocked,userControl.resetOTP)
 //router.get('/log-in/resetPassword',userControl.getPasswordChange)
-router.put('/log-in/passwordReseted/:email',isUserBlocked,userControl.endOfPassReset)
+router.put('/log-in/passwordReseted',isUserBlocked,userControl.endOfPassReset)
 
 
 //catagory

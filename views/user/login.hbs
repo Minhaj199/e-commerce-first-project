@@ -27,6 +27,9 @@
                     {{#if error}}
                     <p style="color:red">{{error}}</p>
                     {{/if}}
+                    {{#if message}}
+                    <p style="color:red">{{message}}</p>
+                    {{/if}}
                     <form class="form-box px-3" action="/user/log-in" method="post" onsubmit="return loginVal()">
                         <div class="form-input">
                             <span><i class="fa fa-envelope-o"></i></span>
