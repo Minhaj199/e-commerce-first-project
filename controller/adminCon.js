@@ -731,7 +731,7 @@ module.exports = {
             );
            
             amount=Math.floor(returnShipping+amount )
-            console.log("amount inside function afeter adding retunrsh" + amount);
+            
             const refund = await walletModel.updateOne(
               
               { UserID: req.session.customerId },
@@ -756,7 +756,7 @@ module.exports = {
           let amount = canceledData.Order[req.body.index].total;
           let DiscountedAmount = amount;
           if (canceledData.Discount > 0) {
-            discount = canceledData.Discount / canceledData.Order.length;
+            discount =Math.ceil (canceledData.Discount / canceledData.Order.length);
             if (discount <= DiscountedAmount) {
               let sample = DiscountedAmount;
               DiscountedAmount = sample - discount;
