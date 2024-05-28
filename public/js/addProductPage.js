@@ -1,3 +1,22 @@
+
+
+
+
+document.querySelector(".dis-input").addEventListener("input", function () {
+
+  const Text = this.value;
+
+  if (Text.length > 70) {
+    let sid = document.querySelector(".dis-input").value.slice(0, 70);
+    document.querySelector(".dis-input").value = sid;
+    showToast("Word limit reached");
+  }
+});
+
+
+
+
+
 let modal = document.getElementById("myModal");
 let close = document.querySelector(".close");
 let cancelBtn = document.getElementById("cancel-modal");
@@ -27,6 +46,18 @@ const closeContainerIds = [
   "close-container-4",
   "close-container-5",
 ];
+
+document.querySelector(".dis-input").addEventListener("input", function () {
+  console.log("hiii");
+  const Text = this.value;
+
+  if (Text.length > 70) {
+    let sid = document.querySelector(".dis-input").value.slice(0, 70);
+    console.log(sid);
+    document.querySelector(".dis-input").value = sid;
+    showToast("Word limit reached");
+  }
+});
 
 close.addEventListener("click", () => {
   closeModal();
@@ -183,6 +214,9 @@ function validate() {
   const photo3 = document.getElementById("field-3").value;
   const photo4 = document.getElementById("field-4").value;
   const photo5 = document.getElementById("field-5").value;
+
+  
+
   if (name.trim() === "") {
     showToast("Blank space in Name is not allowed");
     return false;
