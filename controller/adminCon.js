@@ -264,10 +264,12 @@ module.exports = {
     const ProductData = await productModel.findById(req.params.id);
     const CatAndBrand = await Category.findOne();
     const cat = ProductData.category;
+    
     res.render("admin/EditProduct", { ProductData, CatAndBrand, cat });
   },
   putEditPage: async (req, res) => {
     try {
+      
       const uploader = async (path) => await cloudinary.uploads(path, "Images");
 
       let urls = [];
@@ -334,6 +336,7 @@ module.exports = {
           path: finalImage.length > 0 ? updatedPhotos : oldData.images.path,
         },
       };
+      
    
       await productModel
         .findOneAndUpdate({ _id: req.params.id }, { $set: productData })
