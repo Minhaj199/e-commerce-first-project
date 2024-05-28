@@ -33,7 +33,7 @@
         <div class="category"><a href="/admin/datashBord">Dashbord</a></div>
         <div class="category"><a href="/admin/product-management">Product Details </a> </div>
         <div class="category"> <a href="/admin/getPages?from=Sale report">Sales Report</a></div>
-        <div class="category"><a href="/admin/product-management">User Management</a></div>
+        <div class="category"><a href="/admin/userManagemnent">User Management</a></div>
         <div class="category"> <a href="/admin/getPages?from=offer">Offers</a></div>
         <div class="category"> <a href="/admin/getPages?from=orders">Orders</a></div>
         <div class="category"> <a href="/admin/manageCategory">Category</a></div>
@@ -154,12 +154,9 @@
 
             </table>
             <div class="col-12 btn-box" style="">
-              <button><a href="/admin/product-management?page=1">1</a></button>
-              <button><a href="/admin/product-management?page=2">2</a></button>
-              <button><a href="/admin/product-management?page=3">3</a></button>
-              <button><a href="/admin/product-management?page=4">4</a></button>
-              <button><a href="/admin/product-management?page=5">5</a></button>
-              <button><a href="/admin/product-management?page=6">6</a></button>
+              {{#each dynamicPageArray}}
+              <button><a href="/admin/product-management?page={{this}}">{{this}}</a></button>
+              {{/each}}
             </div>
           </div>
         </div>

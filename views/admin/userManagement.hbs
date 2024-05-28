@@ -104,7 +104,7 @@
                                 {{#each userData}}
                                 <tr>
                                     <td>
-                                        {{this.created_at}}
+                                        {{this.formatedDate}}
                                     </td>
                                     <td>
                                         {{this.first_name}}
@@ -149,23 +149,26 @@
                     </div>
                     
                 </div>
-                <div class="col-12 btn-box">
-                    <button><a href="/admin//userManagemnent?page=1">1</a></button>
-                    <button><a href="/admin//userManagemnent?page=2">2</a></button>
-                    <button><a href="/admin//userManagemnent?page=3">3</a></button>
-                    <button><a href="/admin//userManagemnent?page=4">4</a></button>
-                    <button><a href="/admin//userManagemnent?page=5">5</a></button>
-                    <button><a href="/admin//userManagemnent?page=6">6</a></button>
+                <div  class="col-12 btn-box">
+                
+                    {{#each dynamicPageArray}}
+                    <button><a href="/admin//userManagemnent?page={{this}}">{{this}}</a></button>
+                    {{/each}}
                 </div>
+                
             </div>
+            
 
         </div>
-
+        
 
 
     </div>
+    
 
     </div>
+    
+
     <script src="/js/userManagement.js">
        
     </script>

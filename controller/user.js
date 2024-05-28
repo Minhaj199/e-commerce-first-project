@@ -102,7 +102,7 @@ module.exports = {
             });
             const productName = await productModel.findById(proId[i], {
               Name: 1,
-              _id: 0,
+              _id: 0
             });
 
             const qty = product.sizes[sizes[i]][colors[i]];
@@ -511,7 +511,7 @@ module.exports = {
   getAll: async (req, res) => {
     try {
       if (req.query.search) {
-        const searchWord = new RegExp("^" + req.query.search, "i");
+        const searchWord = new RegExp("^" + req.query.search, "i").sort({_id:-1});
 
         const Data = await productModel
           .find({ Name: { $regex: searchWord } })
@@ -583,6 +583,12 @@ module.exports = {
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else {
         const pageNumber = req.query.page;
+        const pagesOf=await productModel.find().count()
+        const pages=Math.ceil(pagesOf/6)
+        const pagesArray=[]
+        for(let i=1;i<=pages;i++){
+          pagesArray.push(i)
+        }
         const Data = await productModel
           .find()
           .skip((pageNumber - 1) * 6)
@@ -590,7 +596,12 @@ module.exports = {
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("admin/shop", {
+          Data,
+          CategoryCollection,
+          User,
+          pagesArray
+        });
       }
     } catch (error) {
       console.log(error);

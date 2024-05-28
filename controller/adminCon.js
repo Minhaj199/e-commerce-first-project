@@ -13,11 +13,12 @@ const upload = require("../middleware/multer");
 const cloudinary = require("../middleware/cludinary");
 const fs = require("fs");
 const Razorpay = require("razorpay");
-const coupen = require("../Model/coupen");
 const offerModel = require("../Model/offer");
-const offer = require("../Model/offer");
 const { includes } = require("lodash");
 const dateFunction = require("../utility/DateFormating");
+const cartModel = require("../Model/cart");
+const wishlistModel = require("../Model/wishList");
+
 
 module.exports = {
   getLogin: (req, res) => {
@@ -150,6 +151,14 @@ module.exports = {
   getProductManagement: async (req, res) => {
     let page = req.query.page || 1;
     let skip = 4;
+    const numOfPage = await productModel.find().count()
+    const dynamicPage = Math.ceil(numOfPage / 4);
+    let dynamicPageArray=[]
+
+    for(let i=1;i<=dynamicPage;i++){
+      dynamicPageArray.push(i)
+    }
+   
     const productData = await productModel
       .find()
       .skip((page - 1) * skip)
@@ -173,6 +182,7 @@ module.exports = {
       updtErrMessage,
       dltMessage,
       dltErrMessage,
+      dynamicPageArray
     });
   },
   getProductManagementSorted: async (req, res) => {
@@ -284,7 +294,7 @@ module.exports = {
       const finalImage = imagePaths.slice(0, 5);
       const oldData = await productModel.findById({ _id: req.params.id });
       let updatedPhotos=oldData.images.path
-        console.log(finalImage)
+       
       
          if (finalImage.length > 0) {
          
@@ -364,12 +374,21 @@ module.exports = {
 
   getUserManagement: async (req, res) => {
     let page = req.query.page || 1;
-    let limit = 3;
+    let NumberOfPage=await userModel.find().count()
+    let pages=Math.ceil(NumberOfPage/3)
+    let dynamicPageArray=[]
+    for(let i=1;i<=pages;i++){
+      dynamicPageArray.push(i)
+    }
+    let limit = 4;
     let userData = await userModel
       .find()
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ _id: -1 });
+      for(let i=0;i<userData.length;i++){
+        userData[i].formatedDate = dateFunction.Invoice(userData[i].created_at);
+      }
     const unBlockMessage = req.query.unBlockMessage;
     const blockMessage = req.query.blockMessage;
     const dltMessage = req.query.dltMessage;
@@ -378,6 +397,7 @@ module.exports = {
       unBlockMessage,
       blockMessage,
       dltMessage,
+      dynamicPageArray,
     });
   },
   getUnblocled: async (req, res) => {
@@ -395,6 +415,9 @@ module.exports = {
   },
   getDelete: async (req, res) => {
     await userModel.deleteOne({ _id: req.params.id });
+    await walletModel.deleteOne({ UserID: req.params.id });
+    await cartModel.deleteMany({ UserId :req.params.id});
+    await wishlistModel({ UserID :req.params.id})
     req.session.isUserAuthenticated = false;
     req.session.user = false;
     res.redirect("/admin/userManagemnent?dltMessage=User Deleted Successfully");
@@ -689,7 +712,7 @@ module.exports = {
             { _id: req.body.ID },
             { $set: updateObject }
           );
-
+          let returnShipping
           (async function () {
             let amount = canceledData.Order[req.body.index].total;
 
@@ -700,8 +723,14 @@ module.exports = {
                 amount = sample - discount;
               }
             }
-
+             returnShipping = Math.floor(
+             60 / canceledData.Order.length
+            );
+           
+            amount=Math.floor(returnShipping+amount )
+            console.log("amount inside function afeter adding retunrsh" + amount);
             const refund = await walletModel.updateOne(
+              
               { UserID: req.session.customerId },
               { $inc: { Amount: amount } }
             );
@@ -730,13 +759,15 @@ module.exports = {
               DiscountedAmount = sample - discount;
             }
           }
-          await orderModel.findByIdAndUpdate(
+          DiscountedAmount += returnShipping;
+                    await orderModel.findByIdAndUpdate(
             { _id: req.body.ID },
             {
               $inc: {
                 numberOfOrders: -1,
                 TotalOrderPrice: -DiscountedAmount,
                 SubTotal: -amount,
+                ShippingCharge: -returnShipping
               },
             }
           );
@@ -1268,21 +1299,7 @@ module.exports = {
   getInvoice: async (req, res) => {
     let index = req.query.index;
     let OrderID = req.query.id;
-    //  const ProductData = await orderModel.aggregate([
-    //   { $match: { _id: new ObjectId(OrderID) } },
-    //   { $unwind: "$Order.0" },
-    //   {
-    //     $lookup: {
-    //       from: "products",
-    //       let: { productID: { $toObjectId: "$Order.ProductID" } }, // Convert string ID to ObjectId
-    //       pipeline: [
-    //         { $match: { $expr: { $eq: ["$_id", "$$productID"] } } },
-    //       ],
-    //       as: "ProductDetails",
-    //     },
-    //   },
-    //   { $unwind: "$ProductDetails" },
-    // ]);
+    
     const orderData = await orderModel.aggregate([
       { $match: { _id: new ObjectId(OrderID) } },
       {

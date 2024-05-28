@@ -24,10 +24,11 @@ window.onclick = function (event) {
 document
   .querySelector("#add-submit")
   .addEventListener("click", async function () {
+    this.disable=true
     const code = document.getElementById("code").value;
     const date = document.getElementById("date").value;
     const amount = document.getElementById("amount").value;
-    modal.style.display = "none";
+   
     let isUser;
     const encodeCode = encodeURIComponent(code);
     const nowData = new Date();
@@ -110,7 +111,6 @@ async function editData(id) {
 }
 
 document.querySelector(".edit-submit").addEventListener("click", async () => {
-  modalEdit.style.display = "none";
 
   const code = document.getElementById("code-edit").value;
   const encodeCode = encodeURIComponent(code);
