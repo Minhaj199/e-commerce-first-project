@@ -1,8 +1,6 @@
 const user = require("../Model/user");
 const bcrypt = require("bcrypt");
-const otpGenerator = require("otp-generator");
-const otpSchema = require("../Model/otp/otp");
-const OTP = require("../Model/otp/otp");
+
 const productModel = require("../Model/product");
 const categoryModel = require("../Model/catagory");
 const addressModel = require("../Model/address");
@@ -17,30 +15,14 @@ const walletModel = require("../Model/Wallet");
 const coupenTrackingModel = require("../Model/coupenTracking");
 const offerModel = require("../Model/offer");
 const coupenModel = require("../Model/coupen");
-const capitalisation = require("../utility/makeCapitalLetter");
-const forgotEmail=require('../Model/otp/forgoEmail')
+
 
 const dateFunction = require("../utility/DateFormating");
 
 
-let email;
-let data = "";
-let otp = 0;
 
 module.exports = {
-  getLanding: async (req, res) => {
-    try {
-      let User = req.session.user;
-
-      let user = req.session.customerId;
-      const Data = await productModel.find().limit(9).sort({ _id: -1 });
-      const categoryCollecion = await categoryModel.findOne();
-      res.render("index", { User, Data, categoryCollecion, user });
-    } catch (error) {
-      console.log("error on landing page");
-    }
-  },
-  getPages: async (req, res) => {
+  renderPages: async (req, res) => {
     try {
       if (req.query.from === "cart") {
         const addedMessage = req.session.addedMessage;
@@ -303,249 +285,23 @@ module.exports = {
       console.log(error);
     }
   },
-  getLogin: (req, res) => {
-    let message;
-    if(req.session.successOfReset){
-      message=req.session.successOfReset
-      delete req.session.successOfReset
-    }
-    res.render("./user/login",{message});
-  },
-  postLogin: async (req, res, next) => {
-    try {
-      const userData = await user.findOne({ Email: req.body.email });
-      globalEmail = userData;
-      if (userData) {
-        if (userData.status) {
-          const dashashed = await bcrypt.compare(
-            req.body.password,
-            userData.password
-          );
-          if (dashashed) {
-            req.session.user = `Happy Shopping ${userData.first_name} ${userData.second_name}`;
-            req.session.customerId = userData._id;
-            req.session.isUserAuthenticated = true;
-            res.redirect("/user");
-          } else {
-            res.render("user/login", { error: "password is not match" });
-          }
-        } else {
-          req.session.user = "User Blocked";
-          res.redirect("/user");
-        }
-      } else {
-        res.render("user/login", { error: "user not found" });
-      }
-    } catch (err) {
-      console.log(err);
-      // const error=new Error('internal server error')
-      // error.statusCode=500
-      // next(error)
-    }
-  },
-  getForgot: (req, res) => {
-    delete req.session.user,
-      delete req.session.customerId,
-      delete req.session.isUserAuthenticated;
-
-    res.render("user/forgot/forgotEmail");
-  },
-  postOtpEnter: async (req, res) => {
-    try {
-      const email = await user.findOne({ Email: req.body.email });
-      globalEmail = email;
-      if (!email) {
-        res.render("user/forgot/forgotEmail", { error: "user not found" });
-      } else {
-        res.redirect("/log-in/OTP")
-      }
-    } catch (error1) {
-      const error = new Error("internal server error");
-      error.statusCode = 500;
-      next(error);
-    }
-  },
-  getOTP: async (req, res, next) => {
-    try {
-      const email = req.body.email;
-      globalEmail = email;
-      const ifUser=await forgotEmail.findOne({email:email})
-      let EmailOfUser;
-      if(ifUser){
-          EmailOfUser=ifUser.email
-          req.session.emialId=ifUser._id
-      }else{
-       EmailOfUser= await forgotEmail.create({email}
-       )
-        req.session.emialId = EmailOfUser._id;
-      }
-      
-     
-      ;
-    
-     
-      
-      const isUser = await user.findOne({ Email: email });
-      if (isUser) {
-        const otp = otpGenerator.generate(6, {
-          upperCaseAlphabets: false,
-          lowerCaseAlphabets: false,
-          specialChars: false,
-        });
-        const userData = { email, otp };
-        await OTP.create(userData);
-        res.render("user/forgot/otpEnter");
-      } else {
-        res.render("user/forgot/forgotEmail", { error: "Email not found" });
-      }
-    } catch (error1) {
-      console.log(error1)
-      const error = new Error(error1);
-      error.statusCode = 500;
-      next(error);
-    }
-  },
-  resetOTP: async (req, res) => {
-    if (req.query.from === "register") {
-      try {
-        const otp = otpGenerator.generate(6, {
-          upperCaseAlphabets: false,
-          lowerCaseAlphabets: false,
-          specialChars: false,
-        });
-        const userData = { email, otp };
-        await otpSchema.create(userData);
-        res.render("user/otpEnterForReg");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        const otp = otpGenerator.generate(6, {
-          upperCaseAlphabets: false,
-          lowerCaseAlphabets: false,
-          specialChars: false,
-        });
-        const email = req.session.emialId
-        const userData = { email, otp };
-        await otpSchema.create(userData);
-        res.render("user/forgot/otpEnter");
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  },
-  validateOTP: async (req, res) => {
-    if (req.query.from === "Register") {
-      try {
-        const last_otp = await OTP.aggregate([
-          { $sort: { _id: -1 } },
-          { $limit: 1 },
-        ]);
-        if (last_otp[0]?.otp){
-          if (last_otp[0].otp === req.body.userOTP) {
-            const hashedpassword = await bcrypt.hash(data.password, 10);
-            data.password = hashedpassword;
-            const userData = await user.insertMany([data]);
-
-            const walletData = {
-              UserID: userData[0]._id,
-              Amount: 0,
-            };
-            await walletModel.create(walletData);
-
-            res.render("user/login", { error: "Account created successfull" });
-          } else {
-            res.render("user/otpEnterForReg", { error: "Invalid OTP" });
-          }
-        }else{
-          res.render("user/otpEnterForReg", { error: "Invalid Expired" });
-        }
-          
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        
-        const last_otp = await OTP.findOne({ otp: req.body.userOTP })
-          .sort({ _id: -1 })
-          .limit(1);
-        if (last_otp) {
-          res.render("user/forgot/resetPassword");
-        } else {
-          res.render("user/forgot/otpEnter", { message: "invalid otp or OTP Expired" });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  },
-  endOfPassReset: async (req, res) => {
-    try {
-      
-      const emailObj = await forgotEmail.findById(req.session.emialId);
-      
-     
-      const email=emailObj.email
-      
-      const newPassword = req.body.password;
-
-      const saltRounds = 10;
-      const hashedpassword = await bcrypt.hash(newPassword, saltRounds);
-      await user.updateOne(
-        { Email: email },
-        { $set: { password: hashedpassword } }
-      );
-      req.session.successOfReset='Password resetted successfully'
-      res.redirect("/user/log-in");
-    } catch (error) {
-      console.log(error)
-      await forgotEmail.deleteMany({_id:req.session.emialId})
-      delete req.session.emialId
-    
-      console.log("error in the password updation");
-    }
-  },
-  getSignUp: (req, res) => {
-    res.render("./user/registration");
-  },
-  postSignup: async (req, res) => {
-    try {
-      data = {
-        first_name: capitalisation(req.body.First_name),
-        second_name: capitalisation(req.body.Last_name),
-        Email: req.body.Email,
-        phone_Number: req.body.phone,
-        password: req.body.password,
-      };
-      email = req.body.Email;
-      const check = await user.findOne({ Email: req.body.Email });
-
-      if (check) {
-        res.render("user/registration", { error: "Email already exists" });
-      } else {
-        otp = otpGenerator.generate(6, {
-          upperCaseAlphabets: false,
-          lowerCaseAlphabets: false,
-          specialChars: false,
-        });
-        console.log(email, otp);
-        const userData = { email, otp };
-
-        await otpSchema.create(userData);
-        res.render("user/otpEnterForReg");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
   //////////////category////////////
+  getLanding: async (req, res) => {
+    try {
+      let User = req.session.user;
+
+      let user = req.session.customerId;
+      const Data = await productModel.find().limit(9).sort({ _id: -1 });
+      const categoryCollecion = await categoryModel.findOne();
+      res.render("index", { User, Data, categoryCollecion, user });
+    } catch (error) {
+      console.log("error on landing page");
+    }
+  },
   getAll: async (req, res) => {
     try {
       if (req.query.search) {
-        const searchWord = new RegExp("^" + req.query.search, "i").sort({_id:-1});
+        const searchWord = new RegExp("^" + req.query.search, "i")
 
         const Data = await productModel
           .find({ Name: { $regex: searchWord } })

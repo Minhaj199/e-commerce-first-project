@@ -1,214 +1,140 @@
- a {
-     text-decoration: none;
- }
+body {
+    background-color: rgb(210, 210, 210);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
 
- body {
-     background-color: rgb(210, 210, 210);
-     margin: 0;
- }
+a {
+    text-decoration: none;
+}
 
- p {
-     margin: 0;
- }
+p {
+    margin: 0;
+}
 
- .container {
-     display: flex;
-     flex-direction: column;
- }
-
- .nav-bar {
-     width: 100%;
-     height: 10vh;
-     display: flex;
-     justify-content: space-between;
-
- }
-
- .M-fashion {
-     height: 100%;
-     width: 100vw;
-     display: flex;
-     align-items: center;
- }
-
- .m {
-     display: inline;
-     font-weight: bolder;
-     font-family: 'Sonsie One', system-ui;
-     vertical-align: middle;
-     font-size: 3.5em;
- }
-
- .f {
-     font-family: 'Sorts Mill Goudy', serif;
-     display: inline;
-     margin-left: .2em;
-     font-size: 2em;
-     margin-top: 3vh;
-     padding-left: .7vh;
- }
-
- .outer-box {
-     width: 73.5vw;
-     height: 50%;
-     margin: auto;
-     display: flex;
-     justify-content: center;
-     background-color: white;
-     justify-content: flex-start;
-     
- }
-
- .photo {
-     height: 100%;
-     width: 50%;
-
-
- }
-
- img {
-     max-width: 100%;
-     max-height: 100%;
-     overflow: hidden;
- }
-
- .form {
+.container {
     display: flex;
-     flex-direction: column;
-     vertical-align: top;
- }
-
- .back {
-    
-     height: 7.7vh;
-     width: 36.6vw;
- }
-
-
- .back-btn {
-    order: 1;
-     margin-top: 4vh;
-     margin-left: 2vw;
-     color: black;
- }
-
-
-
-.titile {
-    order: 2;
-     padding-left: 10vw;
-     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    flex-direction: column;
 }
 
-.discription {
-    order: 3;
-     width: 100%;
-     height: 20vh;
+.nav-bar {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.dis {
-     width: 34.4vw;
-     display: inline-block;
-     font-family: 'Roboto', sans-serif;
-     font-size: 14px;
-     padding-left: 2vw;
-     line-height: 4vh;
-     padding-top: 4vh;
- }
-
-.email-box {
-     margin-left: 4vw;
-     background-color: rgb(200, 198, 198);
-     border: none;
-     height: 5vw;
-     width: 30vw;
-
- }
-
- ::placeholder {
-     color: rgb(79, 79, 79);
-     padding: 2em;
- }
-
-.dailog-box {
-    order: 4;
-     width: 36.4vw;
-     height: 16vh;
- }
-
-.submit {
-     padding: 1em 2em;
-     margin-top: 5vh;
-     margin-left: 15vw;
-     border-radius: 2em;
-     border: none;
-     background-color: rgb(0, 123, 255)
- }
- .warning{
-    order: 2;
-    display: block;
-    margin-left: 20px;
-    color: red;
- }
- 
-@media screen and (max-width:765px)  {
-.discription {
-        height: 10vh;
-        color: red;
-    }
-.titile {
-    padding-left: 5vw;
-    font-size: 1 px;
-    margin-top: 1em;
+.M-fashion {
+    display: flex;
+    align-items: center;
 }
+
+.m {
+    font-family: 'Sonsie One', system-ui;
+    font-size: 3em;
+}
+
+.f {
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 2em;
+    margin-left: 0.5em;
+}
+
 .outer-box {
-    vertical-align: middle;
-   flex-direction: column;
-   height: 400px;
-   width: 355px;
-   
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    background-color: white;
+    flex-wrap: wrap;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
-.photo{
-    display: none;
+
+.photo {
+    flex: 1 1 50%;
+    min-height: 300px;
+    background: url('/images/image.jpg') center/cover no-repeat;
 }
-.email-box {
-   margin-top: 5em;
+
+.form {
+    flex: 1 1 50%;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-.dis{
-    width: 350px;
+
+.back {
+    margin-bottom: 1em;
 }
-::placeholder {
-    color: rgb(79, 79, 79);
-    font-size: 1em;
+
+.back-btn {
+    color: black;
+    font-weight: 500;
 }
-.submit {
-    padding: 4px ;
-    font-size: 1em;
-    
+
+.titile {
+    font-size: 1.8em;
+    margin-bottom: 0.5em;
 }
+
+.warning {
+    color: red;
+    margin-bottom: 1em;
 }
-@media screen and (max-height:400px) {
+
+.discription {
+    margin-bottom: 1em;
+}
+
 .dis {
-        display: none;
-    }
-        .submit {
-            width: 50%;
-            height: 30px;
-            font-size: 10px;
-            padding-left: 10px;
-            margin: 0;
-            margin-left: 100px;
-            margin-top: 40px;
-        }
-    
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.6;
 }
-@media screen and (max-height:260px) {
-    .dis {
+
+.email-box {
+    width: 100%;
+    padding: 1em;
+    background-color: rgb(230, 230, 230);
+    border: none;
+    margin-bottom: 1em;
+    font-size: 1em;
+}
+
+::placeholder {
+    color: #555;
+}
+
+.submit {
+    width: 100%;
+    padding: 0.75em;
+    background-color: rgb(0, 123, 255);
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit:hover {
+    background-color: rgb(0, 100, 210);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .outer-box {
+        flex-direction: column;
+    }
+
+    .photo {
         display: none;
     }
 
-    .submit {
-        margin-top: 2px;
+    .form {
+        padding: 1.5em;
     }
-
 }

@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const hbs = require("hbs");
 const session = require("express-session");
 const methodOverride = require("method-override");
+const morgan=require('morgan')
 
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
@@ -22,6 +23,7 @@ app.use(require("./middleware/cacheControl"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan('dev'))
 
 
 

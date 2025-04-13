@@ -1,18 +1,19 @@
 const express=require('express')
 const router=express.Router()
 
+
 const userControl=require('../controller/user')
 const userAuthenticated=require('../middleware/userAuthenticated')
 const isUserAuthenticated=require('../middleware/isUserAuthenticated')
 const isUserBlocked=require('../middleware/userBlocked')
+const auth=require('../controller/userRelated.js/auth')
+
 
 
 //landing
 
 router.get('/',userControl.getLanding)
-
-router.all('/getpages',isUserAuthenticated,userControl.getPages)
-
+router.all('/getpages',isUserAuthenticated,userControl.renderPages)
 router.get('/fetchData',userControl.fetchData)
 
 
@@ -25,22 +26,20 @@ router.patch('/patchCart',isUserAuthenticated,userControl.patchCart)
 router.delete('/dltFromCart',isUserAuthenticated,userControl.dltFromCart)
 
 //login
-router.get('/log-in',userAuthenticated,userControl.getLogin)
-router.post('/log-in',userControl.postLogin)
+router.get('/log-in',userAuthenticated,auth.renderLoginPage)
+router.post('/log-in',auth.handleLoginSubmission)
 
 //sign up
-router.get('/registration',userAuthenticated,userControl.getSignUp)
-router.post('/registration',userControl.postSignup)
-router.post('/log-in/forgotOtpEnter',userAuthenticated,userControl.postOtpEnter)
+router.get('/registration',userAuthenticated,auth.renderSignUpPage)
+router.post('/registration',auth.handleSignupPost)
+router.post('/log-in/forgotOtpEnter',userAuthenticated,auth.validateEmail)
 //forgot
-router.get('/log-in/forgot',isUserBlocked,userControl.getForgot)
-router.post('/log-in/forgotOtpEnter',isUserBlocked,userAuthenticated,userControl.postOtpEnter)
-router.post('/log-in/validateOTP',isUserBlocked,userAuthenticated,userControl.validateOTP)
-//router.get('/log-in/passwordChanged',userControl.getPasswordChange)
-router.post('/log-in/OTP',isUserBlocked,userControl.getOTP)
-router.post('/log-in/otpResend',isUserBlocked,userControl.resetOTP)
-//router.get('/log-in/resetPassword',userControl.getPasswordChange)
-router.put('/log-in/passwordReseted',isUserBlocked,userControl.endOfPassReset)
+router.get('/log-in/forgot',isUserBlocked,auth.renderForgot)
+router.post('/log-in/forgotOtpEnter',isUserBlocked,userAuthenticated,auth.validateEmail)
+router.post('/log-in/validateOTP',isUserBlocked,userAuthenticated,auth.validateOTP)
+router.post('/log-in/OTP',isUserBlocked,auth.handleOtpSharing)
+router.post('/log-in/otpResend',isUserBlocked,auth.handleResendOtp)
+router.put('/log-in/passwordReseted',isUserBlocked,auth.resetPassword)
 
 
 //catagory

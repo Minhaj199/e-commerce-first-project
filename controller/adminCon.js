@@ -702,12 +702,10 @@ module.exports = {
           const size = canceledData.Order[req.body.index].size;
 
           const color = canceledData.Order[req.body.index].color;
-
           const result = await productModel.updateOne(
             { _id: ID },
             { $inc: { [`sizes.${size}.${color}`]: quantity } }
           );
-
           const path = `Order.${req.body.index}.admin`;
           let updateObject = {};
           updateObject[path] = false;

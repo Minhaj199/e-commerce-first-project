@@ -23,7 +23,6 @@ const mailSender = async (emailAddress, title, body) => {
     });
     return info;
   } catch (error) {
-    console.log(error.message);
   }
 };
 
