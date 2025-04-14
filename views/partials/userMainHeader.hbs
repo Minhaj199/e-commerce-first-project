@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Css Styles -->
+
+    <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__close">+</div>
+        <ul class="offcanvas__widget">
+            <li><span class="icon_search search-switch"></span></li>
+            <li><a href="/user/getpages/?from=wishlist"><span class="icon_heart_alt"></span>
+
+                </a></li>
+
+
+            </a></li>
+        </ul>
+
+        <div id="mobile-menu-wrap"></div>
+
+    </div>
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-2">
+                    <div class="header__logo">
+                        <a href="/">
+                            <h1 class="m-fashion-logo">M-fashion</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-7">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/user/cat?cat=Women">Women’s</a></li>
+                            <li><a href="/user/cat?cat=Men">Men’s</a></li>
+                            <li><a href="/user/all">Shop</a></li>
+                            <li><a href="./contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__right">
+                        <div class="header__right__auth">
+                            {{#if User}}
+                            <a href="/user/logOut">Log out</a>
+                            <a href="/user/registration" style="display: none;">Register</a>
+                            {{else}}
+                            <a href="/user/log-in">Login &nbsp;/</a>
+                            <a href="/user/registration">Register</a>
+                            {{/if}}
+                        </div>
+                        <ul class="header__right__widget">
+                            <li><span class="icon_search search-switch"></span></li>
+                            <li><a href="/user/getpages/?from=wishlist"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="/user/getPages?from=cart"><span class="icon_bag_alt"></span>
+                                </a></li>
+                            </a></li>
+                            </a></li>
+                            <a href='/user/getUserProfile'><img style="height: 50px;margin-left:20px"
+                                    src="/images/Icons/user.png" alt=""></a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>

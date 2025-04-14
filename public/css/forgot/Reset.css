@@ -1,24 +1,15 @@
 body {
-    background-color: #d2d2d2;
+    background-color: #d2d2d2 !important;
     font-family: 'Roboto', sans-serif;
   }
 
-  .m {
-    font-family: 'Sonsie One', cursive;
-    font-size: 3rem;
-    font-weight: bold;
-  }
 
-  .f {
-    font-family: 'Sorts Mill Goudy', serif;
-    font-size: 2rem;
-    padding-left: 0.5rem;
-  }
 
   .reset-container {
     background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
+    margin-bottom: 50px;
   }
 
   .form-section {

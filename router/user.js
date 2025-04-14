@@ -6,15 +6,16 @@ const userControl=require('../controller/user')
 const userAuthenticated=require('../middleware/userAuthenticated')
 const isUserAuthenticated=require('../middleware/isUserAuthenticated')
 const isUserBlocked=require('../middleware/userBlocked')
-const auth=require('../controller/userRelated.js/auth')
-
+const auth=require('../controller/userRelated.js/authController')
+const orderController=require('../controller/userRelated.js/orderController')
+const addressController = require('../controller/userRelated.js/addressController')
 
 
 //landing
 
 router.get('/',userControl.getLanding)
 router.all('/getpages',isUserAuthenticated,userControl.renderPages)
-router.get('/fetchData',userControl.fetchData)
+router.get('/fetchData',orderController.checkoutUtilityRouter)
 
 
 
@@ -51,7 +52,7 @@ router.get('/cat',isUserBlocked,userControl.cat)
 
 //product Data
 router.get('/productData/:id',isUserBlocked,userControl.getProductDatails)
-router.use('/sighOut',isUserBlocked,userControl.sighOut)
+// router.use('/sighOut',isUserBlocked,userControl.sighOut)
 
 ////////////////////////user Profile////////////////////////////////////
 
@@ -61,33 +62,33 @@ router.put('/updateUserProfile',isUserAuthenticated,userControl.updateUserProfil
 
 ///Manage Address///
 
-router.get('/getManageAddress',isUserAuthenticated,userControl.getManageAddress)
-router.post('/postAddress',isUserAuthenticated,userControl.postAddress)
-router.patch('/patchAddress',isUserAuthenticated,userControl.patchAddress)
-router.put('/putAddress',isUserAuthenticated,userControl.putAddress)
-router.delete('/deleteAddress',isUserAuthenticated,userControl.deleteAddress)
+router.get('/getManageAddress',isUserAuthenticated,addressController.renderAdressMgt)
+router.post('/postAddress',isUserAuthenticated,addressController.submitAddress)
+router.patch('/patchAddress',isUserAuthenticated,addressController.resetingDefualtAddress)
+router.put('/putAddress',isUserAuthenticated,addressController.editAddress)
+router.delete('/deleteAddress',isUserAuthenticated,addressController.deleteAddress)
 
 
 ///check Out//////
 
-router.patch('/removeProduct',isUserAuthenticated,userControl.removeProduct)
-router.post('/orderPlacement',isUserAuthenticated,userControl.placeOrder)
-router.post('/orderFailed',isUserAuthenticated,userControl.orderFailed)
-router.patch('/retryOrderPlacement',isUserAuthenticated,userControl.retryOrderPlacement)
+router.patch('/removeProduct',isUserAuthenticated,orderController.removeProduct)
+router.post('/orderPlacement',isUserAuthenticated,orderController.placeOrder)
+router.post('/orderFailed',isUserAuthenticated,orderController.handleFailed)
+router.patch('/retryOrderPlacement',isUserAuthenticated,orderController.handleRetryOrder)
 
 
 
 ///Delete from OrderPlaced/////
 
-router.patch('/CanecelFromPlacedOrder',isUserAuthenticated,userControl.cancelOreder)
+router.patch('/CanecelFromPlacedOrder',isUserAuthenticated,orderController.cancelOreder)
 
 ////payment gatway/////
 
-router.post('/payment',isUserAuthenticated,userControl.paymentGateway)
-router.post('/retryPayment',isUserAuthenticated,userControl.retryPaymentGateway)
-router.get('/payment',isUserAuthenticated,userControl.getUserData)
+router.post('/payment',isUserAuthenticated,orderController.paymentGateway)
+router.post('/retryPayment',isUserAuthenticated,orderController.retryPayment)
+router.get('/payment',isUserAuthenticated,orderController.getUserInfo)
 router.patch('/payment',isUserAuthenticated,userControl.addIDs)
-router.post('/webhook',isUserAuthenticated,userControl.paymentNotification)
+// router.post('/webhook',isUserAuthenticated,userControl.paymentNotification)
 
 ////////returnProduct//////
 

@@ -23,12 +23,15 @@ app.use(require("./middleware/cacheControl"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 
 
 
 app.get("/", async (req, res) => {
   res.redirect("/user");
+});
+app.get("/sample", (req, res) => {
+  res.render("sample", { title: "sample" });
 });
 
 // routes require
@@ -48,9 +51,10 @@ app.use(express.static(path.join(__dirname, "public")));
 ///partials
 
 hbs.registerPartials("views/partials");
-hbs.registerPartials("views/partials");
-hbs.registerPartials("vies/partials");
-hbs.registerPartials("vies/partials");
+// hbs.registerPartials("views/partials");
+// hbs.registerPartials("views/partials");
+// hbs.registerPartials("views/partials");
+// hbs.registerPartials("views/partials");
 
 ///helper
 hbs.registerHelper("isEqual", function (value1, value2, options) {

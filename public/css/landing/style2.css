@@ -841,6 +841,7 @@ ol {
 .instagram__text i {
 	font-size: 30px;
 	color: #0d0d0d;
+	
 }
 
 .instagram__text a {
@@ -857,6 +858,7 @@ ol {
 
 .footer {
 	padding-top: 55px;
+	background-color: white !important;
 }
 
 .footer__about {

@@ -8,13 +8,10 @@ const { ObjectId } = require("mongodb");
 const lodash = require("lodash");
 const cartModel = require("../Model/cart");
 const orderModel = require("../Model/Order");
-const RazorPay = require("razorpay");
-const Order = require("../Model/Order");
+
 const wishlistModel = require("../Model/wishList");
 const walletModel = require("../Model/Wallet");
-const coupenTrackingModel = require("../Model/coupenTracking");
-const offerModel = require("../Model/offer");
-const coupenModel = require("../Model/coupen");
+
 
 
 const dateFunction = require("../utility/DateFormating");
@@ -22,7 +19,21 @@ const dateFunction = require("../utility/DateFormating");
 
 
 module.exports = {
+  getLanding: async (req, res) => {
+    /////get landing page//////
+    try {
+      let User = req.session.user;
+
+      let user = req.session.customerId;
+      const Data = await productModel.find().limit(9).sort({ _id: -1 });
+      const categoryCollecion = await categoryModel.findOne();
+      res.render("index", { User, Data, categoryCollecion, user });
+    } catch (error) {
+      console.log("error on landing page");
+    }
+  },
   renderPages: async (req, res) => {
+    /////////////render pages based on query//////////
     try {
       if (req.query.from === "cart") {
         const addedMessage = req.session.addedMessage;
@@ -286,18 +297,7 @@ module.exports = {
     }
   },
   //////////////category////////////
-  getLanding: async (req, res) => {
-    try {
-      let User = req.session.user;
-
-      let user = req.session.customerId;
-      const Data = await productModel.find().limit(9).sort({ _id: -1 });
-      const categoryCollecion = await categoryModel.findOne();
-      res.render("index", { User, Data, categoryCollecion, user });
-    } catch (error) {
-      console.log("error on landing page");
-    }
-  },
+  
   getAll: async (req, res) => {
     try {
       if (req.query.search) {
@@ -562,181 +562,6 @@ module.exports = {
       } catch (error) {}
     }
   },
-  getManageAddress: async (req, res) => {
-    try {
-      if (req.query.from === "getManage") {
-        const userData = await user.findById({ _id: req.session.customerId });
-        const idd = req.session.customerId;
-        const getAddresss = await user.aggregate([
-          { $match: { _id: new ObjectId(idd) } },
-          {
-            $lookup: {
-              from: "addresses",
-              localField: "_id",
-              foreignField: "UserId",
-              as: "address",
-            },
-          },
-        ]);
-        const getAddress = getAddresss[0];
-        const addressAdded = req.session.addressAdded;
-        delete req.session.addressAdded;
-        const setAddress = req.session.setAddress;
-        delete req.session.setAddress;
-        const editedInfo = req.session.editedInfo;
-        delete req.session.editedInfo;
-        const deleteAddress = req.session.deleteAddress;
-        delete req.session.deleteAddress;
-        res.render("user/manageAddress", {
-          userData,
-          addressAdded,
-          getAddress,
-          setAddress,
-          editedInfo,
-          deleteAddress,
-        });
-      } else if (req.query.from === "addAddress") {
-        const userId = req.session.customerId;
-        res.render("user/addAddress", { userId });
-      } else if (req.query.from === "editAddress") {
-        const addressData = await addressModel.findById({
-          _id: req.query.Id,
-        });
-        const userID = req.session.customerId;
-        res.render("user/editAddress", { addressData, userID });
-      } else if (req.query.from === "adressEditModalin") {
-        const address = await addressModel.findById(req.query.id);
-
-        res.json(address);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  postAddress: async (req, res) => {
-    try {
-      await addressModel.updateMany(
-        { UserId: req.session.customerId },
-        { $set: { status: false } }
-      );
-
-      if (req.body.hasOwnProperty("addressDataCheckout")) {
-        const addressData = {
-          UserId: req.session.customerId,
-          Name: req.body.addressDataCheckout.name,
-          Mobile: req.body.addressDataCheckout.mobile,
-          Aleternative_mobile: req.body.addressDataCheckout.Aleternative_mobile,
-          Pin: req.body.addressDataCheckout.pin,
-          Town: req.body.addressDataCheckout.town,
-          Email: req.body.addressDataCheckout.email,
-          Locality: req.body.addressDataCheckout.lacality,
-          Land_mark: req.body.addressDataCheckout.landMark,
-          Address: req.body.addressDataCheckout.address,
-        };
-        await addressModel.create(addressData);
-        return res.json("recieved");
-      }
-      const addressData = {
-        UserId: req.session.customerId,
-        Name: req.body.Name,
-        Mobile: req.body.Mobile,
-        Aleternative_mobile: req.body.Aleternative_mobile,
-        Pin: req.body.pin,
-        Town: req.body.Town,
-        Email: req.body.Email,
-        Locality: req.body.Locality,
-        Land_mark: req.body.Land_mark,
-        Address: req.body.Address,
-      };
-      await addressModel
-        .create(addressData)
-        .then((result) => {
-          req.session.addressAdded = "Address Added Successfully";
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      res.redirect(`/user/getManageAddress?from=getManage`);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  patchAddress: async (req, res) => {
-    try {
-      if (req.body.from === "selectBotton") {
-        const userId = req.session.customerId;
-
-        await addressModel.updateMany(
-          { UserId: req.session.customerId },
-          { $set: { status: false } }
-        );
-        await addressModel
-          .updateOne({ _id: req.body.id }, { status: true })
-
-          .then((result) => {
-            res.send("success");
-          });
-      }
-    } catch (error) {}
-  },
-  putAddress: async (req, res) => {
-    try {
-      if (req.query.from === "editAddress") {
-        const addressData = await addressModel.findById({ _id: req.body.id });
-        const data = {
-          Name: req.body.Name || addressData.Name,
-          Mobile: req.body.Mobile || addressData.Mobile,
-          Pin: req.body.pin || addressData.Pin,
-          Aleternative_mobile:
-            req.body.Aleternative_mobile || addressData.Aleternative_mobile,
-          Town: req.body.Town || addressData.Town,
-          Email: req.body.Email || addressData.Email,
-          Locality: req.body.Locality || addressData.Locality,
-          Land_mark: req.body.Land_mark || addressData.Land_mark,
-          Address: req.body.Address || addressData.Address,
-        };
-        await addressModel.findByIdAndUpdate(
-          { _id: req.body.id },
-          { $set: data }
-        );
-        const idd = req.session.customerId;
-        req.session.editedInfo = "Edited Successfully";
-        res.redirect(`/user/getManageAddress?from=getManage`);
-      } else if (req.body.from === "checkOutModalin") {
-        const id = req.body.id;
-        delete req.body.id, req.body.from;
-
-        await addressModel
-          .findByIdAndUpdate(id, req.body)
-          .then((result) => {
-            res.json("ok");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  deleteAddress: async (req, res) => {
-    try {
-      await addressModel.deleteOne({ _id: req.body.id });
-      req.session.deleteAddress = "Deleted Successfully";
-      await addressModel
-        .updateOne(
-          { UserId: req.session.customerId },
-          { $set: { status: true } }
-        )
-        .then((result) => {})
-        .catch((error) => {
-          console.log(error);
-        });
-      res.send("recieved");
-    } catch (error) {}
-  },
-
   /////cart//////
   cart: async (req, res) => {
     try {
@@ -844,251 +669,7 @@ module.exports = {
       console.log(error);
     }
   },
-  ////check out///
-  removeProduct: async (req, res) => {
-    try {
-      await cartModel
-        .findByIdAndUpdate({ _id: req.body.id }, { $set: { status: false } })
-        .then(() => {
-          req.session.removeFromCheckout = "Removed Successfully";
-          res.json("ok");
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  placeOrder: async (req, res) => {
-    try {
-      const orderCount = req.body.orderDetails.Order.length;
-      const Order = {
-        UserId: req.session.customerId,
-        PaymentOption: req.body.orderDetails.paymentOption,
-        SubTotal: req.body.orderDetails.subTotal,
-        Order: req.body.orderDetails.Order,
-        Discount: req.body.orderDetails.discount,
-        ShippingCharge: req.body.orderDetails.deleveryCharge,
-        TotalOrderPrice: req.body.orderDetails.total,
-        AddressID: req.body.orderDetails.addressID,
-        payment_Order_id: req.body.orderDetails.paymentOrderID,
-        payment_id: req.body.orderDetails.paymentID,
-        numberOfOrders: orderCount,
-      };
-      if (req.body.orderDetails.CoupenID != undefined) {
-        const coupenData = {
-          UserID: req.session.customerId,
-          CoupenID: req.body.orderDetails.CoupenID,
-        };
-        await coupenTrackingModel.create(coupenData);
-      }
-
-      let resultID = "";
-      await orderModel
-        .create(Order)
-        .then((result) => {
-          resultID = result._id;
-          req.session.OrderID = result._id;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      if (
-        req.body.orderDetails.paymentOption === "Wallet+Online" ||
-        req.body.orderDetails.paymentOption === "Wallet"
-      ) {
-        const amount = req.body.orderDetails.Order[0].wallet;
-
-        await walletModel.updateOne(
-          { UserID: req.session.customerId },
-          { $inc: { Amount: -amount } }
-        );
-        const result = await walletModel.updateOne(
-          { UserID: req.session.customerId },
-          {
-            $push: {
-              transaction: {
-                id: resultID,
-                amount: amount,
-                status: "Debited",
-                date: new Date(),
-              },
-            },
-          }
-        );
-      }
-      for (let i = 0; i < req.body.orderDetails.CartIDs.length; i++) {
-        await cartModel.deleteOne({ _id: req.body.orderDetails.CartIDs[i] });
-      }
-      for (let i = 0; i < req.body.orderDetails.productID.length; i++) {
-        path = `sizes.${req.body.orderDetails.sizes[i]}.${req.body.orderDetails.colors[i]}`;
-        quantity = req.body.orderDetails.Order[i].quantity;
-        await productModel
-          .findByIdAndUpdate(
-            { _id: req.body.orderDetails.productID[i] },
-            { $inc: { [path]: -quantity } }
-          )
-          .then((result) => {})
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      return res.json("hiiiiiiiiiiiiiiiii");
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  orderFailed: async (req, res) => {
-    try {
-      const Order = {
-        UserId: req.session.customerId,
-        PaymentOption: req.body.orderDetails.paymentOption,
-        SubTotal: req.body.orderDetails.subTotal,
-        Order: req.body.orderDetails.Order,
-        Discount: req.body.orderDetails.discount,
-        ShippingCharge: req.body.orderDetails.deleveryCharge,
-        TotalOrderPrice: req.body.orderDetails.total,
-        AddressID: req.body.orderDetails.addressID,
-        payment_Order_id: req.body.orderDetails.paymentOrderID,
-        payment_id: req.body.orderDetails.paymentID,
-        coupenID: req.body.orderDetails.CoupenID,
-      };
-      for (let i = 0; i < req.body.orderDetails.CartIDs.length; i++) {
-        await cartModel.deleteOne({ _id: req.body.orderDetails.CartIDs[i] });
-      }
-      let OrderID;
-      await orderModel
-        .create(Order)
-        .then((result) => {
-          req.session.OrderID = result._id;
-          return res.json("success");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  retryOrderPlacement: async (req, res) => {
-    try {
-      const result = await orderModel.findById(req.body.retryObj.id);
-
-      for (let i = 0; i < result.Order.length; i++) {
-        result.Order[i].status = "Pending";
-        result.Order[i].admin = true;
-      }
-      result.PaymentOption = "Razor Pay";
-
-      const quantity = result.Order.map((item) => item.quantity);
-      const color = result.Order.map((item) => item.color);
-      const IDs = result.Order.map((item) => item.ProductID);
-      const size = result.Order.map((item) => item.size);
-      await orderModel.findByIdAndUpdate(req.body.retryObj.id, {
-        $set: result,
-        numberOfOrders: IDs.length,
-      });
-
-      for (let i = 0; i < IDs.length; i++) {
-        path = `sizes.${size[i]}.${color[i]}`;
-        const result = await productModel.findByIdAndUpdate(IDs[i], {
-          $inc: { [path]: -quantity[i] },
-        });
-      }
-
-      if (req.body.retryObj.coupenID != "") {
-        const coupenData = {
-          UserID: req.session.customerId,
-          CoupenID: req.body.retryObj.coupenID,
-        };
-        await coupenTrackingModel.create(coupenData);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    res.json("success");
-  },
-  //////order Cancelation//////
-  cancelOreder: async (req, res) => {
-    if (req.body.from === "return order") {
-      try {
-        const path = `Order.${req.body.index}.status`;
-        const pathToReason = `Order.${req.body.index}.reason`;
-        let updateObject = {};
-        updateObject[pathToReason] = req.body.reason;
-        updateObject[path] = "Requested for Return";
-
-        await orderModel
-          .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
-          .then((result) => {
-            res.json("ok");
-          });
-      } catch (error) {}
-    } else {
-      try {
-        const path = `Order.${req.body.index}.status`;
-        let updateObject = {};
-        updateObject[path] = "Requested for Cancelation";
-
-        await orderModel
-          .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
-          .then((result) => {
-            res.json("ok");
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  },
-
-  ///payment gateway///
-
-  paymentGateway: async (req, res) => {
-    try {
-      const razorpay = new RazorPay({
-        key_id: process.env.key_id,
-        key_secret: process.env.key_secret,
-      });
-
-      const paymentData = {
-        amount: req.body.amount * 100,
-        currency: "INR",
-        receipt: "###",
-      };
-      const response = await razorpay.orders.create(paymentData);
-      response.pubID = process.env.key_id;
-      res.json(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  retryPaymentGateway: async (req, res) => {
-    try {
-      const razorpay = new RazorPay({
-        key_id: process.env.key_id,
-        key_secret: process.env.key_secret,
-      });
-
-      const paymentData = {
-        amount: req.body.amount * 100,
-        currency: "INR",
-        receipt: "###",
-      };
-      const response = await razorpay.orders.create(paymentData);
-
-      res.json(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  getUserData: async (req, res) => {
-    try {
-      const userData = await user.findById(req.session.customerId);
-
-      res.status(200).json(userData);
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  
   addIDs: async (req, res) => {
     if (req.body.hasOwnProperty("retryPayment")) {
     }
@@ -1153,93 +734,5 @@ module.exports = {
     }
     
   },
-  fetchData: async (req, res) => {
-    try {
-      if (req.query.from === "retryPayment") {
-        const jcolor = decodeURIComponent(req.query.color);
-        const jsize = decodeURIComponent(req.query.size);
-        const jIDs = decodeURIComponent(req.query.IDs);
-
-        const colors = jcolor.split(",");
-        const sizes = jsize.split(",");
-        const IDs = jIDs.split(",");
-
-        const qty = [];
-        for (let i = 0; i < IDs.length; i++) {
-          const temQty = await productModel.findById(IDs[i]);
-
-          qty.push(temQty);
-        }
-        let sizesArray = [];
-        const a = qty[0].sizes.small.white;
-
-        for (let i = 0; i < qty.length; i++) {
-          let path = `sizes.${sizes[i]}.${colors[i]}`;
-
-          sizesArray.push(lodash.get(qty[i], path));
-        }
-
-        let count = 0;
-        for (let i = 0; i < sizesArray.length; i++) {
-          if (sizesArray[i] === 0) {
-            count++;
-          }
-        }
-        if (count !== 0) {
-          res.json("no stock");
-        } else {
-          res.json("stock");
-        }
-      } else if (req.query.from === "validateCoupen") {
-        const validateCoupen = await coupenModel.find({
-          code: req.query.coupen,
-        });
-
-        if (validateCoupen.length !== 0) {
-          const expiry = validateCoupen[0].Expiry;
-          const currentDate = new Date();
-
-          if (expiry < currentDate) {
-            res.json("Code Expird");
-          } else {
-            const checkUsage = await coupenTrackingModel.findOne({
-              $and: [
-                { UserID: req.session.customerId },
-                { CoupenID: validateCoupen[0]._id },
-              ],
-            });
-
-            if (checkUsage) {
-              res.json("Code Already used");
-            } else {
-              res.json({
-                message: `Code amout ${validateCoupen[0].amount} applied`,
-                amount: validateCoupen[0].amount,
-                flag: true,
-                coupenID: validateCoupen[0]._id,
-              });
-            }
-          }
-        } else {
-          res.json("Invalid code");
-        }
-      } else {
-        const WalletAmount = await walletModel.findOne({
-          UserID: req.session.customerId,
-        });
-        const amount = WalletAmount.Amount;
-
-        res.json(amount);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  paymentNotification: async (req, res) => {
-    try {
-      const notification = req.body;
-    } catch (error) {
-      console.log(error);
-    }
-  },
+ 
 };

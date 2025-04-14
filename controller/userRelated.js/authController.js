@@ -1,75 +1,75 @@
 const user = require("../../Model/user");
 const bcrypt = require("bcrypt");
-const forgotEmail=require('../../Model/otp/forgoEmail')
+const forgotEmail = require('../../Model/otp/forgoEmail')
 const capitalisation = require("../../utility/makeCapitalLetter");
 const otpGenerator = require("otp-generator");
 const otpSchema = require("../../Model/otp/otp");
 const OTP = require("../../Model/otp/otp");
-const walletModel=require('../../Model/Wallet')
+const walletModel = require('../../Model/Wallet')
 
 let data = {};
 let email;
 let globalEmail = null;
 let otp = null;
-module.exports={
-      renderLoginPage: (req, res) => {
+module.exports = {
+    renderLoginPage: (req, res) => {
         let message;
-        if(req.session.successOfReset){
-          message=req.session.successOfReset
-          delete req.session.successOfReset
+        if (req.session.successOfReset) {
+            message = req.session.successOfReset
+            delete req.session.successOfReset
         }
-        res.render("./user/login",{message});
-      },
-      handleLoginSubmission: async (req, res, next) => {
+        res.render("./user/login", { message });
+    },
+    handleLoginSubmission: async (req, res, next) => {
         /////password validation and session assigning////
         try {
-          const userData = await user.findOne({ Email: req.body.email });
-          globalEmail = userData;
-          if (userData) {
-            if (userData.status) {
-              const dashashed = await bcrypt.compare(
-                req.body.password,
-                userData.password
-              );
-              if (dashashed) {
-                req.session.user = `Happy Shopping ${userData.first_name} ${userData.second_name}`;
-                req.session.customerId = userData._id;
-                req.session.isUserAuthenticated = true;
-                res.redirect("/user");
-              } else {
-                res.render("user/login", { error: "password is not match" });
-              }
+            const userData = await user.findOne({ Email: req.body.email });
+            globalEmail = userData;
+            if (userData) {
+                if (userData.status) {
+                    const dashashed = await bcrypt.compare(
+                        req.body.password,
+                        userData.password
+                    );
+                    if (dashashed) {
+                        req.session.user = `Happy Shopping ${userData.first_name} ${userData.second_name}`;
+                        req.session.customerId = userData._id;
+                        req.session.isUserAuthenticated = true;
+                        res.redirect("/user");
+                    } else {
+                        res.render("user/login", { error: "password is not match" });
+                    }
+                } else {
+                    req.session.user = "User Blocked";
+                    res.redirect("/user");
+                }
             } else {
-              req.session.user = "User Blocked";
-              res.redirect("/user");
+                res.render("user/login", { error: "user not found" });
             }
-          } else {
-            res.render("user/login", { error: "user not found" });
-          }
         } catch (err) {
-          console.log(err);
-          next(err)
+            console.log(err);
+            next(err)
         }
-      },
-      renderForgot: (req, res) => {
+    },
+    renderForgot: (req, res) => {
         ///// get from forgot page////
         delete req.session.user,
-          delete req.session.customerId,
-          delete req.session.isUserAuthenticated;
+            delete req.session.customerId,
+            delete req.session.isUserAuthenticated;
         res.render("user/forgot/forgotEmail");
-      },
-      resetPassword: async (req, res,next) => {
+    },
+    resetPassword: async (req, res, next) => {
         console.log(req.body)
         try {
-            const emailObj = await forgotEmail.findOne({email:req.session.emailID});
+            const emailObj = await forgotEmail.findOne({ email: req.session.emailID });
             const email = emailObj.email
 
             const newPassword = req.body.password;
-            
+
             const saltRounds = 10;
             const hashedpassword = await bcrypt.hash(newPassword, saltRounds);
-            
-             await user.updateOne(
+
+            await user.updateOne(
                 { Email: email },
                 { $set: { password: hashedpassword } }
             );
@@ -79,7 +79,7 @@ module.exports={
             console.log(error.message)
             await forgotEmail.deleteMany({ _id: req.session.emailID })
             delete req.session.emailID
-            
+
             console.log("error in the password updation");
             next(error)
         }
@@ -119,7 +119,7 @@ module.exports={
             console.log(error);
         }
     },
-    validateEmail: async (req, res,next) => {
+    validateEmail: async (req, res, next) => {
         /////validate email and redirect to OTP page////
         try {
             const email = await user.findOne({ Email: req.body.email });
@@ -233,13 +233,13 @@ module.exports={
             } catch (error) {
                 console.log(error);
             }
-        } else {    
+        } else {
             try {
 
-                const last_otp = await OTP.findOne({ otp: req.body.userOTP,email:req.session.emailID })
+                const last_otp = await OTP.findOne({ otp: req.body.userOTP, email: req.session.emailID })
                     .sort({ _id: -1 })
                     .limit(1);
-                    console.log(last_otp)
+                console.log(last_otp)
                 if (last_otp) {
                     res.render("user/forgot/resetPassword");
                 } else {

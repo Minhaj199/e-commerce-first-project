@@ -8,11 +8,9 @@ const { ObjectId } = require("mongodb");
 const walletModel = require("../Model/Wallet");
 const coupenModel = require("../Model/coupen");
 const coupenTrackingModel = require("../Model/coupenTracking");
-
-const upload = require("../middleware/multer");
 const cloudinary = require("../middleware/cludinary");
 const fs = require("fs");
-const Razorpay = require("razorpay");
+
 const offerModel = require("../Model/offer");
 const { includes } = require("lodash");
 const dateFunction = require("../utility/DateFormating");
