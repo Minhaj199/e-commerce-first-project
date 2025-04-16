@@ -39,6 +39,7 @@ router.get("/datashBord", AdminAuthenticated, renderingController.dashBord);
 
 router.get('/add-product-form', AdminAuthenticated, renderingController.addProduct)
 router.get('/product-management', AdminAuthenticated, renderingController.productsMgt)
+router.get('/product-stock/:id',AdminAuthenticated,renderingController.productStock)
 router.post('/product-management', AdminAuthenticated, renderingController.setProductMgtSorted)
 router.post('/add-Product', AdminAuthenticated, upload.array('image'), addController.postProduct)
 router.post('/editProduct/:id', AdminAuthenticated, renderingController.editProduct)

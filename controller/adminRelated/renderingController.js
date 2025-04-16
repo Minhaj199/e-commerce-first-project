@@ -92,6 +92,18 @@ module.exports = {
         }
 
     },
+    productStock: async (req, res, next) => {
+        try {
+            const id=req.params.id
+            if(!id&&typeof id!=='string')throw new Error('id not found')
+            const product=await productItemModel.findById(id)
+            res.render('admin/productStock',{product})  
+    
+        } catch (error) {
+         next(error)   
+        }
+       
+    },
     setProductMgtSorted: async (req, res, next) => {
         try {
             if (req.body.category == "Men") {

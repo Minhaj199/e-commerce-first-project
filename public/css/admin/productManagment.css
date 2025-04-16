@@ -11,6 +11,9 @@
     flex-direction: column;
         
 }
+table ,td{
+  background-color: white;
+}
 p{
   font-family: 'Poppins', sans-serif;
 }
@@ -20,7 +23,7 @@ p{
   .admin-profile{
     height: 30%;
     width: 100%;
-    background-color: rgb(186, 186, 186);
+    /* background-color: rgb(186, 186, 186); */
     margin: 0;
     display: flex;
     flex-direction: column;

@@ -10,6 +10,8 @@ const morgan=require('morgan')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
 const productItemModel = require("./Model/prouctItems");
+const { Types } = require("mongoose");
+const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning } = require("./utils/hbsHelpers");
 
 
 
@@ -47,7 +49,7 @@ app.use(require("./middleware/cacheControl"));
 
 app.get("/", async (req, res) => {
   try {
-    const product=await productItemModel.find({}).limit()
+   
     res.redirect("/user");
   } catch (error) {
     
@@ -61,8 +63,9 @@ app.get("/", async (req, res) => {
 
 app.use("/user", require("./router/user"));
 app.use("/admin", require("./router/admin"));
-app.get('/sample',(req,res)=>{
-  res.render('sample',{name:'minhaj'})
+app.get('/sample',async(req,res)=>{
+  const product=await productItemModel.findById('67ff58d96dae652a0889e9ab')
+  res.render('sample',{product})
 })
 
 
@@ -77,30 +80,12 @@ app.use(express.static(path.join(__dirname, "public")));
 // hbs.registerPartials("views/partials");
 
 ///helper
-hbs.registerHelper("isEqual", function (value1, value2, options) {
-  return value1 === value2 ? options.fn(this) : options.inverse(this);
-});
-hbs.registerHelper("increment", function (value) {
-  return value + 1;
-});
-hbs.registerHelper("calculatePersatage", function (value1, value2) {
-  let persantage = parseInt(value1);
-  let amount = parseInt(value2);
-  if (isNaN(value1) || isNaN(value2)) {
-    return "";
-  }
-  const sample = persantage / 100;
-  const discount = sample * amount;
-  const preResult = value2 - discount;
-  const result = Math.floor(preResult);
-  return result;
-});
-
-hbs.registerHelper('lookupQuantity', function(size, color, stock) {
-  const found = stock.find(item => item.size === size && item.color === color);
-  return found ? found.quantity : '-';
-});
-
+hbs.registerHelper("isEqual",isEqual);
+hbs.registerHelper("increment",increment)
+hbs.registerHelper("calculatePersatage",calculatePersatage);
+hbs.registerHelper('lookupQuantity',lookupQuantity);
+hbs.registerHelper('sumStock',sumStock)
+hbs.registerHelper('stockWarning',stockWarning)
 app.use(erro404);
 
 app.use(errorHandler);

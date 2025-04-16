@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Inventory Management</title>
+    <link rel="stylesheet" href="/css/admin/productStock.css">
+</head>
+<body>
+     {{> adminHeader}}
+    <main style="margin-top: 10px;">
+        <a href="/admin/product-management" class="back-button">
+            <span class="back-arrow">←</span> Back to Products
+        </a>
+        
+        <div class="product-container">
+            <div class="product-header">
+                <div class="product-image">
+                    <img src={{product.images.path.[0]}} alt="Classic Cotton T-Shirt">
+                </div>
+                <div class="product-info">
+                   
+                    <h1 class="product-title">{{product.Name}}</h1>
+                   
+                    <div class="product-code">Product Rate: ₹{{product.price}}</div>
+                    <p class="product-description">
+                       {{product.description}}
+                    </p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Category</div>
+                            <div class="meta-value">{{product.category}}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Total Stock</div>
+                            <div class="meta-value">{{sumStock product.variants}} units</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Inventory Status</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Size</th>
+                        <th>Variant</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {{#each product.variants}}
+                    <tr>
+                        <td>{{increment @index }}</td>
+                        <td>{{this.size}}</td>
+                        <td>{{this.color}}</td>
+                        {{#if (stockWarning this.stock)}}
+                        <td class="low-stock">{{this.stock}}</td>
+                        {{else}}
+                        <td class="high-stock">{{this.stock}}</td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
