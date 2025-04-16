@@ -8,6 +8,8 @@ const offerModel = require("../../Model/offer");
 const userModel = require("../../Model/user");
 const walletModel = require("../../Model/wallets");
 const orderModel = require("../../Model/orders");
+const productItemModel = require('../../Model/prouctItems');
+const { Types } = require('mongoose');
 
 
 module.exports = {
@@ -96,6 +98,51 @@ module.exports = {
                 });
         } catch (error) {
             next(error)
+        }
+    },
+    updateVariant: async (req, res) => {
+        try {
+            const { id } = req.params
+            const {
+                size,
+                color,
+                stock,
+                varientId
+            } = req.body
+            if (!size || !color || !stock || !varientId) {
+                throw new Error('insufficient data')
+            }
+            if (!id) {
+                throw new Error('id not found')
+            }
+            const product = await productItemModel.findById(id)
+            if (!product) res.json({ message: 'product not found' })
+            const isDuplicate = product.variants.find(v => {
+                let docId = v._id.toString()
+                return docId !== varientId && v.size === size && v.color === color
+            })
+
+            if (isDuplicate) {
+                throw new Error('This variant already exist')
+            }
+
+            const varientTobeEdited = product.variants.id(varientId)
+
+            if (varientTobeEdited.size === size && varientTobeEdited.color === color && stock == varientTobeEdited.stock) {
+                return res.status(400).json({ message: 'change not found' })
+            }
+            if (!varientTobeEdited) {
+                res.status(400).json({ message: 'veriant not found' })
+            }
+            varientTobeEdited.size = size
+            varientTobeEdited.color = color
+            varientTobeEdited.stock = stock
+            const result = await product.save()
+            if (result) {
+                res.json(true)
+            }
+        } catch (error) {
+            res.status(400).json({ message: 'Duplicate variant exists (same size and color).' });
         }
     },
     handleBlockAndUnblock: async (req, res, next) => {

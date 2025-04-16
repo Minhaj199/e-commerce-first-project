@@ -5,21 +5,21 @@ form.addEventListener('submit', (e) => {
   const input = document.getElementById('varient_collection')
   const tbody = document.getElementById('productTableBody')
   const tbodyChild = tbody.childElementCount
-  
-  input.value = (sessionStorage.getItem('value')&&tbodyChild>1) ? sessionStorage.getItem('value') : '[]'
-  
-  const varient =input.value
+
+  input.value = (sessionStorage.getItem('value') && tbodyChild > 1) ? sessionStorage.getItem('value') : '[]'
+
+  const varient = input.value
   if (varient) {
     const varientParsed = JSON.parse(varient) || []
     if (varientParsed?.length <= 0) {
       document.getElementById('varient-warning').innerHTML = 'Please Insert Atlease One Varient'
-      window.scroll({top:0,behavior:'smooth'})
+      window.scroll({ top: 0, behavior: 'smooth' })
       e.preventDefault()
       return false
     }
   } else {
     document.getElementById('varient-warning').innerHTML = 'Please Insert Atlease One Varient'
-    window.scroll({top:0,behavior:'smooth'})
+    window.scroll({ top: 0, behavior: 'smooth' })
     e.preventDefault()
     return false
   }
@@ -135,7 +135,7 @@ function handleRemoveVarient(id, button) {
     return el.id !== id
   })
   button.closest('tr').remove()
-  sessionStorage.setItem('value',JSON.stringify(arrayAfterRemoved))
+  sessionStorage.setItem('value', JSON.stringify(arrayAfterRemoved))
 }
 
 
@@ -328,8 +328,8 @@ function validate() {
   const photo3 = document.getElementById("field-3").value;
   const photo4 = document.getElementById("field-4").value;
   const photo5 = document.getElementById("field-5").value;
-  
-  
+
+
   if (name.trim() === "") {
     showToast("Blank space in Name is not allowed");
     return false;

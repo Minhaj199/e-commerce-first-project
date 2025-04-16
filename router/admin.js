@@ -39,13 +39,17 @@ router.get("/datashBord", AdminAuthenticated, renderingController.dashBord);
 
 router.get('/add-product-form', AdminAuthenticated, renderingController.addProduct)
 router.get('/product-management', AdminAuthenticated, renderingController.productsMgt)
-router.get('/product-stock/:id',AdminAuthenticated,renderingController.productStock)
+router.get('/product-stock/:id', AdminAuthenticated, renderingController.productStock)
 router.post('/product-management', AdminAuthenticated, renderingController.setProductMgtSorted)
 router.post('/add-Product', AdminAuthenticated, upload.array('image'), addController.postProduct)
 router.post('/editProduct/:id', AdminAuthenticated, renderingController.editProduct)
 router.post('/deleteProduct/:id', AdminAuthenticated, renderingController.deleteProduct)
 router.delete('/DeleteProduct/:id', AdminAuthenticated, deleteController.handleDeleteProduct)
 router.put('/editProduct/:id', AdminAuthenticated, upload.array('image'), editController.updateProduct)
+
+//////////route to edit variant individually////////
+router.patch('/edit-variant/:id', editController.updateVariant)
+
 
 // 
 /////////category management////////////

@@ -71,12 +71,11 @@ module.exports = {
     editProduct: async (req, res, next) => {
         try {
 
-            const ProductData = await productModel.findById(req.params.id);
-
+            const ProductData = await productItemModel.findById(req.params.id);
             const CatAndBrand = await category.findOne();
             const cat = ProductData.category;
-
-            res.render("admin/EditProduct", { ProductData, CatAndBrand, cat });
+            
+            res.render("admin/editProduct", { ProductData, CatAndBrand, cat });
         } catch (error) {
             next(error)
         }
@@ -128,7 +127,7 @@ module.exports = {
         try {
             // res.render("admin/adminLogIn");
             req.session.isAdminAuthenticated = true;
-            res.redirect("/admin/add-product-form");
+            res.redirect("/admin/product-management");
         } catch (error) {
             next(error)
         }
@@ -448,7 +447,7 @@ module.exports = {
                         category,
                     });
                 } catch (error) {
-                    console.log(error);
+                   next(error)
                 }
             }
         } catch (error) {

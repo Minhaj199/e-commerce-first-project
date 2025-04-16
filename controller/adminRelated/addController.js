@@ -5,20 +5,19 @@ const fs = require("fs");
 const category = require("../../Model/catagory");
 const coupenModel = require("../../Model/coupen");
 const offerModel = require("../../Model/offer");
-const productItemModel=require("../../Model/prouctItems")
-const variatFormater=require('../../utils/variantFormater')
+const productItemModel = require("../../Model/prouctItems")
+const variatFormater = require('../../utils/variantFormater')
 module.exports = {
 
     postProduct: async (req, res, next) => {
-        console.log(req.body)
-        console.log(req.files)
+
         try {
-            const variants=JSON.parse (req.body.variens)||[]
-                if(!variants||variants?.length<=0){
-                    throw new Error('in sufficient data')
-                }
-              const idRemovedVarient=variatFormater(variants)
-              console.log(idRemovedVarient)
+            const variants = JSON.parse(req.body.variens) || []
+            if (!variants || variants?.length <= 0) {
+                throw new Error('in sufficient data')
+            }
+            const idRemovedVarient = variatFormater(variants)
+
             const uploader = async (path) => await cloudinary.uploads(path, "Images");
             let urls = [];
             const files = req.files;
@@ -38,7 +37,7 @@ module.exports = {
                 Name: req.body.Name,
                 brand: req.body.brand,
                 category: req.body.category,
-                variants:idRemovedVarient,
+                variants: idRemovedVarient,
                 price: req.body.price,
                 description: req.body.description,
                 images: {

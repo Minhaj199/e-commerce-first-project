@@ -1,3 +1,12 @@
+const capitalisor = (word) => {
+  //////////capitalising first letter of color////
+  if (!word || typeof word !== 'string' || word.length <= 1) {
+    throw new Error('varient not accepted')
+  }
+  let newWord = word[0].toUpperCase() + word.slice(1).toLocaleLowerCase()
+  return newWord
+}
+
 let oldImages = [];
 let modal = document.getElementById("myModal");
 let close = document.querySelector(".close");
@@ -217,7 +226,6 @@ function validate() {
 }
 
 function showToast(message) {
-  console.log("inside tost");
   Toastify({
     text: message,
     duration: 4000,
@@ -225,4 +233,141 @@ function showToast(message) {
     gravity: "top",
     position: "center",
   }).showToast();
+}
+
+async function handleEditClick(id,button,index){
+  ///////////// handle clicking eding in the table dynamically insert current value/////
+ ////////////storing varient id on button data set
+    try {
+     
+      const row=button.closest('tr')
+      const cells=row.querySelectorAll('td')
+      const size=cells[0]?.textContent.trim().toUpperCase()
+      const color=cells[1]?.textContent.trim()
+      const stock= Number(cells[2]?.textContent.trim())
+      if(stock&&size&&color){
+        const sizeDropdown=document.getElementById('size')
+        sizeDropdown.disabled=false
+        document.getElementById(size).selected=true
+        const colorInput=document.getElementById('color')
+        colorInput.disabled=false
+        colorInput.value=color
+        const stockInput=document.getElementById('qty')
+        stockInput.disabled=false
+        stockInput.value=stock
+        const button=document.getElementById('update-btn')
+        button.disabled=false
+        button.dataset._id=id
+        sessionStorage.setItem('editingRow','id-'+index)
+        document.getElementById('cancel-edit').disabled=false
+      }
+    
+    } catch (error) {
+      console.error(error)
+    showToast(error.message||'internal server error')    
+    }
+}
+
+async function handleSubmitVariantEdit(productId){
+  const prompt=await showAlertPropt('Do you want to submit change?')
+  if(!prompt)return
+  
+  /////////// validating edid data ///////
+  try {
+    const size=document.getElementById('size').value
+  const color=capitalisor(document.getElementById('color').value)
+  const stock=Math.floor(document.getElementById('qty').value)
+  const warning=document.getElementById('varient-warning')
+  if(size?.trim()===''){
+    warning.textContent='Size Is Empty'
+    return
+  }
+  if(color?.trim()===''){
+    warning.textContent='Color Is Empty'
+    return
+  }   
+  if(color?.trim().length>10){
+    warning.textContent='Reduce name length below 11'
+    return
+  }
+    if(stock>5000||stock<1){
+      warning.textContent='insert stock between 1-5000'
+      return
+    }
+  warning.textContent=''
+  const varientId=document.getElementById('update-btn').dataset._id
+  if(!varientId){
+    showToast('id not found')
+    return
+  }
+  const response=await submitEditedData(varientId,size,color,stock,productId)
+
+  if(response===true){
+    const editingRow=sessionStorage.getItem('editingRow')
+    const row=document.getElementById(editingRow)
+    const cells=row.querySelectorAll('td')
+    cells[0].textContent=size
+    cells[1].textContent=color
+    cells[2].textContent=stock
+    sessionStorage.removeItem('editingRow')
+    handleResetVariantEdit()
+    showToast(`size-${size}-color-${color} updated`)
+  }
+} catch (error) {
+    showToast(error.message||'internal server error')
+  }
+}
+async function submitEditedData(varientId,size,color,stock,productId){
+  try {
+    const data={size,color,stock,varientId}
+  const response=await fetch('/admin/edit-variant/'+productId,{method:'PATCH',body:JSON.stringify(data), headers: {
+    'Content-Type': 'application/json'
+  }})
+  if (!response.ok) {
+    const error = await response.json(); // or .text() if your server returns plain error
+    throw new Error(error.message || 'Something went wrong');
+  }
+   const parsededReponse=await response.json()
+  
+   return parsededReponse
+  } catch (error) {
+    showToast(error.message||'internal server error')
+  }
+}
+async function showAlertPropt(message) {
+
+  try {
+const result = await Swal.fire({
+  title: "Are you sure ?",
+  text: message,
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#b50c00",
+  cancelButtonColor: "##bfbcbb !important",
+  confirmButtonText: "confirm",
+});
+if (result.isConfirmed) {
+  return true;
+} else {
+  return false;
+}
+} catch (e) {
+showToast("internal server error");
+return false;
+}
+}
+function handleResetVariantEdit(){
+  
+  const sizeInput=document.getElementById('size')
+    const colorInput=document.getElementById('color')
+    const stockInput=document.getElementById('qty')
+    const button=document.getElementById('update-btn')
+    document.getElementById('cancel-edit').disabled=true
+    sizeInput.disabled=true
+    colorInput.value=''
+    color.disabled=true
+    stockInput.value=0
+    stockInput.disabled=true
+    button.disabled=true
+
 }
