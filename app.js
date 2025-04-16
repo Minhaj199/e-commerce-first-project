@@ -9,7 +9,23 @@ const morgan=require('morgan')
 
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
+const productItemModel = require("./Model/prouctItems");
 
+
+
+dotenv.config({ path: "./configaration.env" });
+
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs")
+app.set("view cache", false);
+// hbs.registerPartials("views/partials");
+hbs.registerPartials(path.join(__dirname, "views/partials"));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(methodOverride("_method"))
 app.use(
   session({
     secret: "secret-key",
@@ -19,38 +35,42 @@ app.use(
   })
 );
 
+
+
+
 app.use(require("./middleware/cacheControl"));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
 // app.use(morgan('dev'))
 
 
 
 app.get("/", async (req, res) => {
-  res.redirect("/user");
+  try {
+    const product=await productItemModel.find({}).limit()
+    res.redirect("/user");
+  } catch (error) {
+    
+  }
 });
-app.get("/sample", (req, res) => {
-  res.render("sample", { title: "sample" });
-});
+
 
 // routes require
-dotenv.config({ path: "./configaration.env" });
 
-app.use(methodOverride("_method"))
+
 
 app.use("/user", require("./router/user"));
 app.use("/admin", require("./router/admin"));
+app.get('/sample',(req,res)=>{
+  res.render('sample',{name:'minhaj'})
+})
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "hbs");
 
-app.set("view cache", false);
 app.use(express.static(path.join(__dirname, "public")));
 
 ///partials
 
-hbs.registerPartials("views/partials");
+
 // hbs.registerPartials("views/partials");
 // hbs.registerPartials("views/partials");
 // hbs.registerPartials("views/partials");
@@ -74,6 +94,11 @@ hbs.registerHelper("calculatePersatage", function (value1, value2) {
   const preResult = value2 - discount;
   const result = Math.floor(preResult);
   return result;
+});
+
+hbs.registerHelper('lookupQuantity', function(size, color, stock) {
+  const found = stock.find(item => item.size === size && item.color === color);
+  return found ? found.quantity : '-';
 });
 
 app.use(erro404);

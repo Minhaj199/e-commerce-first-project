@@ -1,25 +1,20 @@
-const user = require("../Model/user");
+const user = require("../../Model/user");
 const bcrypt = require("bcrypt");
-
-const productModel = require("../Model/product");
-const categoryModel = require("../Model/catagory");
-const addressModel = require("../Model/address");
+const productModel = require("../../Model/product");
+const categoryModel = require("../../Model/catagory");
+const addressModel = require("../../Model/address");
 const { ObjectId } = require("mongodb");
 const lodash = require("lodash");
-const cartModel = require("../Model/cart");
-const orderModel = require("../Model/Order");
-
-const wishlistModel = require("../Model/wishList");
-const walletModel = require("../Model/Wallet");
-
-
-
-const dateFunction = require("../utility/DateFormating");
+const cartModel = require("../../Model/cart");
+const orderModel = require("../../Model/orders");
+const wishlistModel = require("../../Model/wishList");
+const walletModel = require("../../Model/wallets");
+const dateFunction = require("../../utils/DateFormating");
 
 
 
 module.exports = {
-  getLanding: async (req, res) => {
+  getLanding: async (req, res, next) => {
     /////get landing page//////
     try {
       let User = req.session.user;
@@ -29,10 +24,10 @@ module.exports = {
       const categoryCollecion = await categoryModel.findOne();
       res.render("index", { User, Data, categoryCollecion, user });
     } catch (error) {
-      console.log("error on landing page");
+      next(error);
     }
   },
-  renderPages: async (req, res) => {
+  renderPages: async (req, res, next) => {
     /////////////render pages based on query//////////
     try {
       if (req.query.from === "cart") {
@@ -107,9 +102,9 @@ module.exports = {
                 qty === 0
                   ? productName.Name + " is out of stock"
                   : productName.Name +
-                    " is only " +
-                    qty +
-                    " stock.Please reduce the stock";
+                  " is only " +
+                  qty +
+                  " stock.Please reduce the stock";
               return res.redirect("/user/getPages?from=cart");
             }
           }
@@ -278,7 +273,7 @@ module.exports = {
           { $unwind: "$product" },
         ]);
 
-        res.render("user/wishLIst", { data });
+        res.render("user/wishList", { data });
       } else if (req.query.from === "wallet") {
         const walletData = await walletModel.findOne({
           UserID: req.session.customerId,
@@ -293,12 +288,12 @@ module.exports = {
         res.render("user/Wallet", { walletData });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
   //////////////category////////////
-  
-  getAll: async (req, res) => {
+
+  getAll: async (req, res, next) => {
     try {
       if (req.query.search) {
         const searchWord = new RegExp("^" + req.query.search, "i")
@@ -373,10 +368,10 @@ module.exports = {
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else {
         const pageNumber = req.query.page;
-        const pagesOf=await productModel.find().count()
-        const pages=Math.ceil(pagesOf/6)
-        const pagesArray=[]
-        for(let i=1;i<=pages;i++){
+        const pagesOf = await productModel.find().count()
+        const pages = Math.ceil(pagesOf / 6)
+        const pagesArray = []
+        for (let i = 1; i <= pages; i++) {
           pagesArray.push(i)
         }
         const Data = await productModel
@@ -394,26 +389,30 @@ module.exports = {
         });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  getWomen: async (req, res) => {
+  getWomen: async (req, res, next) => {
     try {
       const Data = await productModel.find({ category: "women" });
       let User = req.session.isUserAuthenticated;
 
       res.render("admin/shop", { Data, User });
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   },
 
-  getMan: async (req, res) => {
+  getMan: async (req, res, next) => {
     try {
       const Data = await productModel.find({ category: "men" });
       let User = req.session.isUserAuthenticated;
       res.render("admin/shop", { Data, User });
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   },
-  cat: async (req, res) => {
+  cat: async (req, res, next) => {
     try {
       if (req.query.from === "sorting") {
         const CategoryCollection = await categoryModel.findOne();
@@ -467,13 +466,12 @@ module.exports = {
         }
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  getProductDatails: async (req, res) => {
+  getProductDatails: async (req, res, next) => {
     try {
       const d = req.params.id;
-
       let User = req.session.isUserAuthenticated;
       const Data = await productModel.findById({ _id: d });
       const relatedData = await productModel
@@ -481,19 +479,15 @@ module.exports = {
         .limit(3);
 
       res.render("admin/productDatails", { Data, relatedData, User });
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   },
-  sighOut: (req, res) => {
-    app.use((req, res, next) => {
-      const error = new Error("oops..invalid route");
-      error.statusCode = 404;
-      next(error);
-    });
-  },
+
 
   //user Profile
 
-  getUserProfile: async (req, res) => {
+  getUserProfile: async (req, res, next) => {
     try {
       const userId = req.session.customerId;
       const userData = await user.findById({ _id: userId });
@@ -510,7 +504,7 @@ module.exports = {
         passwordUpdMessage,
       });
     } catch (error) {
-      console.log("error occured in the getUserProfile" + " " + error);
+      next(error)
     }
   },
   logOut: (req, res) => {
@@ -520,7 +514,7 @@ module.exports = {
 
     res.redirect("/user");
   },
-  updateUserProfile: async (req, res) => {
+  updateUserProfile: async (req, res, next) => {
     if (req.query.from === "profileInfo") {
       try {
         const userData = await user.findById({ _id: req.session.customerId });
@@ -536,7 +530,7 @@ module.exports = {
         req.session.updatedMessage = "Profile Information Updated Successfully";
         res.redirect(`/user/getUserProfile`);
       } catch (error) {
-        console.log(error);
+        next(error)
       }
     } else if (req.query.from === "passwordChange") {
       try {
@@ -552,20 +546,22 @@ module.exports = {
             { _id: req.session.customerId },
             { $set: { password: hashedPassword } }
           );
-          const userId = req.session.customerId;
+
           req.session.passwordUpdMessage = "Password Updated Successfull";
           res.redirect(`/user/getUserProfile`);
         } else {
           req.session.wrongPasswordMessage = "Old Password  Not Match";
           res.redirect(`/user/getUserProfile`);
         }
-      } catch (error) {}
+      } catch (error) {
+        next(error)
+      }
     }
   },
   /////cart//////
-  cart: async (req, res) => {
+  cart: async (req, res, next) => {
     try {
-      if ((req.body.from = "add to cart")) {
+      if ((req.body.from === "add to cart")) {
         const addToCart = {
           ProductId: req.body.id,
           UserId: req.session.customerId,
@@ -580,18 +576,18 @@ module.exports = {
 
         await cartModel
           .create(addToCart)
-          .then((res) => {})
+          .then((res) => { })
           .catch((error) => {
-            res.json(done);
+            res.json('done');
           });
 
         res.send("reaceived");
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  getQuantity: async (req, res) => {
+  getQuantity: async (req, res, next) => {
     try {
       const item = await productModel.findById({ _id: req.query.id });
       const path = `sizes.${req.query.size}.${req.query.color}`;
@@ -599,10 +595,10 @@ module.exports = {
 
       res.json(quantity);
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  patchCart: async (req, res) => {
+  patchCart: async (req, res, next) => {
     try {
       if (req.body.from === "updateDiscount") {
         if (req.body.discoutCode === "##11") {
@@ -623,7 +619,7 @@ module.exports = {
         } else {
           res.json("invalid code");
         }
-      } else if ((req.body.from = "updteCartQty")) {
+      } else if (req.body.from === "updteCartQty") {
         req.session.dom = req.body.curID;
 
         await cartModel
@@ -649,14 +645,14 @@ module.exports = {
               { _id: id },
               { $set: { OrderQuantity: newSize, Total: total } }
             )
-            .then((result) => {})
+            .then((result) => { })
             .catch((error) => {
               console.log(error);
             });
         }
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
   dltFromCart: async (req, res) => {
@@ -666,23 +662,29 @@ module.exports = {
       res.json('ok')
     } catch (error) {
       res.json('error')
-      console.log(error);
+
     }
   },
-  
-  addIDs: async (req, res) => {
-    if (req.body.hasOwnProperty("retryPayment")) {
+
+  addIDs: async (req, res, next) => {
+    ////////////add order id to cart collection for payment//////////
+    try {
+      // if (req.body.hasOwnProperty("retryPayment")) {
+      // }
+
+      await cartModel.findByIdAndUpdate(req.session.customerId, {
+        $set: {
+          payment_Order_id: req.body.order_id,
+          payment_id: req.body.payment_id,
+        },
+      });
+      res.status(200);
+    } catch (error) {
+      next(error)
     }
 
-    await cartModel.findByIdAndUpdate(req.session.customerId, {
-      $set: {
-        payment_Order_id: req.body.order_id,
-        payment_id: req.body.payment_id,
-      },
-    });
-    res.status(200);
   },
-  createWishlist: async (req, res) => {
+  addToWishlist: async (req, res, next) => {
     try {
       const wishData = {
         UserID: req.session.customerId,
@@ -696,25 +698,26 @@ module.exports = {
       const response = await wishlistModel.create(wishData);
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  removeFromWishList: async (req, res) => {
+  removeFromWishList: async (req, res, next) => {
     try {
       const response = await wishlistModel.deleteOne({ _id: req.body.id });
       res.status(200).json(response);
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   },
-  addToCart: async (req, res) => {
-    const wishlistData = await wishlistModel.find({
-      UserID: req.session.customerId,
-    });
-    
-    if(wishlistData.length>0){
+  addToCart: async (req, res, next) => {
+    try {
+      const wishlistData = await wishlistModel.find({
+        UserID: req.session.customerId,
+      });
+
+      if (wishlistData.length > 0) {
         for (let i = 0; i < wishlistData.length; i++) {
-          cartData = {
+          const cartData = {
             ProductId: wishlistData[i].ProductID,
             UserId: req.session.customerId,
             OrderQuantity: wishlistData[i].quantity,
@@ -729,10 +732,14 @@ module.exports = {
           req.session.addedMessage = "Items added from wishlist to cart";
         }
         return res.json("success");
-    }else{
-      res.json('no data')
+      } else {
+        res.json('no data')
+      }
+
+    } catch (error) {
+      next(error)
     }
-    
+
   },
- 
+
 };

@@ -1,4 +1,5 @@
 const errorHandler = (error, req, res, next) => {
+  console.log(error)
   const errorStatusCode = error.statusCode || 500;
   const errormessage = error.message || "Unexpted error";
   const errormessag = `${errormessage}(${errorStatusCode})`;

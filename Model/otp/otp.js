@@ -1,5 +1,5 @@
 const mongo = require("mongoose");
-const mailSender=require('../../utility/sendEmail')
+const mailSender=require('../../utils/sendEmail')
 
 
 

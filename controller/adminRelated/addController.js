@@ -1,0 +1,146 @@
+
+const productModel = require('../../Model/product')
+const cloudinary = require('../../utils/cludinary')
+const fs = require("fs");
+const category = require("../../Model/catagory");
+const coupenModel = require("../../Model/coupen");
+const offerModel = require("../../Model/offer");
+const productItemModel=require("../../Model/prouctItems")
+const variatFormater=require('../../utils/variantFormater')
+module.exports = {
+
+    postProduct: async (req, res, next) => {
+        console.log(req.body)
+        console.log(req.files)
+        try {
+            const variants=JSON.parse (req.body.variens)||[]
+                if(!variants||variants?.length<=0){
+                    throw new Error('in sufficient data')
+                }
+              const idRemovedVarient=variatFormater(variants)
+              console.log(idRemovedVarient)
+            const uploader = async (path) => await cloudinary.uploads(path, "Images");
+            let urls = [];
+            const files = req.files;
+            for (const file of files) {
+                const { path } = file;
+
+                const newPath = await uploader(path);
+
+                urls.push(newPath);
+                fs.unlinkSync(path);
+            }
+
+            const imagePaths = urls.map((item) => item.url);
+            const finalImage = imagePaths.slice(0, 5);
+
+            const Newproduct = {
+                Name: req.body.Name,
+                brand: req.body.brand,
+                category: req.body.category,
+                variants:idRemovedVarient,
+                price: req.body.price,
+                description: req.body.description,
+                images: {
+                    path: finalImage,
+                },
+            };
+            await productItemModel
+                .create(Newproduct)
+                .then((result) => {
+                    res.redirect(
+                        "/admin/product-management?message=Product Added Successfully"
+                    );
+                })
+                .catch((error) => {
+                    res.redirect(
+                        "/admin/product-management?errMessage=Product Added successfull"
+                    );
+                });
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    },
+    category: async (req, res, next) => {
+        try {
+            const Data = req.body.cate;
+            await category.findOneAndUpdate(
+                { _id: "65e085036e57f3e5630201fd" },
+                { $addToSet: { category: Data } },
+                { upsert: true, new: true }
+            );
+            res.redirect(
+                "/admin/managecategory?catMessage=category Added Successfully"
+            );
+        } catch (error) {
+            next(error)
+        }
+    },
+    brand: async (req, res, next) => {
+        try {
+            const Data = req.body.brand;
+            await category.findOneAndUpdate(
+                { brand: { $exists: true } },
+                { $addToSet: { brand: Data } },
+                { upsert: true, new: true }
+            );
+            res.redirect(
+                "/admin/getBrandPages?To=brand&brandAddedMessage=Brand Added Successfully"
+            );
+        } catch (error) {
+            next(error)
+        }
+    },
+    coupen: async (req, res, next) => {
+        const coupenData = {
+            code: req.body.code,
+            Expiry: req.body.compareData,
+            amount: parseInt(req.body.amount),
+        };
+        try {
+            const result = await coupenModel.create(coupenData);
+            if (result) {
+                res.json("Coupen created");
+            }
+        } catch (error) {
+            next(error)
+        }
+    },
+    offer: async (req, res, next) => {
+        try {
+            const check = await offerModel.findOne({ Title: req.body.title });
+            if (check) {
+                req.session.offerNotAdded = "Not added";
+                res.redirect("/admin/getPages?from=offer");
+            } else {
+                let productArray = [];
+
+                if (typeof req.body.productsID === "string") {
+                    productArray.push(req.body.productsID);
+                } else {
+                    productArray = req.body.productsID;
+                }
+
+                const offerObj = {
+                    Title: req.body.title,
+                    category: req.body.category,
+                    rate: req.body.rate,
+                    ProductIDs: req.body.productsID,
+                };
+                for (let i = 0; i < productArray.length; i++) {
+                    const result = await productModel.findByIdAndUpdate(productArray[i], {
+                        $set: { offer_rate: req.body.rate },
+                    });
+                }
+
+                await offerModel.create(offerObj);
+
+                req.session.offerAdded = "Offer Added";
+                res.redirect("/admin/getPages?from=offer");
+            }
+        } catch (error) {
+            next(error)
+        }
+    },
+}

@@ -23,6 +23,9 @@
 
 <body>
     {{> adminHeader}}
+    <div id="loader" class="loader-wrapper">
+  <div class="loader"></div>
+    </div>
     <div class="container-fluid main-cont">
         <div class="row">
             <div class=" admin-option">
@@ -46,15 +49,15 @@
 
 
             </div>
-            <div    class="main-content">
+            <div class="main-content">
                 <div class="col-12 title-box">
                     <p>Add Product</p>
                 </div>
-                <form style="height: 100%;" onsubmit='return validate()' method="post" action="/admin/add-Product"
+                <form id="mainForm" style="height: 100%;" onsubmit='return validate()' method="post" action="/admin/add-Product"
                     enctype="multipart/form-data">
                     <div class="col-12 name-box" style=" border:1px solid rgb(218, 218, 218)">
                         <label for="">Product name</label>
-                        <input  type="text" id="name" name="Name" minlength="3" maxlength="35" required>
+                        <input value="product" type="text" id="name" name="Name" minlength="3" maxlength="35" required>
                     </div>
                     <div class="col-12 brand-category-box" style="border:1px solid rgb(218, 218, 218)">
                         <div class="row brand-category-box-row  ">
@@ -62,7 +65,7 @@
                                 <label for="">Brand</label>
                                 <select name="brand" id="" class="brand-dropdown" required>
 
-                                    <option value="" disabled selected>Choose Brand</option>
+                                    <option value="value" disabled selected>Choose Brand</option>
                                     {{#each categoryCollection.brand }}
 
                                     <option value="{{this}}">{{this}}</option>
@@ -71,7 +74,8 @@
                             </div>
                             <div class="col-4 category-box">
                                 <label for="">Category</label>
-                                <select name="category" id="" class="brand-dropdown" required>
+                                <select value name="category" id="" class="brand-dropdown" required>
+                                    <option  value="value" disabled selected>Xl</option>
                                     <option value="" disabled selected>Choose category</option>
                                     {{#each categoryCollection.category}}
 
@@ -83,88 +87,83 @@
                             <div class="col-4"
                                 style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
                                 <label style="color: black;font-weight: bold;" for="">Selling price</label>
-                                <input type="number" min="1" required style=" width: 127px;display: block;height: 43px;"
+                                <input value="100" type="number" min="1" required style=" width: 127px;display: block;height: 43px;"
                                     name="price">
                             </div>
                         </div>
+
                     </div>
                     <div class="col-12 size-and-color-box" style="border:1px solid rgb(218, 218, 218)">
-                        <div class="row six-color-row">
-                            <div class="col-4 small-size" style="padding: 0;">
 
-                                <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
-                                    <p style="font-weight: bolder;">Small Size</p>
-                                </div>
-                                <div style="height: 70%;" class="col-12 small-inpu-dive">
-                                    <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
-                                        <label style="color: rgb(5, 116, 90);" for="">White</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="small_white">
-                                    </div>
-                                    <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;"
-                                        class="col-4">
-                                        <label style="color: black;" for="">Black</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="small_black">
-                                    </div>
-                                    <div style="height: 100%;display: flex;flex-direction: column;" class="col-4">
-                                        <label style="color:Red" for="">Red</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="small_red">
-                                    </div>
-                                </div>
-
+                        {{!-- hiddenInputFieldFor send varientCollection --}}
+                        <input type="hidden" name="variens" id="varient_collection">
+                        <div class="row brand-category-box-row " style="height: 150px;">
+                            {{!--------------- Quantity and size ---------------}}
+                             <div id="varient-warning" style="width:100%;height: 25px;padding-left: 10px;color:red;text-align: center; ">
+                               
+                             </div>
+                            <div class="col-4 brand-box ">
+                                <label for="">Sizes</label>
+                                <select name="size" id="size" class="brand-dropdown" required>
+                                    <option value="">chouse</option>
+                                    <option value="xs">XS</option>
+                                    <option value="s">S</option>
+                                    <option value="m">M</option>
+                                    <option value="l">L</option>
+                                    <option value="xl">XL</option>
+                                    <option value="xxl">XXL</option>
+                                    <option value="xxxl">XXXL</option>
+                                </select>
+                            </div>
+                            <div class="col-4 category-box">
+                            {{!-- color input --}}
+                                <label for="">Colors</label>
+                                <input  type="text" style="width: 200px;height:50px;" id="color" name="color" minlength="3"
+                                   placeholder="Red....Green....Blue" maxlength="30" required>
+                                </select>
                             </div>
                             <div class="col-4"
-                                style="border-right: 1px solid rgb(202, 202, 202);border-left:  1px solid rgb(202, 202, 202);">
-                                <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
-                                    <p style="font-weight: bolder;font-size: 20px;">Medium Size</p>
-                                </div>
-                                <div style="height: 70%;" class="col-12 small-inpu-dive">
-                                    <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
-                                        <label style="color: rgb(5, 116, 90);" for="">White</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="medium_white">
-                                    </div>
-                                    <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;"
-                                        class="col-4">
-                                        <label style="color: black;" for="">Black</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="medium_black">
-                                    </div>
-                                    <div style="height: 100%;display: flex;flex-direction: column;" class="col-4">
-                                        <label style="color:Red" for="">Red</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="medium_red">
-                                    </div>
-                                </div>
-
+                                style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                                <label style="color: black;font-weight: bold;" for="">Quantity</label>
+                                <input id="qty" type="number" min="1" required style=" width: 127px;display: block;height: 43px;"
+                                    name="qty">
                             </div>
-                            <div class="col-4">
-                                <div style="height: 30%;display:flex;justify-content: center;" class="col-12">
-                                    <p style="font-weight: bolder;font-size:20px">Large size</p>
-                                </div>
-                                <div style="height: 70%;" class="col-12 small-inpu-dive">
-                                    <div style="  height: 100%;display: flex;flex-direction: column; " class="col-4">
-                                        <label style="color: rgb(5, 116, 90);" for="">White</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="large_white">
-                                    </div>
-                                    <div style="  height: 100%;background-color:black display: flex;flex-direction: column; align-items: center;"
-                                        class="col-4">
-                                        <label style="color: black;" for="">Black</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="large_black">
-                                    </div>
-                                    <div style="height: 100%;display: flex;flex-direction: column;" class="col-4">
-                                        <label style="color:Red" for="">Red</label>
-                                        <input min="0" step="1" style="width:60px;height: 40px;" type="number"
-                                            name="large_red">
-                                    </div>
-                                </div>
-
+                            <div
+                                style="height: 40px;width:100%;display: flex;justify-content: center;align-items: center;">
+                                <button role="button" onclick="handleAddVariant(event)" type="button"
+                                    class="btn btn-primary btn-sm"
+                                    style="width: 20%;height: 100%;background: #4592ff;border: none;border-radius: 10px;color: white;"
+                                    id="add-variant"
+                                    style="width: 20%;height: 100%;;background: #4592ff;border: none;border-radius: 10px;color: white;"><img
+                                        height="25px" width="25px" src="/images/Icons/add.png" alt=""></button>
+                           
                             </div>
+                           
                         </div>
+                    </div>
+                    <div class="col-12 size-and-color-box"
+                        style="border:1px solid rgb(218, 218, 218);height: 300px;overflow-y: auto;">
+                        <table style="max-height:200px;min-height: 100%; " class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Variant</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <!-- Example row -->
+
+
+
+                                <tr>
+
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                     <div class="col-12 discriptionInput-box" style="border:1px solid rgb(218, 218, 218)">
                         <label style="display: block;margin-bottom: 20px;" for="">Discription</label>
@@ -179,7 +178,8 @@
 
                             <div style="height: 100%;" class="col-2 ">
                                 <div id="close-container">
-                                    <img src="/public/MSJCKT60224-6_3e49240a-265d-48ea-86ef-cf46679033bb_700x.webp" width="5px" alt="">
+                                    <img src="/public/MSJCKT60224-6_3e49240a-265d-48ea-86ef-cf46679033bb_700x.webp"
+                                        width="5px" alt="">
                                 </div>
                                 <label for="field-1">
 
@@ -263,13 +263,13 @@
                     <div class="col-12 submit-box"><button class="sub-brn" type="submit">submit</button></div>
                 </form>
             </div>
-           
-            
+
+
             <!-- The Modal -->
             <div style="border: none; background-color: transparent;overflow: scroll;" id="myModal" class="modal">
                 <!-- Modal content -->
                 <div style="width:59%;margin-top:5%;background-color: transparent;" class="modal-content">
-                    <span class="close" >&times;</span>
+                    <span class="close">&times;</span>
                     <div id="cropeCanvas" style=" box-shadow: 0 0 10px   rgb(222, 25, 25); ">
                         <div id="img-A" class="col-12" style="height: 90%;margin:0;padding:0">
                             <img id="img-t-A" width="100%" src="" alt="">
@@ -287,7 +287,7 @@
                 </div>
             </div>
 
-            
+
         </div>
 
 

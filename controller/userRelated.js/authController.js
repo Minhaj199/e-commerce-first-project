@@ -1,11 +1,11 @@
 const user = require("../../Model/user");
 const bcrypt = require("bcrypt");
 const forgotEmail = require('../../Model/otp/forgoEmail')
-const capitalisation = require("../../utility/makeCapitalLetter");
+const capitalisation = require("../../utils/makeCapitalLetter");
 const otpGenerator = require("otp-generator");
 const otpSchema = require("../../Model/otp/otp");
 const OTP = require("../../Model/otp/otp");
-const walletModel = require('../../Model/Wallet')
+const walletModel = require('../../Model/wallets')
 
 let data = {};
 let email;
@@ -47,7 +47,6 @@ module.exports = {
                 res.render("user/login", { error: "user not found" });
             }
         } catch (err) {
-            console.log(err);
             next(err)
         }
     },
@@ -59,7 +58,7 @@ module.exports = {
         res.render("user/forgot/forgotEmail");
     },
     resetPassword: async (req, res, next) => {
-        console.log(req.body)
+      
         try {
             const emailObj = await forgotEmail.findOne({ email: req.session.emailID });
             const email = emailObj.email
@@ -88,7 +87,7 @@ module.exports = {
         //// get sign up page////
         res.render("./user/registration");
     },
-    handleSignupPost: async (req, res) => {
+    handleSignupPost: async (req, res,next) => {
         ////////////// handle submitt data and ridirect to naviagation page////////
         try {
             data = {
@@ -116,7 +115,7 @@ module.exports = {
                 res.render("user/otpEnterForReg");
             }
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
     validateEmail: async (req, res, next) => {
@@ -164,13 +163,12 @@ module.exports = {
                 res.render("user/forgot/forgotEmail", { error: "Email not found" });
             }
         } catch (error1) {
-            console.log(error1)
             const error = new Error(error1);
             error.statusCode = 500;
             next(error);
         }
     },
-    handleResendOtp: async (req, res) => {
+    handleResendOtp: async (req, res,next) => {
 
         ////////////handle resend otp///////////
         if (req.query.from === "register") {
@@ -198,11 +196,11 @@ module.exports = {
                 await otpSchema.create(userData);
                 res.render("user/forgot/otpEnter");
             } catch (error) {
-                console.log(error);
+               next(error)
             }
         }
     },
-    validateOTP: async (req, res) => {
+    validateOTP: async (req, res,next) => {
         ////////////validate otp and redirect to password reset page///////////
         if (req.query.from === "Register") {
             try {
@@ -231,7 +229,7 @@ module.exports = {
                 }
 
             } catch (error) {
-                console.log(error);
+              next(error)
             }
         } else {
             try {
@@ -246,14 +244,14 @@ module.exports = {
                     res.render("user/forgot/otpEnter", { message: "invalid otp or OTP Expired" });
                 }
             } catch (error) {
-                console.log(error);
+               next(error)
             }
         }
     },
     getSignUp: (req, res) => {
         res.render("./user/registration");
     },
-    postSignup: async (req, res) => {
+    postSignup: async (req, res,next) => {
         try {
             data = {
                 first_name: capitalisation(req.body.First_name),
@@ -280,7 +278,7 @@ module.exports = {
                 res.render("user/otpEnterForReg");
             }
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     }
 }

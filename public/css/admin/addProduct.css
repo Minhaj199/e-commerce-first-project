@@ -73,7 +73,7 @@
   height:9%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center;;
 }
  label{
   display: block;
@@ -82,7 +82,7 @@
 }
 .name-box input{
   display: block;
-  width: 50%;
+  width: 100%;
   height: 30%;
   font-size: 15px;
   border-color:rgb(140, 136, 136);
@@ -111,10 +111,9 @@
   width: 150px;
   height: 30px;
   border-radius: 20px;
-  padding-left: 10%;
+  padding: 0 10px;
   border: 3px solid rgb(97, 96, 96);
-  font-size: 12px;
-  
+  font-size: smaller;
 }
 .six-color-row{
   height: 100%;
@@ -143,11 +142,11 @@ font-size: 20px;
 }
 .discriptionInput-box{
   height:13%;
-  
+ 
 }
 .dis-input{
   display: block;
-   width: 80%;
+   width: 100%;
   height: 130px; 
   
 }
@@ -250,6 +249,34 @@ align-items: center;
     text-decoration: none;
     cursor: pointer;
   }
+
+  .loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white; /* or your theme background */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
 @media screen and (max-width:1190px) {
  
  .category{

@@ -1,9 +1,9 @@
 const productModel = require("../../Model/product");
-const orderModel = require("../../Model/Order");
+const orderModel = require("../../Model/orders");
 const cartModel = require("../../Model/cart");
 const coupenModel = require("../../Model/coupen");
 const coupenTrackingModel = require("../../Model/coupenTracking");
-const walletModel = require("../../Model/Wallet");
+const walletModel = require("../../Model/wallets");
 const user = require("../../Model/user");
 const RazorPay = require("razorpay");
 const lodash = require("lodash");
@@ -11,7 +11,7 @@ const path = require("path");
 
 
 module.exports = {
-    checkoutUtilityRouter: async (req, res) => {
+    checkoutUtilityRouter: async (req, res,next) => {
         try {
             if (req.query.from === "retryPayment") {
                 ////////// retray payment from failed order ////////////
@@ -95,10 +95,10 @@ module.exports = {
                 res.json(amount);
             }
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
-    placeOrder: async (req, res) => {
+    placeOrder: async (req, res,next) => {
         ///////////placing order from checkout page/////////// 
         try {
             const orderCount = req.body.orderDetails.Order.length;
@@ -175,10 +175,10 @@ module.exports = {
             }
             return res.json(true);
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
-    handleFailed: async (req, res) => {
+    handleFailed: async (req, res,next) => {
         ///////////handling failed order from checkout page///////////
         try {
             const Order = {
@@ -208,10 +208,10 @@ module.exports = {
                     console.log(error);
                 });
         } catch (error) {
-            console.log(error);
+           next(error)
         }
     },
-    handleRetryOrder: async (req, res) => {
+    handleRetryOrder: async (req, res,next) => {
         ///////////retrying order from failed order page///////////
         try {
             const result = await orderModel.findById(req.body.retryObj.id);
@@ -246,11 +246,11 @@ module.exports = {
                 await coupenTrackingModel.create(coupenData);
             }
         } catch (error) {
-            console.log(error);
+            next(error)
         }
         res.json("success");
     },
-    removeProduct: async (req, res) => {
+    removeProduct: async (req, res,next) => {
         ///////////removing product from cart or checkout///////////
         try {
             await cartModel
@@ -260,10 +260,10 @@ module.exports = {
                     res.json("ok");
                 });
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
-    cancelOreder: async (req, res) => {
+    cancelOreder: async (req, res,next) => {
         /////canceling order from my order page//////
         if (req.body.from === "return order") {
             try {
@@ -291,11 +291,11 @@ module.exports = {
                         res.json("ok");
                     });
             } catch (error) {
-                console.log(error);
+               next(error)
             }
         }
     },
-    paymentGateway: async (req, res) => {
+    paymentGateway: async (req, res,next) => {
         ///////////payment gateway from checkout page///////////
         try {
             const razorpay = new RazorPay({
@@ -312,10 +312,10 @@ module.exports = {
             response.pubID = process.env.key_id;
             res.json(response);
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
-    retryPayment: async (req, res) => {
+    retryPayment: async (req, res,next) => {
         try {
             const razorpay = new RazorPay({
                 key_id: process.env.key_id,
@@ -331,17 +331,17 @@ module.exports = {
 
             res.json(response);
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
-    getUserInfo: async (req, res) => {
+    getUserInfo: async (req, res,next) => {
         /////////////get user info for payment gateway///////
         try {
             const userData = await user.findById(req.session.customerId);
 
             res.status(200).json(userData);
         } catch (error) {
-            console.log(error);
+            next(error)
         }
     },
     //   paymentNotification: async (req, res) => {

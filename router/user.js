@@ -2,7 +2,7 @@ const express=require('express')
 const router=express.Router()
 
 
-const userControl=require('../controller/user')
+const userControl=require('../controller/userRelated.js/mainUserController')
 const userAuthenticated=require('../middleware/userAuthenticated')
 const isUserAuthenticated=require('../middleware/isUserAuthenticated')
 const isUserBlocked=require('../middleware/userBlocked')
@@ -52,7 +52,6 @@ router.get('/cat',isUserBlocked,userControl.cat)
 
 //product Data
 router.get('/productData/:id',isUserBlocked,userControl.getProductDatails)
-// router.use('/sighOut',isUserBlocked,userControl.sighOut)
 
 ////////////////////////user Profile////////////////////////////////////
 
@@ -96,7 +95,7 @@ router.patch('/payment',isUserAuthenticated,userControl.addIDs)
 
 /////wishLIst//////
 
-router.post('/createWishlist',isUserAuthenticated,userControl.createWishlist)
+router.post('/createWishlist',isUserAuthenticated,userControl.addToWishlist)
 router.delete('/removeFromWishList',isUserAuthenticated,userControl.removeFromWishList)
 router.post('/wishToCart',isUserAuthenticated,userControl.addToCart)
 

@@ -1,17 +1,22 @@
-const express=require('express')
-const router=express.Router()
-const adminCon=require('../controller/adminCon')
-const upload=require('../middleware/multer')
+const express = require('express')
+const router = express.Router()
+const adminCon = require('../controller/adminRelated/otherController')
+const upload = require('../middleware/multer')
 
 
-const isAdminAuthenticated=require('../middleware/isAdminAuthenticated')
-const AdminAuthenticated=require('../middleware/adminAuthenticated')
+const isAdminAuthenticated = require('../middleware/isAdminAuthenticated')
+const AdminAuthenticated = require('../middleware/adminAuthenticated')
+const productMgtController = require('../controller/adminRelated/addController')
+const renderingController = require('../controller/adminRelated/renderingController')
+const editController = require('../controller/adminRelated/editController')
+const deleteController = require('../controller/adminRelated/deleteController')
+const addController = require('../controller/adminRelated/addController')
 
 
 
 
 
- 
+
 
 
 
@@ -21,78 +26,78 @@ const AdminAuthenticated=require('../middleware/adminAuthenticated')
 ///////getPages//////
 
 
-router.get('/getPages',AdminAuthenticated,adminCon.getPages)
+router.get('/getPages', AdminAuthenticated, renderingController.getPages)
 
-router.get('/fetchData',adminCon.fetchData)
+router.get('/fetchData', adminCon.fetchData)
 
-router.get('/salesFiltering',AdminAuthenticated,adminCon.salesFiltering)
+router.get('/salesFiltering', AdminAuthenticated, renderingController.salesFiltering)
 
-router.get("/datashBord", AdminAuthenticated,adminCon.getDashBord);
-
-
+router.get("/datashBord", AdminAuthenticated, renderingController.dashBord);
 
 
-router.get('/add-product-form',AdminAuthenticated,adminCon.getAddProduct)
-router.get('/product-management',AdminAuthenticated,adminCon.getProductManagement)
-router.post('/product-management',AdminAuthenticated,adminCon.getProductManagementSorted)
-router.post('/add-Product',AdminAuthenticated,upload.array('image'),adminCon.productAdding)
-router.post('/editProduct/:id',AdminAuthenticated,adminCon.getEditPage)
-router.post('/deleteProduct/:id',AdminAuthenticated,adminCon.getDeletePage)
-router.delete('/DeleteProduct/:id',AdminAuthenticated,adminCon.deleteProduct)
-router.put('/editProduct/:id',AdminAuthenticated,upload.array('image'), adminCon.putEditPage)
+
+
+router.get('/add-product-form', AdminAuthenticated, renderingController.addProduct)
+router.get('/product-management', AdminAuthenticated, renderingController.productsMgt)
+router.post('/product-management', AdminAuthenticated, renderingController.setProductMgtSorted)
+router.post('/add-Product', AdminAuthenticated, upload.array('image'), addController.postProduct)
+router.post('/editProduct/:id', AdminAuthenticated, renderingController.editProduct)
+router.post('/deleteProduct/:id', AdminAuthenticated, renderingController.deleteProduct)
+router.delete('/DeleteProduct/:id', AdminAuthenticated, deleteController.handleDeleteProduct)
+router.put('/editProduct/:id', AdminAuthenticated, upload.array('image'), editController.updateProduct)
 
 // 
 /////////category management////////////
-router.post('/addCat',AdminAuthenticated,adminCon.addCategory)
-router.get('/manageCategory',AdminAuthenticated,adminCon.getCategoryManagement)
-router.get('/addCatt',AdminAuthenticated,adminCon.getAddCategory)
-router.put('/category-edit/:id',AdminAuthenticated,adminCon.editCategory)
-router.get('/addCattbefore/:id',AdminAuthenticated,adminCon.editCategorybefore)
-router.get('/addDeletebefore/:id',AdminAuthenticated,adminCon.deleteCategorybefore)
-router.delete('/category-delete/:id',AdminAuthenticated,adminCon.deleteCategory)
+router.post('/addCat', AdminAuthenticated, addController.category)
+router.get('/manageCategory', AdminAuthenticated, renderingController.categoryManagement)
+router.get('/addCatt', AdminAuthenticated, renderingController.addcategory)
+router.put('/category-edit/:id', AdminAuthenticated, editController.category)
+router.get('/addCattbefore/:id', AdminAuthenticated, renderingController.editCategory)
+router.get('/addDeletebefore/:id', AdminAuthenticated, renderingController.deleteCategory)
+router.delete('/category-delete/:id', AdminAuthenticated, deleteController.category)
 
 
 
-router.get('/',isAdminAuthenticated, adminCon.getLogin)
-router.post('/',adminCon.adminAuthentication)
-router.get('/log-out',adminCon.sign_out)
+router.get('/', isAdminAuthenticated, renderingController.login)
+router.post('/', adminCon.adminAuthentication)
+router.get('/log-out', adminCon.sign_out)
 
 
 //////////user management ///////////////////
 
-router.get('/userManagemnent',AdminAuthenticated,adminCon.getUserManagement)
-router.put('/getUnBlock/:id',AdminAuthenticated,adminCon.getUnblocled)
-router.delete('/getDelete/:id',AdminAuthenticated,adminCon.getDelete)
+router.get('/userManagemnent', AdminAuthenticated, renderingController.userManagement)
+router.put('/getUnBlock/:id', AdminAuthenticated, editController.handleBlockAndUnblock)
+router.delete('/getDelete/:id', AdminAuthenticated, deleteController.user)
 
 //////////Brand management/////////
 
-router.get('/getBrandPages',AdminAuthenticated,adminCon.getBrandPage)
-router.post('/AddBrand',AdminAuthenticated,adminCon.addBrand)
-router.put('/editBrand/:id',AdminAuthenticated,adminCon.editBrand)
-router.delete('/deleteBrand/:id',AdminAuthenticated,adminCon.deleteBrand)
+router.get('/getBrandPages', AdminAuthenticated, renderingController.brandPage)
+router.post('/AddBrand', AdminAuthenticated, addController.brand)
+router.put('/editBrand/:id', AdminAuthenticated, editController.brand)
+router.delete('/deleteBrand/:id', AdminAuthenticated, deleteController.brand)
 
 
 ////////Change ManageOrder Status/////////
 
-router.patch('/ChangeStatus',AdminAuthenticated,adminCon.ChangeStatus)
+router.patch('/ChangeStatus', AdminAuthenticated, editController.orderStatus)
 
 //////return product////
-router.patch('/returnProduct',AdminAuthenticated,adminCon.returnProduct)
+router.patch('/returnProduct', AdminAuthenticated, editController.returnProduct)
 
 
 ///// coupen adding///
-router.post('/addCoupen',AdminAuthenticated,adminCon.addCoupen)
-router.patch('/editCoupen',AdminAuthenticated,adminCon.editCoupen)
-router.delete('/deleteCoupen',AdminAuthenticated,adminCon.deleteCoupen)
+router.post('/addCoupen', AdminAuthenticated, addController.coupen)
+router.patch('/editCoupen', AdminAuthenticated, editController.coupen)
+router.delete('/deleteCoupen', AdminAuthenticated, deleteController.coupen)
 
 /////offer management/////
-router.post('/createOffer',AdminAuthenticated,adminCon.createOffer)
-router.delete('/deleteOffer',AdminAuthenticated,adminCon.deleteOffer)
-router.patch('/deleteOfferField',AdminAuthenticated,adminCon.deleteField)
-router.put('/editOffer',AdminAuthenticated,adminCon.editOffer)
+router.post('/createOffer', AdminAuthenticated, addController.offer)
+router.delete('/deleteOffer', AdminAuthenticated, deleteController.offer)
+router.patch('/deleteOfferField', AdminAuthenticated, editController.deleteField)
+router.put('/editOffer', AdminAuthenticated, editController.offer)
 
 ////invoice//////
 
-router.get('/getInvoice',adminCon.getInvoice)
+router.get('/getInvoice', renderingController.invoice)
 
-module.exports=router
+module.exports = router
