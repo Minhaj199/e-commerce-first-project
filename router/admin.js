@@ -50,8 +50,6 @@ router.put('/editProduct/:id', AdminAuthenticated, upload.array('image'), editCo
 //////////route to edit variant individually////////
 router.patch('/edit-variant/:id', editController.updateVariant)
 
-
-// 
 /////////category management////////////
 router.post('/addCat', AdminAuthenticated, addController.category)
 router.get('/manageCategory', AdminAuthenticated, renderingController.categoryManagement)
@@ -60,8 +58,8 @@ router.put('/category-edit/:id', AdminAuthenticated, editController.category)
 router.get('/addCattbefore/:id', AdminAuthenticated, renderingController.editCategory)
 router.get('/addDeletebefore/:id', AdminAuthenticated, renderingController.deleteCategory)
 router.delete('/category-delete/:id', AdminAuthenticated, deleteController.category)
-
-
+router.post('/add-new-variant',AdminAuthenticated,addController.productVariant)
+router.delete('/delete-variant/:id',AdminAuthenticated,deleteController.productVariant)
 
 router.get('/', isAdminAuthenticated, renderingController.login)
 router.post('/', adminCon.adminAuthentication)

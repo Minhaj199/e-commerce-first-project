@@ -18,6 +18,9 @@
 </head>
 <body>
   {{> adminHeader}}
+  <div id="loader" class="loader-wrapper">
+  <div class="loader"></div>
+    </div>
     <div class="container-fluid main-cont">
         <div class="row">
                  <div class=" admin-option">
@@ -45,7 +48,7 @@
                 <div class="col-12 title-box" style="border:1px solid rgb(218, 218, 218)">
                     <p>Edit Product</p>
                 </div>
-                <form style="height: 100%;"  onsubmit='return validate()' method="post" action="/admin/editProduct/{{ProductData._id}}?_method=PUT" enctype="multipart/form-data" >
+                <form id="main-form" style="height: 100%;"  onsubmit='return validate()' method="post" action="/admin/editProduct/{{ProductData._id}}?_method=PUT" enctype="multipart/form-data" >
                   <div  class="col-12 name-box" style=style="border:1px solid rgb(218, 218, 218)" >
                     <label for="">Product name</label>
                     <input type="text" id="name" minlength="3" maxlength="35" name="Name" value="{{ProductData.Name}}" required>
@@ -117,18 +120,24 @@
                             <div class="col-4"
                                 style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
                                 <label style="color: black;font-weight: bold;" for="">Quantity</label>
-                                <input disabled=true id="qty" type="number" max="500" min="1" required style=" width: 127px;display: block;height: 43px;"
+                                <input disabled=true id="qty"  type="number" max="500" min="1" required style=" width: 127px;display: block;height: 43px;"
                                     name="qty">
                             </div>
-                            <div
+                            <div id="button-div"
                                 style="height: 40px;width:100%;display: flex;justify-content: center;align-items: center;">
-                                <button disabled=true role="button" onclick="handleSubmitVariantEdit('{{ProductData._id}}')" type="button"
+                                <button  role="button" onclick="handleAddVariant('{{ProductData._id}}')" type="button"
+                                    class="btn btn-primary btn-sm"
+                                    style="width: 20%;height: 100%;background: #4592ff;border: none;border-radius: 10px;color: white;"
+                                    id="add-btn"
+                                    style="width: 20%;height: 100%;;background: #4592ff;border: none;border-radius: 10px;color: white;"><img
+                                        height="25px" width="25px" src="/images/Icons/addCheckout.png" alt=""></button>
+                                <button hidden role="button" onclick="handleSubmitVariantEdit('{{ProductData._id}}')" type="button"
                                     class="btn btn-primary btn-sm"
                                     style="width: 20%;height: 100%;background: #4592ff;border: none;border-radius: 10px;color: white;"
                                     id="update-btn"
                                     style="width: 20%;height: 100%;;background: #4592ff;border: none;border-radius: 10px;color: white;"><img
                                         height="25px" width="25px" src="/images/Icons/application.png" alt=""></button>
-                                         <button disabled=true role="button" onclick="handleResetVariantEdit()" type="button"
+                                         <button hidden role="button" onclick="handleResetVariantEdit()" type="button"
                                     class="btn btn-primary btn-sm"
                                     style="margin-left: 10px; width: 20%;height: 100%;background: #FE6364;border: none;border-radius: 10px;color: white;"
                                     id="cancel-edit"
@@ -141,29 +150,34 @@
                   </div>
                    <div class="col-12 size-and-color-box"
                         style="border:1px solid rgb(218, 218, 218);height: 300px;overflow-y: auto;">
-                        <table style="max-height:200px;min-height: 100%; " class="table table-bordered">
+                        <table style="table-layout: fixed; width: 100%; max-height:200px; min-height:100%;" class="table table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">Size</th>
-                                    <th scope="col">Variant</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Action</th>
+                                    <th style="w-20">Size</th>
+                                    <th style="w-40">Variant</th>
+                                    <th style="w-24">Quantity</th>
+                                    <th style="w-32">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="productTableBody">
                                 <!-- Example row -->
 
-    {{#each ProductData.variants}}
+                        {{#each ProductData.variants}}
                                 <tr id="id-{{@index}}">
 
                                  <td>{{this.size}}</td>
                                     <td>{{this.color}}</td>
                                     <td>{{this.stock}}</td>
-                                    <td id=id-${id} style="display: flex;justify-content: center;align-items: center;border:none">
-                                   
-                                        <button type="button" class="btn  btn-sm"
-                                            onclick="handleEditClick('{{this._id}}',this,'{{@index}}')"><img width="25px" height="25px"
-                                                src="/images/Icons/edit.png" alt=""></button>
+                                    <td id=id-${id} style="text-align: center;  padding: 0;">
+                                        <div style="display: flex; justify-content: center; gap: 5px;">
+      
+        <button type="button" onclick="handleEditClick('{{this._id}}',this,'{{@index}}')" class="btn btn-sm">
+            <img width="20" height="20" src="/images/Icons/edit.png" alt="">
+        </button>
+        <button onclick="deleteVarient('{{this._id}}',this)" type="button" class="btn btn-sm">
+            <img width="20" height="20" src="/images/Icons/delete-symbol-option.png" alt="">
+        </button>
+    </div>
                                     </td>
                                 </tr>
                                 {{/each}}

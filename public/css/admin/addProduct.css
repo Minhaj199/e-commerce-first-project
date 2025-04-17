@@ -225,6 +225,9 @@ align-items: center;
     border: none;
    
   }
+  #productTableBody{
+   
+  }
   
   /* Modal content */
   .modal-content {

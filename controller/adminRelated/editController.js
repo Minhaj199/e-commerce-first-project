@@ -40,7 +40,7 @@ module.exports = {
 
             const imagePaths = urls.map((item) => item.url);
             const finalImage = imagePaths.slice(0, 5);
-            const oldData = await productModel.findById({ _id: req.params.id });
+            const oldData = await productItemModel.findById({ _id: req.params.id });
             let updatedPhotos = oldData.images.path
 
 
@@ -59,23 +59,6 @@ module.exports = {
                 Name: req.body.Name,
                 brand: req.body.brand,
                 category: req.body.category,
-                sizes: {
-                    small: {
-                        white: req.body.small_white ? req.body.small_white : 0,
-                        black: req.body.small_black ? req.body.small_black : 0,
-                        red: req.body.small_red ? req.body.small_red : 0,
-                    },
-                    medium: {
-                        white: req.body.medium_white ? req.body.medium_white : 0,
-                        black: req.body.medium_black ? req.body.medium_black : 0,
-                        red: req.body.medium_red ? req.body.medium_red : 0,
-                    },
-                    large: {
-                        white: req.body.large_white ? req.body.large_white : 0,
-                        black: req.body.large_black ? req.body.large_black : 0,
-                        red: req.body.large_red ? req.body.large_black : 0,
-                    },
-                },
                 price: req.body.price,
                 description: req.body.description,
                 images: {
@@ -84,7 +67,7 @@ module.exports = {
             };
 
 
-            await productModel
+            await productItemModel
                 .findOneAndUpdate({ _id: req.params.id }, { $set: productData })
                 .then((result) => {
                     res.redirect(
@@ -115,13 +98,13 @@ module.exports = {
             if (!id) {
                 throw new Error('id not found')
             }
+            
             const product = await productItemModel.findById(id)
             if (!product) res.json({ message: 'product not found' })
             const isDuplicate = product.variants.find(v => {
                 let docId = v._id.toString()
                 return docId !== varientId && v.size === size && v.color === color
             })
-
             if (isDuplicate) {
                 throw new Error('This variant already exist')
             }
@@ -142,6 +125,7 @@ module.exports = {
                 res.json(true)
             }
         } catch (error) {
+            console.log(error)
             res.status(400).json({ message: 'Duplicate variant exists (same size and color).' });
         }
     },

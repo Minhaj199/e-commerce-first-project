@@ -61,6 +61,43 @@ module.exports = {
             next(error)
         }
     },
+    productVariant:async (req, res, next) => {
+        try {
+              const {productID}=req.body
+              const {size,color,stock}=req.body.newVariant
+             
+            if(!productID||!size||!color||stock<0||stock>5000){
+                res.status(400).json({message:'insufficient data'})
+                return
+            }
+            const product=await productItemModel.findById(productID)
+            
+            if(!product){
+                res.status(400).json({message:'product id not found'})
+                return
+            }
+            const isDuplicate=product.variants.find(v=>{
+                return v.size===size&&v.color===color
+            })
+            
+            if(isDuplicate){
+                res.status(400).json({message:'This variant already exist'})
+                return
+            }else{
+                product.variants.push({size,color,stock})
+                const result=await product.save()
+                if(result){
+                    res.json(true)
+                    return 
+                }
+            }
+            throw new Error('internal server error')
+        } catch (error) {
+            
+            console.log(error)
+            res.status(400).json(error.message||'internal server error')
+        }
+    },
     category: async (req, res, next) => {
         try {
             const Data = req.body.cate;

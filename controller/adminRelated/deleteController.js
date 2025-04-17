@@ -6,6 +6,8 @@ const userModel = require('../../Model/user')
 const walletModel = require('../../Model/wallets')
 const cartModel = require('../../Model/cart')
 const wishlistModel = require('../../Model/wishList')
+const productItemModel = require('../../Model/prouctItems')
+const { Types } = require('mongoose')
 
 module.exports = {
     handleDeleteProduct: async (req, res) => {
@@ -19,6 +21,38 @@ module.exports = {
             res.redirect(
                 `/admin/product-management?dltErrMessage=Product Deleted Unsuccessfully`
             );
+        }
+    },
+    productVariant:async(req,res)=>{
+        try {
+            const {id}=req.params
+            if(!id||typeof id!=='string'){
+                res.status(400).json({message:'id not found'})
+                return
+            }
+           let product=await productItemModel.findOne({'variants._id':id})
+           if(!product){
+            return res.status(400).json({message:'product not found'})
+           }
+           if(product?.variants.length===1){
+            return res.status(400).json({message:'Not updated ! keep atlease one variant'})
+           }
+      
+           const afterRemovedArray=product?.variants.filter(v=>{
+         
+            let docId=v._id.toString()
+            return docId!==id
+           })
+            product.variants=afterRemovedArray
+          const response=  await product.save()
+            if(response){
+                res.json(true)
+            }else{
+                res.status(400).json({message:'internal server error'})
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({message:'internal server error'})   
         }
     },
     user: async (req, res, next) => {
