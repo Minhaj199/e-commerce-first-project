@@ -34,4 +34,7 @@ function increment(value){
   function stockWarning(stock){
     return stock<10
   }
-module.exports={isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning}
+  function isZero(value){
+    return value==0
+  }
+module.exports={isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning,isZero}

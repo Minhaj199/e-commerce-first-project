@@ -12,6 +12,10 @@ module.exports = {
     postProduct: async (req, res, next) => {
 
         try {
+            const isDuplicate=await productItemModel.findOne({Name:req.body.Name})
+            if(isDuplicate){
+                return res.redirect('/admin/add-product-form?errMessage=This name already exist')
+            }
             const variants = JSON.parse(req.body.variens) || []
             if (!variants || variants?.length <= 0) {
                 throw new Error('in sufficient data')

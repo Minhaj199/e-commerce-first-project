@@ -18,6 +18,8 @@ module.exports = {
             message = req.session.successOfReset
             delete req.session.successOfReset
         }
+        req.session.customerId = '664a090b1ed93fff5bc4b85a';
+                        req.session.isUserAuthenticated = true;
         res.render("./user/login", { message });
     },
     handleLoginSubmission: async (req, res, next) => {

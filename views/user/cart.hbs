@@ -84,17 +84,22 @@
                     </div>
             {{/if}}
         </div>
-        <div class="container">
+        {{#if (isZero total)}}
+        <div style="height: 100svh;width:100%;">
+            <h1 style="text-align: center;">NO CART ITEMS</h1>
+        </div>
+        {{else}}
+        <div  class="container">
 
             <div class="row">
-
+                
                 <div class="col-lg-12">
                     <div class="shop__cart__table">
                         <table>
                             <thead  class="thead">
                                 <tr >
                                     <th >Product</th>
-                                    <th >Stock</th>
+                                   
                                     <th >Price</th>
                                     <th >Quantity</th>
 
@@ -121,7 +126,7 @@
                                         </div>
                                     </td>
                                     
-                                    <td data-currQty="{{this.currentQuantity}}" class="cart__price_quantity">{{this.currentQuantity}}</td>
+                                    {{!-- <td data-currQty="{{this.currentQuantity}}" class="cart__price_quantity">{{this.currentQuantity}}</td> --}}
                                     <td  id="price" class="cart__price">₹{{this.OrderPrice}}</td>
                                     <td class="cart__quantity">
                                         <div class="pro-qty">
@@ -165,15 +170,16 @@
                     <div class="cart__total__procced">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span id="subtotal"></span></li>
+                            <li>Subtotal <span id="subtotal">{{total}}</span></li>
                             <li>Discount <span id="discount">₹ 0</span></li>
-                            <li>Total <span id="total"> </span></li>
+                            <li>Total <span id="total">{{total}} </span></li>
                         </ul>
                         <a href="#" onclick="proceedToChackOut(3)" class="primary-btn">Proceed to checkout</a>
                     </div>
                 </div>
             </div>
         </div>
+        {{/if}}
     </section>
     <!-- Shop Cart Section End -->
 

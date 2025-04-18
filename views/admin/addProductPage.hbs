@@ -49,6 +49,7 @@
 
 
             </div>
+            <h1 id="errorMessage" hidden>{{errMessage}}</h1>
             <div class="main-content">
                 <div class="col-12 title-box">
                     <p>Add Product</p>
@@ -87,7 +88,7 @@
                             <div class="col-4"
                                 style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
                                 <label style="color: black;font-weight: bold;" for="">Selling price</label>
-                                <input value="100" type="number" min="1" max="10" required style=" width: 127px;display: block;height: 43px;"
+                                <input value="100" type="number" min="1"  required style=" width: 127px;display: block;height: 43px;"
                                     name="price">
                             </div>
                         </div>
@@ -119,7 +120,7 @@
                             {{!-- color input --}}
                                 <label for="">Colors</label>
                                 <input  type="text" style="width: 200px;height:50px;" id="color" name="color" minlength="3"
-                                   placeholder="Red....Green....Blue" maxlength="30" required>
+                                   placeholder="Red....Green....Blue" maxlength="15" required>
                                 </select>
                             </div>
                             <div class="col-4"
@@ -260,7 +261,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 submit-box"><button class="sub-brn" type="submit">submit</button></div>
+                    <div class="col-12 submit-box "><button class="sub-brn" id="main-submit-button" type="submit">submit</button></div>
                 </form>
             </div>
 

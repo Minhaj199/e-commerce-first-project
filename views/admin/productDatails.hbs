@@ -27,6 +27,8 @@
 <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
 <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
 <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+<link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
+<link rel="stylesheet" href="/css/productDetails.css" type="text/css">
 </head>
 
 <body>
@@ -89,7 +91,7 @@
                                 <img data-hash="product-2" class="product__big__img"
                                     src="{{Data.images.path.[4]}}" alt="">
                                 <img data-hash="product-3" class="product__big__img"
-                                    src="{{Data.imags.path.[1]}}" alt="">
+                                    src="{{Data.images.path.[1]}}" alt="">
                                 <img data-hash="product-4" class="product__big__img"
                                     src="{{Data.images.path.[2]}}" alt="">
                             </div>
@@ -98,7 +100,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <h3>{{Data.Name}} <span>Brand: {{Data.brand}}</span></h3>
+                        <h3 id="name-field" data-name="{{Data.Name}}">{{Data.Name}} <span>Brand: {{Data.brand}}</span></h3>
                         
                         {{#if Data.offer_rate}}
                         <div class="rating">
@@ -126,7 +128,7 @@
                                 </div>
                                 
                             </div>
-                            <a onclick='result("{{Data._id}}")'   class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <a onclick='submitToCart("{{Data._id}}")'   class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
                             
                             <ul>
                                 <li><a class="wishlist"  href="#"><span class="icon_heart_alt"></span></a></li>
@@ -137,14 +139,15 @@
                                     <span class="close">&times;</span>
                                     <p>Please select size and color!</p>
                                     <select class="color-drop" name="color" id="">
-                                        <option value="red">Red</option>
-                                        <option value="black">Black</option>
-                                        <option value="white">White</option>
+                                        {{#each uniqueColor}}
+                                        <option  value={{this}}>{{this}}</option>
+                                        {{/each}}
                                     </select>
                                     <select class="size-drop" name="size" id="">
-                                        <option value="small">Small</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="large">Large</option>
+                                        {{#each uniqueSize}}
+                                        <option value={{this}}>{{this}}</option>
+                                        {{/each}}
+                                        
                                     </select>
                                     <button data-id="{{Data._id}}" class="mod-btn">Submit</button>
                                 </div>
@@ -160,44 +163,33 @@
                                 </li>
                                 <li>
                                     <span>Available color:</span>
-                                    <div class="color__checkbox"> 
-                                        <label for="red">
-                
-                                           
-                                            <input type="radio"  onclick="color('red','{{Data._id}}')" name="color__radio" value="red" id="red" >
-                                            <span class="checkmark red-bg"></span>
-                                        </label>
-                                        <label for="black">
-                                            <input type="radio"  onclick="color('black','{{Data._id}}')" name="color__radio" value="black" id="black">
-                                                                                              
-                                            <span class="checkmark black-bg"></span>
-                                        </label>
-                                        <label for="grey">
-                                            <input type="radio" name="color__radio"  onclick="color('white','{{Data._id}}')" value="white" id="grey" >
-                                            <span class="checkmark grey-bg"></span>
-                                        </label>
-                                    </div>
+                                  <div  class="dropdown">
+                                    
+                                    
+                                    <select onchange="colorFunction(event,'{{Data._id}}')"  >
+                                    <option >Select an color</option>
+                                    {{#each uniqueColor}}
+                                    <option onclick="colorFunction()" value={{this}}>{{this}}</option>
+                                    {{/each}}
+                                    </select>
+                                </div>
+                                   
                                 </li>
                                 <li>
+                                    
                                     <span>Available size:</span>
-                                    <div class="size__btn">
-                                        <label for="s-btn">
-                                            <input class="size" onclick="Size('small','{{Data._id}}')" type="radio" id="s-btn" name="size-option">
-                                            s
-                                        </label>
-                                        <label for="m-btn">
-                                            <input type="radio" class="size"  onclick="Size('medium','{{Data._id}}')" id="m-btn" name="size-option">
-                                            m
-                                        </label>
-                                        <label for="l-btn">
-                                            <input type="radio" id="l-btn"  class="size" onclick="Size('large','{{Data._id}}')" name="size-option">
-                                            l
-                                        </label>
-                                    </div>
+                                    <div class="dropdown">
+                                    <select onchange="Size(event,'{{Data._id}}')">
+                                    <option disabled selected>Select an size</option>
+                                    {{#each uniqueSize}}
+                                    <option value={{this}}>{{this}}</option>
+                                    {{/each}}
+                                    </select>
+                                </div>
                                 </li>
                                 <li>
                                     <span>Promotions:</span>
-                                    <p>Free shipping</p>
+                                    <p>Offers and coupens available</p>
                                 </li>
                             </ul>
                         </div>

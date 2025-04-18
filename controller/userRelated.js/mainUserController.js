@@ -1,6 +1,5 @@
 const user = require("../../Model/user");
 const bcrypt = require("bcrypt");
-const productModel = require("../../Model/product");
 const categoryModel = require("../../Model/catagory");
 const addressModel = require("../../Model/address");
 const { ObjectId } = require("mongodb");
@@ -10,6 +9,7 @@ const orderModel = require("../../Model/orders");
 const wishlistModel = require("../../Model/wishList");
 const walletModel = require("../../Model/wallets");
 const dateFunction = require("../../utils/DateFormating");
+const productItemModel = require("../../Model/prouctItems");
 
 
 
@@ -20,7 +20,7 @@ module.exports = {
       let User = req.session.user;
 
       let user = req.session.customerId;
-      const Data = await productModel.find().limit(9).sort({ _id: -1 });
+      const Data = await productItemModel.find().limit(9).sort({ _id: -1 });
       const categoryCollecion = await categoryModel.findOne();
       res.render("index", { User, Data, categoryCollecion, user });
     } catch (error) {
@@ -40,7 +40,7 @@ module.exports = {
           { $match: { UserId: new ObjectId(UserId) } },
           {
             $lookup: {
-              from: "products",
+              from: "product_items",
               localField: "ProductId",
               foreignField: "_id",
               as: "Products",
@@ -48,7 +48,7 @@ module.exports = {
           },
           { $unwind: "$Products" },
         ]);
-
+        
         const codeApplied = req.session.codeApplied;
         delete req.session.codeApplied;
         const deleteInfo = req.session.deleteInfo;
@@ -56,15 +56,21 @@ module.exports = {
         let proId = getCart.map((item) => item.Products._id);
         let colors = getCart.map((item) => item.Color);
         let sizes = getCart.map((item) => item.Size);
+        let total=getCart.reduce((acc,curr)=>{
+          acc+=curr.Total
+          return acc
+        },0)
         for (let i = 0; i < proId.length; i++) {
-          const product = await productModel.findById({ _id: proId[i] });
-          getCart[i].currentQuantity = product.sizes[sizes[i]][colors[i]];
+          const product = await productItemModel.findById({ _id: proId[i] });
+          const variant=product.variants.find(v=>v.size===sizes[i]&&v.color===colors[i])
+          getCart[i].currentQuantity = variant?variant.stock:0
         }
-
+     
         res.render("user/cart", {
           addedMessage,
           getCart,
           User,
+          total,
           codeApplied,
           deleteInfo,
         });
@@ -83,25 +89,27 @@ module.exports = {
           let colors = checkCart.map((item) => item.Color);
           let sizes = checkCart.map((item) => item.Size);
           let OrderQuantity = checkCart.map((item) => item.OrderQuantity);
-
+          
           for (let i = 0; i < proId.length; i++) {
             const propertyName = `sizes.${sizes[i]}.${colors[i]}`;
-            const product = await productModel.findById(proId[i], {
-              [propertyName]: 1,
-              _id: 0,
-            });
-            const productName = await productModel.findById(proId[i], {
-              Name: 1,
-              _id: 0
-            });
-
-            const qty = product.sizes[sizes[i]][colors[i]];
-
+            const product = await productItemModel.findById(proId[i]);
+          
+            if(!product){
+              return res.status(400).json({message:'product not found'})
+            }
+            
+            const currentVarinet = product.variants.find(v=>v.size===sizes[i]&&v.color===colors[i]);
+            
+            if(!currentVarinet){
+              return res.status(400).json({message:'variant not found'})
+              
+            }
+            const qty=currentVarinet.stock||0
             if (OrderQuantity[i] > qty) {
               req.session.addedMessage =
                 qty === 0
-                  ? productName.Name + " is out of stock"
-                  : productName.Name +
+                  ? product.Name + " is out of stock"
+                  : product.Name +
                   " is only " +
                   qty +
                   " stock.Please reduce the stock";
@@ -123,7 +131,7 @@ module.exports = {
             { $match: { UserId: new ObjectId(UserId) } },
             {
               $lookup: {
-                from: "products",
+                from: "product_items",
                 localField: "ProductId",
                 foreignField: "_id",
                 as: "Products",
@@ -170,7 +178,7 @@ module.exports = {
           { $unwind: "$Order" },
           {
             $lookup: {
-              from: "products",
+              from: "product_items",
               let: { productID: { $toObjectId: "$Order.ProductID" } },
               pipeline: [
                 { $match: { $expr: { $eq: ["$_id", "$$productID"] } } },
@@ -180,7 +188,7 @@ module.exports = {
           },
           { $unwind: "$ProductDetails" },
         ]);
-
+        
         res.render("user/transactionCompletion", { orderData, ProductData });
       } else if (req.query.from === "orderFailed") {
         const OrderID = req.session.OrderID;
@@ -223,7 +231,7 @@ module.exports = {
           { $unwind: "$Order" },
           {
             $lookup: {
-              from: "products",
+              from: "product_items",
               let: { productID: { $toObjectId: "$Order.ProductID" } }, // Convert string ID to ObjectId
               pipeline: [
                 { $match: { $expr: { $eq: ["$_id", "$$productID"] } } },
@@ -264,7 +272,7 @@ module.exports = {
           { $match: { UserID: new ObjectId(UserID) } },
           {
             $lookup: {
-              from: "products",
+              from: "product_items",
               localField: "ProductID",
               foreignField: "_id",
               as: "product",
@@ -272,8 +280,7 @@ module.exports = {
           },
           { $unwind: "$product" },
         ]);
-
-        res.render("user/wishList", { data });
+        res.render("user/wishList", { data,total:data?.length||0 });
       } else if (req.query.from === "wallet") {
         const walletData = await walletModel.findOne({
           UserID: req.session.customerId,
@@ -298,7 +305,7 @@ module.exports = {
       if (req.query.search) {
         const searchWord = new RegExp("^" + req.query.search, "i")
 
-        const Data = await productModel
+        const Data = await productItemModel
           .find({ Name: { $regex: searchWord } })
           .limit(6);
 
@@ -310,7 +317,7 @@ module.exports = {
         const minValue = parseInt(req.query.minValue);
         const maxValue = parseInt(req.query.maxValue);
         if (minValue < maxValue) {
-          const Data = await productModel.find({
+          const Data = await productItemModel.find({
             $and: [{ price: { $lt: maxValue } }, { price: { $gt: minValue } }],
           });
 
@@ -321,14 +328,14 @@ module.exports = {
           res.redirect("/user/all");
         }
       } else if (req.query.instruction === "lowToHigh") {
-        const Data = await productModel.find().sort({ price: 1 });
+        const Data = await productItemModel.find().sort({ price: 1 });
 
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else if (req.query.instruction === "HighToLow") {
-        const Data = await productModel.find().sort({ price: -1 });
+        const Data = await productItemModel.find().sort({ price: -1 });
 
         const CategoryCollection = await categoryModel.findOne();
 
@@ -337,7 +344,7 @@ module.exports = {
       } else if (req.query.from === "sortBrand") {
         const array = JSON.parse(decodeURIComponent(req.query.brand));
 
-        const Data = await productModel.find({ brand: { $in: array } });
+        const Data = await productItemModel.find({ brand: { $in: array } });
 
         const CategoryCollection = await categoryModel.findOne();
         let User = req.session.isUserAuthenticated;
@@ -353,7 +360,7 @@ module.exports = {
           brand = CategoryCollection.brand;
         }
 
-        const Data = await productModel
+        const Data = await productItemModel
           .find({
             $and: [
               { price: { $gt: minValue } },
@@ -368,13 +375,13 @@ module.exports = {
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else {
         const pageNumber = req.query.page;
-        const pagesOf = await productModel.find().count()
+        const pagesOf = await productItemModel.find().count()
         const pages = Math.ceil(pagesOf / 6)
         const pagesArray = []
         for (let i = 1; i <= pages; i++) {
           pagesArray.push(i)
         }
-        const Data = await productModel
+        const Data = await productItemModel
           .find()
           .skip((pageNumber - 1) * 6)
           .limit(6);
@@ -394,7 +401,7 @@ module.exports = {
   },
   getWomen: async (req, res, next) => {
     try {
-      const Data = await productModel.find({ category: "women" });
+      const Data = await productItemModel.find({ category: "women" });
       let User = req.session.isUserAuthenticated;
 
       res.render("admin/shop", { Data, User });
@@ -405,7 +412,7 @@ module.exports = {
 
   getMan: async (req, res, next) => {
     try {
-      const Data = await productModel.find({ category: "men" });
+      const Data = await productItemModel.find({ category: "men" });
       let User = req.session.isUserAuthenticated;
       res.render("admin/shop", { Data, User });
     } catch (error) {
@@ -426,7 +433,7 @@ module.exports = {
           brand = CategoryCollection.brand;
         }
 
-        const Data = await productModel
+        const Data = await productItemModel
           .find({
             $and: [
               { category: sortVarialble },
@@ -452,7 +459,7 @@ module.exports = {
           let User = req.session.isUserAuthenticated;
           const sortVarialble = req.query.cat;
           const page = req.query.page;
-          const Data = await productModel
+          const Data = await productItemModel
             .find({ category: sortVarialble })
             .skip((page - 1) * 3)
             .limit(3);
@@ -471,14 +478,22 @@ module.exports = {
   },
   getProductDatails: async (req, res, next) => {
     try {
-      const d = req.params.id;
+      const id = req.params.id;
       let User = req.session.isUserAuthenticated;
-      const Data = await productModel.findById({ _id: d });
-      const relatedData = await productModel
-        .find({ category: Data.category })
-        .limit(3);
+      const Data = await productItemModel.findById(id);
+        if(Data){
+          const size=Data?.variants.map(el=>el.size)
+          const uniqueSize=Array.from(new Set(size))
+         
+          const color=Data?.variants.map(el=>el.color)
+          const uniqueColor=Array.from(new Set(color))
+          
+          const relatedData = await productItemModel
+            .find({ category: Data.category })
+            .limit(3);    
+          res.render("admin/productDatails", { Data, relatedData, User,uniqueColor,uniqueSize });
 
-      res.render("admin/productDatails", { Data, relatedData, User });
+        }
     } catch (error) {
       next(error)
     }
@@ -560,40 +575,69 @@ module.exports = {
   },
   /////cart//////
   cart: async (req, res, next) => {
+    
+    const{
+      id,
+      count,
+      size,
+      price,
+      color,
+      from,
+      total,
+      name
+    }=req.body
+    const {customerId}=req.session
+    if(!id||!count||!size||!price||!color||!from||!total||!customerId||!name){
+      return res.status(400).json({message:'in sufficient data'})
+    }
+    const isDuplicate=await cartModel.findOne({name,Size:size,Color:color})
+    if(isDuplicate){
+      res.status(400).json({message:'already exist'})
+      return
+      }
     try {
-      if ((req.body.from === "add to cart")) {
+      if (from === "add to cart") {
         const addToCart = {
-          ProductId: req.body.id,
-          UserId: req.session.customerId,
-          OrderQuantity: req.body.count,
-          OrderPrice: req.body.price,
-          Size: req.body.size,
-          Color: req.body.color,
-          Total: req.body.total,
+          ProductId: id,
+          UserId:customerId,
+          OrderQuantity: count,
+          OrderPrice: price,
+          Size: size,
+          Color: color,
+          Total: total,
+          name,
           payment_id: "paymentId",
           payment_Order_id: "orderID",
         };
-
+        
         await cartModel
           .create(addToCart)
-          .then((res) => { })
+          .then((res) => {
+            return res.json(true)
+          })
           .catch((error) => {
+            console.log(error)
             res.json('done');
           });
-
-        res.send("reaceived");
       }
     } catch (error) {
+      console.log(error)
       next(error)
     }
   },
   getQuantity: async (req, res, next) => {
     try {
-      const item = await productModel.findById({ _id: req.query.id });
-      const path = `sizes.${req.query.size}.${req.query.color}`;
-      const quantity = lodash.get(item, path);
-
-      res.json(quantity);
+        const {id,size,color}=(req.query)
+        if(!id||!size||!color){
+          return
+        }
+      const item = await productItemModel.findById({ _id: req.query.id },{_id:0,variants:1});
+        if(!item){
+          res.json({data:0})
+          return
+        }
+        const currentVarinet=item.variants.find(v=>v.size===size&&v.color===color)
+        return res.json({stock:currentVarinet?currentVarinet.stock:0})
     } catch (error) {
       next(error)
     }
@@ -685,19 +729,39 @@ module.exports = {
 
   },
   addToWishlist: async (req, res, next) => {
-    try {
+  
+   const{
+    id,
+    color,
+    size,
+    price,
+    name
+  } =req.body
+  if(!id||!color||!size||!price||!name){
+    
+   return 
+  }
+  
+   try {
       const wishData = {
         UserID: req.session.customerId,
-        ProductID: req.body.id,
-        color: req.body.color,
-        size: req.body.size,
+        ProductID: id,
+        color,
+        size,
         quantity: 1,
-        price: req.body.price,
-        total: req.body.price,
+        price,
+        name,
+        total: price,
       };
+      const isDuplicate=await wishlistModel.findOne({name,size,color})
+      if(isDuplicate){
+        return res.status(400).json({message:'Already exist'})
+      }
       const response = await wishlistModel.create(wishData);
+      
       res.status(200).json(response);
     } catch (error) {
+      console.log(error)
       next(error)
     }
   },

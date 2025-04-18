@@ -1,3 +1,10 @@
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const errorMessage=document.getElementById('errorMessage').textContent
+  if(errorMessage){
+    showToast(errorMessage)
+  }
+})
 const form = document.getElementById('mainForm')
 
 form.addEventListener('submit', (e) => {
@@ -5,7 +12,12 @@ form.addEventListener('submit', (e) => {
   const input = document.getElementById('varient_collection')
   const tbody = document.getElementById('productTableBody')
   const tbodyChild = tbody.childElementCount
-
+  const mainSubmit=document.getElementById('main-submit-button')
+  mainSubmit.textContent='loading............'
+  mainSubmit.disabled=true
+  setTimeout(() => {
+    mainSubmit.disabled=false
+  }, 15000);
   input.value = (sessionStorage.getItem('value') && tbodyChild > 1) ? sessionStorage.getItem('value') : '[]'
 
   const varient = input.value
@@ -23,8 +35,6 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
     return false
   }
-  const loader = document.getElementById('loader');
-  if (loader) loader.style.display = 'flex';
   sessionStorage.removeItem('value')
 })
 
@@ -58,22 +68,26 @@ function handleAddVariant(e) {
   e.preventDefault()
   const sizeElement = document.getElementById('size').value
   const colorElment = document.getElementById('color').value
-  const qty = document.getElementById('qty').value
+  const qty =Math.floor( document.getElementById('qty').value)
   const warnning = document.getElementById('varient-warning')
   const tbody = document.getElementById('productTableBody')
   const row = document.createElement('tr')
   const tbodyChild = tbody.childElementCount
   const id = Math.floor(Math.random() * 10000)
-  if (sizeElement.trim() === '') {
+  if (sizeElement?.trim() === '') {
     warnning.innerHTML = 'Please Select Size'
     return
   }
-  if (colorElment.trim() === '') {
+  if (colorElment?.trim() === '') {
     warnning.innerHTML = 'Please Insert Color'
     return
   }
-  if (qty <= 0) {
-    warnning.innerHTML = 'Please Insert Quantity'
+  if (colorElment.trim()?.length>=10||colorElment.trim()?.length<=2) {
+    warnning.innerHTML = 'Reduce color text length between 3-10 '
+    return
+  }
+  if (qty <= 0 ||qty >= 5000) {1
+    warnning.innerHTML = 'Please Insert Quantity Betweem 1-5000'
     return
   }
   document.getElementById('varient-warning').innerHTML = ''
@@ -193,7 +207,7 @@ fields.forEach((fieldId, index) => {
     .addEventListener("click", () => resetField(index));
 });
 
-function handleFieldChange(event, index) {
+async function handleFieldChange(event, index) {
   let cropBtn = document.getElementById("crop");
 
   removeClase();
@@ -205,7 +219,9 @@ function handleFieldChange(event, index) {
   }
 
   // if (fieldCounts[index] === 0) {
-  openModal();
+  
+    openModal();
+  
   const file = event.target.files[0];
   if (file) {
     const image = document.getElementById("img-t-A");
@@ -232,6 +248,8 @@ function handleFieldChange(event, index) {
         },
         crop() {
           const canvas = cropper.getCroppedCanvas({
+            minCropBoxWidth: 300,
+            minCropBoxHeight: 500,
             fillColor: "transparent",
           });
           dataURL = canvas.toDataURL("image/jpeg");
@@ -314,6 +332,7 @@ function closeModal() {
     cropper.destroy();
     cropper = null;
   }
+  document.getElementById("img-t-A").src = "";
 }
 
 document.getElementById("cancel-modal").addEventListener('click', () => {

@@ -1,4 +1,4 @@
-const productModel = require("../../Model/product");
+
 const orderModel = require("../../Model/orders");
 const cartModel = require("../../Model/cart");
 const coupenModel = require("../../Model/coupen");
@@ -8,6 +8,8 @@ const user = require("../../Model/user");
 const RazorPay = require("razorpay");
 const lodash = require("lodash");
 const path = require("path");
+const { Types } = require("mongoose");
+const productItemModel = require("../../Model/prouctItems");
 
 
 module.exports = {
@@ -25,12 +27,12 @@ module.exports = {
 
                 const qty = [];
                 for (let i = 0; i < IDs.length; i++) {
-                    const temQty = await productModel.findById(IDs[i]);
+                    const temQty = await productItemModel.findById(IDs[i]);
 
                     qty.push(temQty);
                 }
                 let sizesArray = [];
-                const a = qty[0].sizes.small.white;
+               
 
                 for (let i = 0; i < qty.length; i++) {
                     let path = `sizes.${sizes[i]}.${colors[i]}`;
@@ -50,8 +52,14 @@ module.exports = {
                     res.json("stock");
                 }
             } else if (req.query.from === "validateCoupen") {
+                console.log('hiiii')
                 //////checking applied coupen for in checkout//////
-                console.log('i at 1198')
+                const id=req.session.customerId
+                const isTotalValid=await cartModel.aggregate([{$match:{UserId:new Types.ObjectId(id)}},{$group:{_id:null,sum:{$sum:'$Total'}}}])
+                const totalOrderPrice=(isTotalValid.length&&isTotalValid[0]?.sum)?isTotalValid[0]?.sum+60:0
+                if(totalOrderPrice<1000){
+                    return res.json("Total order less than 1000");
+                }
                 const validateCoupen = await coupenModel.find({
                     code: req.query.coupen,
                 });
@@ -100,25 +108,32 @@ module.exports = {
     },
     placeOrder: async (req, res,next) => {
         ///////////placing order from checkout page/////////// 
+        console.log(req.body)
+        const {orderDetails}=req.body
+        const {customerId}=req.session
+        if(!orderDetails||!customerId){
+            res.status(400).json({message:'in sufficient data'})
+            return
+        }
         try {
-            const orderCount = req.body.orderDetails.Order.length;
+            const orderCount = orderDetails.Order.length;
             const Order = {
-                UserId: req.session.customerId,
-                PaymentOption: req.body.orderDetails.paymentOption,
-                SubTotal: req.body.orderDetails.subTotal,
-                Order: req.body.orderDetails.Order,
-                Discount: req.body.orderDetails.discount,
-                ShippingCharge: req.body.orderDetails.deleveryCharge,
-                TotalOrderPrice: req.body.orderDetails.total,
-                AddressID: req.body.orderDetails.addressID,
-                payment_Order_id: req.body.orderDetails.paymentOrderID,
-                payment_id: req.body.orderDetails.paymentID,
+                UserId: customerId,
+                PaymentOption: orderDetails.paymentOption,
+                SubTotal: orderDetails.subTotal,
+                Order: orderDetails.Order,
+                Discount: orderDetails.discount,
+                ShippingCharge: orderDetails.deleveryCharge,
+                TotalOrderPrice: orderDetails.total,
+                AddressID: orderDetails.addressID,
+                payment_Order_id: orderDetails.paymentOrderID,
+                payment_id: orderDetails.paymentID,
                 numberOfOrders: orderCount,
             };
-            if (req.body.orderDetails.CoupenID != undefined) {
+            if (orderDetails.CoupenID != undefined) {
                 const coupenData = {
-                    UserID: req.session.customerId,
-                    CoupenID: req.body.orderDetails.CoupenID,
+                    UserID: customerId,
+                    CoupenID: orderDetails.CoupenID,
                 };
                 await coupenTrackingModel.create(coupenData);
             }
@@ -134,17 +149,17 @@ module.exports = {
                     console.log(error);
                 });
             if (
-                req.body.orderDetails.paymentOption === "Wallet+Online" ||
-                req.body.orderDetails.paymentOption === "Wallet"
+                orderDetails.paymentOption === "Wallet+Online" ||
+                orderDetails.paymentOption === "Wallet"
             ) {
-                const amount = req.body.orderDetails.Order[0].wallet;
+                const amount = orderDetails.Order[0].wallet;
 
                 await walletModel.updateOne(
-                    { UserID: req.session.customerId },
+                    { UserID: customerId },
                     { $inc: { Amount: -amount } }
                 );
                 const result = await walletModel.updateOne(
-                    { UserID: req.session.customerId },
+                    { UserID: customerId },
                     {
                         $push: {
                             transaction: {
@@ -157,16 +172,15 @@ module.exports = {
                     }
                 );
             }
-            for (let i = 0; i < req.body.orderDetails.CartIDs.length; i++) {
-                await cartModel.deleteOne({ _id: req.body.orderDetails.CartIDs[i] });
+            for (let i = 0; i <orderDetails.CartIDs.length; i++) {
+                await cartModel.deleteOne({ _id: orderDetails.CartIDs[i] });
             }
-            for (let i = 0; i < req.body.orderDetails.productID.length; i++) {
-                path = `sizes.${req.body.orderDetails.sizes[i]}.${req.body.orderDetails.colors[i]}`;
-                quantity = req.body.orderDetails.Order[i].quantity;
-                await productModel
-                    .findByIdAndUpdate(
-                        { _id: req.body.orderDetails.productID[i] },
-                        { $inc: { [path]: -quantity } }
+            for (let i = 0; i < orderDetails.productID.length; i++) {
+                quantity = orderDetails.Order[i].quantity;
+                await productItemModel
+                    .findOneAndUpdate(
+                        { _id: orderDetails.productID[i],'variants.size':orderDetails.sizes[i],'variants.color':orderDetails.colors[i],"variants.stock": { $gt: 0 } },
+                        { $inc: { 'variants.$.stock': -quantity } }
                     )
                     .then((result) => { })
                     .catch((error) => {
@@ -233,7 +247,7 @@ module.exports = {
 
             for (let i = 0; i < IDs.length; i++) {
                 path = `sizes.${size[i]}.${color[i]}`;
-                const result = await productModel.findByIdAndUpdate(IDs[i], {
+                const result = await productItemModel.findByIdAndUpdate(IDs[i], {
                     $inc: { [path]: -quantity[i] },
                 });
             }

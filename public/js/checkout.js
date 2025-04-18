@@ -3,9 +3,18 @@ let info;
 let count = 0;
 document.getElementById("coupen-btn").addEventListener("click", async () => {
   if (count === 0) {
-    count++;
-    const code = document.getElementById("coupen-input").value;
+    const totalValue=parseInt(document.getElementById('Total').textContent||0)
 
+    if(totalValue<1000){
+      await showAlertMessage('COUPON INFO','Minimum order should be 1000')
+    return 
+    }
+    count++;
+    const code = document.getElementById("coupen-input")?.value?.trim();
+    if(code.trim()===''){
+      showToast('please insert code')
+      return
+    }
     const encoded = encodeURIComponent(code);
     const validateCoupen = await fetch(
       `/user/fetchData?coupen=${encoded}&from=validateCoupen`,
@@ -23,7 +32,6 @@ document.getElementById("coupen-btn").addEventListener("click", async () => {
       if (sub_total <= info.amount) {
         showToast("Coupen amount greater than sub total.You cannot add");
       } else {
-        const message = info.message;
 
         orderDetails.CoupenID = info.coupenID;
 
@@ -1011,31 +1019,6 @@ function showAlert(message) {
   });
 }
 
-///sweet alert prompt///
-async function showAlertPropt(message,icon) {
-  
-  try {
-    const result = await Swal.fire({
-      title: "Are you sure ?",
-      text: message,
-      icon: icon,
-      showCancelButton: true,
-      confirmButtonColor: "#b50c00",
-      cancelButtonColor: "##bfbcbb",
-      confirmButtonText: "Confirm",
-    });
-    if (result.isConfirmed) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (e) {
-  
-    alert("internal server error");
-    return false;
-  }
-}
-
 ////toast////
 
 function showToast(message) {
@@ -1047,3 +1030,52 @@ function showToast(message) {
     position: "center",
   }).showToast();
 }
+async function showAlertPropt(message) {
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure ?",
+      text: message,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#b50c00",
+      cancelButtonColor: "##bfbcbb",
+      confirmButtonText: "confirm",
+    });
+    if (result.isConfirmed) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    alert("internal server error");
+    return false;
+  }
+}
+async function showAlertMessage(title,message) {
+  try {
+    const result = await Swal.fire({
+      title: title,
+      text: message,
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#b50c00",
+      cancelButtonColor: "##bfbcbb",
+      confirmButtonText: "confirm",
+    });
+    if (result.isConfirmed) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    alert("internal server error");
+    return false;
+  }
+}
+async function openTandC(){
+  try {
+    await showAlertMessage('COUPON INFO','Coupon only applied order above 1000')
+  } catch (error) {
+    
+  }
+} 

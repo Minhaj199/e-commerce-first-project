@@ -14,10 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
-        
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css">
     <!-- Css Styles -->
     <link rel="stylesheet" href="/css/checkOut.css">
     <link rel="stylesheet" href="/css/landing/bootstrap.min.css" type="text/css">
@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="/css/landing/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/css/landing/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/css/landing/style2.css" type="text/css">
-    
+
 </head>
 
 <body>
@@ -70,321 +70,367 @@
                 <h2>Checkout</h2>
             </div>
             <div style="" class="continer-fuid main-cont-inner">
-                <div  class="col-12 address "> 
+                <div class="col-12 address ">
 
                     <div class="address-box">
 
                         <div style="" class="col-10 address-inner-box">
                             <h3 style="margin-top: 2%;font-weight: bolder;">{{address.Name}}</h3>
-                            <p style="color: black;margin-top: 1%;">Phone:{{address.Mobile}}&nbsp;&nbsp;&nbsp;Aleternative mobile:{{address.[0].Aleternative_mobile}} </p>
-                            <p style="color: black;margin-top: 1%;" >Town:{{address.Town}}&nbsp;&nbsp;Locality:{{address.Locality}}&nbsp;&nbsp;Land mark:{{address.Land_mark}}</p>
-                            <p style="color: black;margin-top: 1%;" >Adress:{{address.Address}}</p>
-                            
+                            <p style="color: black;margin-top: 1%;">
+                                Phone:{{address.Mobile}}&nbsp;&nbsp;&nbsp;Aleternative
+                                mobile:{{address.[0].Aleternative_mobile}} </p>
+                            <p style="color: black;margin-top: 1%;">
+                                Town:{{address.Town}}&nbsp;&nbsp;Locality:{{address.Locality}}&nbsp;&nbsp;Land
+                                mark:{{address.Land_mark}}</p>
+                            <p style="color: black;margin-top: 1%;">Adress:{{address.Address}}</p>
+
                         </div>
 
                         <div style="" class="col-2 button-box">
-                            <button data-address="{{address._id}}" class="change-btn" onclick="ToChangeAddress()">Change</button>
-                            
-                        </div>
-                        
+                            <button data-address="{{address._id}}" class="change-btn"
+                                onclick="ToChangeAddress()">Change</button>
 
-                        
-                    </div>
-                <div style="height: 50px;width:100%;margin-top: 2%;display: flex;">
-                  
-                    <div style="height: 100%;padding: 0;" class="col-10">
-                        {{#if removeFromCheckout}}
-                        
-                        <div class="alert alert-danger" role="alert">
-                            {{removeFromCheckout}}
                         </div>
-                        {{/if}}
-                        {{#if deleteAddress}}
-                        
-                        <div class="alert alert-success" role="alert">
-                            {{deleteAddress}}
+
+
+
+                    </div>
+                    <div style="height: 50px;width:100%;margin-top: 2%;display: flex;">
+
+                        <div style="height: 100%;padding: 0;" class="col-10">
+                            {{#if removeFromCheckout}}
+
+                            <div class="alert alert-danger" role="alert">
+                                {{removeFromCheckout}}
+                            </div>
+                            {{/if}}
+                            {{#if deleteAddress}}
+
+                            <div class="alert alert-success" role="alert">
+                                {{deleteAddress}}
+                            </div>
+                            {{/if}}
                         </div>
-                        {{/if}}
-                    </div>
-                    <div style="height: 100%;padding:0" class="col-1">
-                        <img class="add-button-img"  width="60%" src="/images/Icons/addCheckout.png" alt="+">
-                    </div>
-                    <div id="myAddModal" class="modal" >
-                    
-                        <!-- Modal content -->
-                        <div style="width: 60%;"  class="modal-content">
-                            <span id="add-close" class="close">&times;</span>
-                            <form id="myForm" >
-                                <div class="col-12 model-heading"
-                                    style="height: 30%;display: flex;align-items: center;justify-content: center;">
-                    
-                                    <h3>ADD ADDRESS</h3>
-                                </div>
-                                <div class="col-12 " style="height: 70%;">
-                                    {{!-- <label for="name">Name:
-                    
-                                    </label> --}}
-                                    <input placeholder="name"
-                                        style="margin-top: 5%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
-                                        type="text" id="add-name" name="name"required >
-                    
-                                    {{!-- <label style="margin-left: 10%;" for="name">Email:</label> --}}
-                                    <input
-                                        style="margin-top: 5%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
-                                        class="inputs" type="email" placeholder="Email" id="add-Email" name="Email" required>
-                                    <br>
-                                    {{!-- <label for="">Phone</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
-                                        class="inputs" type="text" id="add-mobile" placeholder="Mobile" name="Mobile" required>
-                                    {{!-- <label for="" style="margin-left: 9%;">Locality</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
-                                        class="inputs" type="text" id="add-Locality" placeholder="Locality" name="Locality" required>
-                                    <br>
-                                    {{!-- <label style="margin-left: %;" for="">Alternative Phone:</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
-                                        class="inputs" type="text" id="add-Alternative Mobile" placeholder="Alternative Number" name="Aleternative_mobile" required>
-                    
-                    
-                    
-                                    {{!-- <label for="">Pin</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
-                                        class="inputs" type="text" id="add-Pin"
-                                        placeholder="pin" name="pin" required>
-                                    <br>
-                                    {{!-- <label for="">Town</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
-                                        class="inputs" type="text" id="add-Town" placeholder="Town" name="Town" required>
-                    
-                                    {{!-- <label for=""> Land Mark</label> --}}
-                                    <input
-                                        style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
-                                        id="add-landMark" class="inputs" type="text"="Land Mark (optional)" placeholder="Land mark" name="Land_mark" required>
-                                    <input id="add-address" maxlength="70"  placeholder="Address" name="address" type="text"
-                                        style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1%;width:95% " >
-                                    <input hidden type="text" value="{{this._id}}" id="id" name="UserId" >
-                                </div>
-                                <!-- Your form inputs go here -->
-                                <!-- Additional form inputs -->
-                    
-                                <input  id="add-btn" class="modal-btn" style="" type="submit" value="Submit" >
-                            </form>
+                        <div style="height: 100%;padding:0" class="col-1">
+                            <img class="add-button-img" width="60%" src="/images/Icons/addCheckout.png" alt="+">
                         </div>
-                    
+                        <div id="myAddModal" class="modal">
+
+                            <!-- Modal content -->
+                            <div style="width: 60%;" class="modal-content">
+                                <span id="add-close" class="close">&times;</span>
+                                <form id="myForm">
+                                    <div class="col-12 model-heading"
+                                        style="height: 30%;display: flex;align-items: center;justify-content: center;">
+
+                                        <h3>ADD ADDRESS</h3>
+                                    </div>
+                                    <div class="col-12 " style="height: 70%;">
+                                        {{!-- <label for="name">Name:
+
+                                        </label> --}}
+                                        <input placeholder="name"
+                                            style="margin-top: 5%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                            type="text" id="add-name" name="name" required>
+
+                                        {{!-- <label style="margin-left: 10%;" for="name">Email:</label> --}}
+                                        <input
+                                            style="margin-top: 5%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                            class="inputs" type="email" placeholder="Email" id="add-Email" name="Email"
+                                            required>
+                                        <br>
+                                        {{!-- <label for="">Phone</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                            class="inputs" type="text" id="add-mobile" placeholder="Mobile"
+                                            name="Mobile" required>
+                                        {{!-- <label for="" style="margin-left: 9%;">Locality</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                            class="inputs" type="text" id="add-Locality" placeholder="Locality"
+                                            name="Locality" required>
+                                        <br>
+                                        {{!-- <label style="margin-left: %;" for="">Alternative Phone:</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                            class="inputs" type="text" id="add-Alternative Mobile"
+                                            placeholder="Alternative Number" name="Aleternative_mobile" required>
+
+
+
+                                        {{!-- <label for="">Pin</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                            class="inputs" type="text" id="add-Pin" placeholder="pin" name="pin"
+                                            required>
+                                        <br>
+                                        {{!-- <label for="">Town</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                            class="inputs" type="text" id="add-Town" placeholder="Town" name="Town"
+                                            required>
+
+                                        {{!-- <label for=""> Land Mark</label> --}}
+                                        <input
+                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                            id="add-landMark" class="inputs" type="text"="Land Mark (optional)"
+                                            placeholder="Land mark" name="Land_mark" required>
+                                        <input id="add-address" maxlength="70" placeholder="Address" name="address"
+                                            type="text"
+                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1%;width:95% ">
+                                        <input hidden type="text" value="{{this._id}}" id="id" name="UserId">
+                                    </div>
+                                    <!-- Your form inputs go here -->
+                                    <!-- Additional form inputs -->
+
+                                    <input id="add-btn" class="modal-btn" style="" type="submit" value="Submit">
+                                </form>
+                            </div>
+
+                        </div>
+
                     </div>
-                    
                 </div>
-                </div>
-               
-                <div id="oderId" class="col-11  order" >
+
+                <div id="oderId" class="col-11  order">
                     <div style="height:100px;display: flex;justify-content: center;align-items: center;" class="col-12">
                         <h2>Order Detail</h2>
                     </div>
-                    <div class="col-12" style="height: 500px;">
-                    <table style="background-color: rgb(233, 233, 233);">
-                       <thead style="border-bottom: 1px solid rgb(144, 143, 143);">
-                        <tr>
-                            <th>NO</th>
-                            <th >Product</th>
-                            <th style="width: 30%;">Name</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th></th>
-                        </tr>
-                       </thead>
-                        <tbody>
-                            {{#each getCart}}
-                            <tr>
-                                
-                                <td class="count">{{increment @index}}</td>
-                                <td><img style="width: 100px;" src="{{this.Products.images.path.[0]}}" alt=""></td>
-                                <td class="name">{{this.Products.Name}}</th>
-                                <td class='price'>{{this.OrderPrice}}</td>
-                                <td class='quatity'>{{this.OrderQuantity}}</td>
-                                <td class="All-total">{{this.Total}}</td>
-                                <td><img style=" padding-right: 6px;" width="2000px;" onclick='remove("{{this._id}}")' src="/images/Icons/close.png" alt=""></td>
-                                <input class="IDs" type="text" value="{{this.Products._id}}" data-Size="{{this.Size}}" data-Color="{{this.Color}}"data-CartID="{{this._id}}" data-Price="{{this.Price}}"  hidden>
-                            </tr>
-                            {{/each}}
+                    <div class="col-12 " style="height: 500px;">
+                        <table
+                            style="text-align: center;border:1px solid rgba(0, 0, 0, .1);background-color:aliceblue;">
+                            <thead style="border:1px solid rgba(0, 0, 0, .1);">
+                                <tr style="padding-bottom: 50px;">
+                                    <th>NO</th>
+                                    <th>Product</th>
+                                    <th style="width: 30%;">Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each getCart}}
+                                <tr>
 
-                        </tbody>
-                    </table>
+                                    <td class="count">{{increment @index}}</td>
+                                    <td><img style="width: 100px;" src="{{this.Products.images.path.[0]}}" alt=""></td>
+                                    <td class="name">{{this.Products.Name}}</th>
+                                    <td class='price'>{{this.OrderPrice}}</td>
+                                    <td class='quatity'>{{this.OrderQuantity}}</td>
+                                    <td class="All-total">{{this.Total}}</td>
+                                    <td><img style=" padding-right: 6px;" width="2000px;"
+                                            onclick='remove("{{this._id}}")' src="/images/Icons/close.png" alt=""></td>
+                                    <input class="IDs" type="text" value="{{this.Products._id}}"
+                                        data-Size="{{this.Size}}" data-Color="{{this.Color}}" data-CartID="{{this._id}}"
+                                        data-Price="{{this.Price}}" hidden>
+                                </tr>
+                                {{/each}}
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div  class="col-11 change-address">
-                    <div  class="col-12 address-titile">
+                <div class="col-11 change-address">
+                    <div class="col-12 address-titile">
                         <p>Manage Address</p>
                     </div>
-                    <div  style="padding: 0;" class="col-12 address-body">
+                    <div style="padding: 0;" class="col-12 address-body">
                         {{#each addressData}}
-                        <div style="padding: 0;"  class="col-12 address-part">
-                            <div style="padding: 0;"  class="col-12  option">
+                        <div style="padding: 0;" class="col-12 address-part">
+                            <div style="padding: 0;" class="col-12  option">
                                 <div class="row" style="width: 100%;height: 100%;justify-content: space-between;">
                                     <div class="col-8" style="height: 10%;"></div>
                                     <div class="col-2" style="height: 100%;">
                                         {{#if this.status}}
-                                        <a href=""><img class="select" style="width: 25%;" src="/images/Icons/check.png" alt="****"
-                                                data-address-id="{{this._id}}"></a>
+                                        <a href=""><img class="select" style="width: 25%;" src="/images/Icons/check.png"
+                                                alt="****" data-address-id="{{this._id}}"></a>
                                         {{else}}
-                                        <a href=""><img class="select" style="width: 25%;" src="/images/Icons/add.png" alt="*"
-                                                data-address-id="{{this._id}}"></a>
+                                        <a href=""><img class="select" style="width: 25%;" src="/images/Icons/add.png"
+                                                alt="*" data-address-id="{{this._id}}"></a>
                                         {{/if}}
-                                
-                            <a onclick='modaling("{{this._id}}")' id="openModalBtn" ><img style="width: 20%;"
+
+                                        <a onclick='modaling("{{this._id}}")' id="openModalBtn"><img style="width: 20%;"
                                                 src="/images/Icons/edit.png" alt="-"></a>
                                         <!-- Button to open the modal -->
-                                       
-                                        
+
+
                                         <!-- The Modal -->
                                         <div id="myModal" class="modal">
-                                        
+
                                             <!-- Modal content -->
                                             <div style="width: 60%;" class="modal-content">
                                                 <span id="close" class="close">&times;</span>
                                                 <form id="myForm">
-                                                    <div class="col-12 model-heading" style="height: 30%;display: flex;align-items: center;justify-content: center;">
-                                                     
+                                                    <div class="col-12 model-heading"
+                                                        style="height: 30%;display: flex;align-items: center;justify-content: center;">
+
                                                         <h3>Edit address</h3>
                                                     </div>
                                                     <div class="col-12 " style="height: 70%;">
-                                                            {{!-- <label for="name">Name:
+                                                        {{!-- <label for="name">Name:
 
-                                                            </label> --}}
-                                                            <input placeholder="name" style="margin-top: 5%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"  type="text" id="name" name="name" required>
-                                                            
-                                                            {{!-- <label style="margin-left: 10%;" for="name">Email:</label> --}}
-                                                            <input  style="margin-top: 5%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"   class="inputs" type="email"  id="Email" name="Email">
-                                                            <br>
-                                                            {{!-- <label for="">Phone</label> --}}
-                                                            <input style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"  class="inputs" type="text" id="mobile" placeholder="Mobile" name="Mobile" required>
-                                                            {{!-- <label for="" style="margin-left: 9%;">Locality</label> --}}
-                                                            <input style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;" class="inputs" type="text"  id="Locality" name="Locality" placeholder="Locality" required>
-                                                            <br>
-                                                            {{!-- <label style="margin-left: %;" for="">Alternative Phone:</label> --}}
-                                                            <input style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"  class="inputs" type="text" id="Alternative Mobile" placeholder="Alternative_mobile" name="Aleternative_mobile" required>
-                                                            
-                                                            
-                                                            
-                                                            {{!-- <label for="">Pin</label> --}}
-                                                            <input style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;" class="inputs" type="text" id="Pin" placeholder="Pin" name="pin" required>
-                                                            <br>
-                                                            {{!-- <label for="">Town</label> --}}
-                                                            <input style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;" class="inputs" type="text" id="Town" placeholder="Town" name="Town" required>
-                                                            
-                                                            {{!-- <label for=""> Land Mark</label> --}}
-                                                            <input  style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;" id="landMark" class="inputs" placeholder="Land Mark" type="text" ="Land Mark (optional)" name="Land_mark">
-                                                            <input id="address" maxlength="70" type="text" style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1%;width:95% ">
-                                                            <input hidden type="text" value="{{this._id}}" id="id" name="UserId">
+                                                        </label> --}}
+                                                        <input placeholder="name"
+                                                            style="margin-top: 5%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            type="text" id="name" name="name" required>
+
+                                                        {{!-- <label style="margin-left: 10%;" for="name">Email:</label>
+                                                        --}}
+                                                        <input
+                                                            style="margin-top: 5%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            class="inputs" type="email" id="Email" name="Email">
+                                                        <br>
+                                                        {{!-- <label for="">Phone</label> --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            class="inputs" type="text" id="mobile" placeholder="Mobile"
+                                                            name="Mobile" required>
+                                                        {{!-- <label for="" style="margin-left: 9%;">Locality</label>
+                                                        --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            class="inputs" type="text" id="Locality" name="Locality"
+                                                            placeholder="Locality" required>
+                                                        <br>
+                                                        {{!-- <label style="margin-left: %;" for="">Alternative
+                                                            Phone:</label> --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            class="inputs" type="text" id="Alternative Mobile"
+                                                            placeholder="Alternative_mobile" name="Aleternative_mobile"
+                                                            required>
+
+
+
+                                                        {{!-- <label for="">Pin</label> --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            class="inputs" type="text" id="Pin" placeholder="Pin"
+                                                            name="pin" required>
+                                                        <br>
+                                                        {{!-- <label for="">Town</label> --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            class="inputs" type="text" id="Town" placeholder="Town"
+                                                            name="Town" required>
+
+                                                        {{!-- <label for=""> Land Mark</label> --}}
+                                                        <input
+                                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            id="landMark" class="inputs" placeholder="Land Mark"
+                                                            type="text"="Land Mark (optional)" name="Land_mark">
+                                                        <input id="address" maxlength="70" type="text"
+                                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1%;width:95% ">
+                                                        <input hidden type="text" value="{{this._id}}" id="id"
+                                                            name="UserId">
                                                     </div>
-                
-                                                    <input onclick='sumbitModalin(event)' class="modal-btn" style="" type="submit" value="Submit">
+
+                                                    <input onclick='sumbitModalin(event)' class="modal-btn" style=""
+                                                        type="submit" value="Submit">
                                                 </form>
                                             </div>
-                                        
+
                                         </div>
 
-                                        <a class="dlt-botton"><img style="width: 20%;cursor: pointer;" src="/images/Icons/delete.png"
-                                                onclick="deleteAddress('{{this._id}}')" alt="+"></a>
-                                
-                                
-                                
-                                
-                                
+                                        <a class="dlt-botton"><img style="width: 20%;cursor: pointer;"
+                                                src="/images/Icons/delete.png" onclick="deleteAddress('{{this._id}}')"
+                                                alt="+"></a>
                                     </div>
-                                
+
                                 </div>
                             </div>
                             <div class="col-12 addrss-inner">
-                               
-                                    <h3 style="color: blue;">{{this.Name}} </h3>
-                                    <p style="color: black;margin-top: 1%;"> Mobile: {{this.Mobile}}&nbsp;&nbsp;Email:{{this.Email}} </p>
-                                    <p style="color: black;"></p>
-                                    <p style="color: black;">Town:{{this.Town}}, Locality:{{this.Locality}}</p>
-                                    <P style="color: black;">Address {{this.Address}}</P>
-                                   
-                               
+
+                                <h3 style="color: blue;">{{this.Name}} </h3>
+                                <p style="color: black;margin-top: 1%;"> Mobile:
+                                    {{this.Mobile}}&nbsp;&nbsp;Email:{{this.Email}} </p>
+                                <p style="color: black;"></p>
+                                <p style="color: black;">Town:{{this.Town}}, Locality:{{this.Locality}}</p>
+                                <P style="color: black;">Address {{this.Address}}</P>
+
+
                             </div>
                         </div>
                         {{/each}}
-                        
+
 
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-3 billing-colum" >
-            <div style="width: 100%;height: 52%;background-color: rgb(226, 226, 226);margin-top: 23%;">
+        <div class="col-3 billing-colum">
+            <div style="width: 100%;height: 56%;margin-top: 23%;background-color:aliceblue;">
                 <div style="height: 10%;display: flex;justify-content: center;align-items: center;" class="col-12">
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif;">Your Order</h2>
-                    
+
                 </div>
                 <div style="height: 80%;" class="col-12">
-                    
+
                     <table>
                         <thead>
                             <tr>
-                                <th  style="padding-left:1px ;color:#880606">Sub Totoal</th>
+                                <th style="padding-left:1px ;color:#880606">Sub Totoal</th>
                                 <th id="add-sub-total" style="padding-left: 120px; color: black;"></th>
-                                
+
                             </tr>
-                            <tr >
-                                <th class="final-order-heading" >Discount</th>
+                            <tr>
+                                <th class="final-order-heading">Discount</th>
                                 <th id="discount" style="padding-left: 120px;padding-top:20px;color: black    ;">0</th>
-                            
+
                             </tr>
                             <tr style="border-bottom: 1px solid rgb(181, 179, 179);">
                                 <th class="final-order-heading">Shipping Charge</th>
-                                <th id="shipping-charge" style="padding-left: 120px;padding-top:20px;color: black    ;">60</th>
-                            
+                                <th id="shipping-charge" style="padding-left: 120px;padding-top:20px;color: black    ;">
+                                    60</th>
                             </tr>
                             <tr style="border-bottom: 1px solid rgb(181, 179, 179);;">
-                                
+
                                 <th class="final-order-heading">Total</th>
                                 <th id="Total" style="padding-left: 120px;padding-top:30px;color: black    ;">$60</th>
-                                
+
                             </tr>
-                            
+
                             </tr>
                             <tr>
-                            <hr>
+                                <hr>
                                 <th class="final-order-heading">Cash on delevery</th>
-                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio" name="payment" value="Cash on delevery"></th>
-                            
+                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio"
+                                        name="payment" value="Cash on delevery"></th>
+
                             </tr>
                             <tr>
-                            
+
                                 <th class="final-order-heading">Razor Pay</th>
-                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio" name="payment" value="Razor Pay" checked></th>
-                            
+                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio"
+                                        name="payment" value="Razor Pay" checked></th>
+
                             </tr>
                             <tr>
-                            
+
                                 <th class="final-order-heading">Wallet</th>
-                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio" name="payment"
-                                        value="Wallet" ></th>
-                            
+                                <th style="padding-left: 120px;padding-top:30px;color: black    ;"><input type="radio"
+                                        name="payment" value="Wallet"></th>
+
                             </tr>
                         </thead>
                     </table>
-                    <input class="submit"   style="" type="submit">
-                    
-                    
+                    <input class="submit" style="" type="submit">
+
+
                 </div>
             </div>
-            <div class="coupen-box" style="padding:0" class="col-12">
+            <div class="coupen-box" style="padding:0;position: relative;" class="col-12">
                 <input id="coupen-input" type="text" placeholder="COUPON CODE" value="">
                 <button id="coupen-btn">Apply</button>
+                <p onclick="openTandC()" style="color:rgba(0, 0, 0, .5);position: absolute;right:10px; cursor: pointer;"> T &#x26 C </p>
             </div>
         </div>
     </div>
 
 
-    
+
     <!-- Instagram End -->
 
     <!-- Footer Section Begin -->
@@ -486,11 +532,11 @@
     <script src="/js/temp/owl.carousel.min.js"></script>
     <script src="/js/temp/jquery.nicescroll.min.js"></script>
     <script src="/js/temp/main.js"></script>
-    
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
+
 </body>
 
 </html>

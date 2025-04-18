@@ -64,6 +64,11 @@
 
     <!-- Shop Cart Section Begin -->
     <section class="shop-cart spad">
+    {{#if (isZero total)}}
+        <div style="height: 100svh;width:100%">
+            <h1 style="text-align: center;">NO ITEMS</h1>
+        </div>
+        {{else}}
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -74,8 +79,9 @@
                                 <tr>
                                     <th>Product</th>
                                     <th>Price</th>
-
-
+                                    <th>Size</th>
+                                    <th>Color</th>
+                                    
                                     <th></th>
                                 </tr>
                             </thead>
@@ -89,12 +95,14 @@
 
                                         </div>
                                     </td>
+                                    <td class="cart__price">{{this.size}}</td>
+                                    <td class="cart__price">{{this.color}}</td>
                                     {{#if this.product.offer_rate}}
                                     <td class="cart__price">{{calculatePersatage this.product.offer_rate this.product.price}}</td>
                                     {{else}}
                                     <td class="cart__price">{{ this.product.price}}</td>
                                     {{/if}}
-
+                                    
                                     <td class="cart__close" onclick='removeFromWishList("{{this._id}}")'><span class="icon_close"></span></td>
                                 </tr>
                                 {{/each}}
@@ -116,6 +124,7 @@
                 
             </div>
         </div>
+        {{/if}}
     </section>
     <!-- Shop Cart Section End -->
 

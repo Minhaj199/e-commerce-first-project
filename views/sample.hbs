@@ -1,216 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Inventory Management</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-        }
-        main {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .back-button:hover {
-            text-decoration: underline;
-        }
-        .back-arrow {
-            margin-right: 0.5rem;
-        }
-        .product-container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-        }
-        .product-header {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            align-items: flex-start;
-        }
-        .product-image {
-            width: 200px;
-            height: 200px;
-            background-color: #eee;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            
-        }
-        .product-image img{
-           height: 100%;
-           width: 100%;
+  <meta charset="UTF-8">
+  <title>Stylish Dropdown</title>
+  <style>
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
 
-        }
-        .product-info {
-            flex: 1;
-        }
-        .product-title {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-        }
-        .product-code {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-        .product-description {
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 1rem;
-        }
-        .product-meta {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-        .meta-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #666;
-        }
-        .meta-value {
-            font-weight: 500;
-        }
-        .section-title {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
-            color: #2c3e50;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #555;
-        }
-        tbody tr:hover {
-            background-color: #f9f9f9;
-        }
-        .low-stock {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        .medium-stock {
-            color: #f39c12;
-        }
-        .high-stock {
-            color: #27ae60;
-        }
-        
-        @media (max-width: 768px) {
-            .product-header {
-                flex-direction: column;
-            }
-            .product-image {
-                width: 100%;
-                height: 250px;
-            }
-            .product-meta {
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
-        }
-    </style>
+    .dropdown select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 2px 40px 5px 15px;
+      font-size: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dropdown select:focus {
+      outline: none;
+      border-color: #000;
+      box-shadow: 0 0 0 2px #0002;
+    }
+
+    .dropdown::after {
+      content: '▼';
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-    <main>
-        <a href="#" class="back-button">
-            <span class="back-arrow">←</span> Back to Products
-        </a>
-        
-        <div class="product-container">
-            <div class="product-header">
-                <div class="product-image">
-                    <img src={{product.images.path.[0]}} alt="Classic Cotton T-Shirt">
-                </div>
-                <div class="product-info">
-                   
-                    <h1 class="product-title">{{product.Name}}</h1>
-                   
-                    <div class="product-code">Product Rate: ₹{{product.price}}</div>
-                    <p class="product-description">
-                       {{product.description}}
-                    </p>
-                    <div class="product-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Category</div>
-                            <div class="meta-value">{{product.category}}</div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Total Stock</div>
-                            <div class="meta-value">{{sumStock product.variants}} units</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <h2 class="section-title">Inventory Status</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Size</th>
-                        <th>Variant</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        {{#each product.variants}}
-                    <tr>
-                        <td>{{increment @index }}</td>
-                        <td>{{this.size}}</td>
-                        <td>{{this.color}}</td>
-                        {{#if (stockWarning this.stock)}}
-                        <td class="low-stock">{{this.stock}}</td>
-                        {{else}}
-                        <td class="high-stock">{{this.stock}}</td>
-                        {{/if}}
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </main>
+
+  <div class="dropdown">
+    <select>
+      <option disabled selected>Select an option</option>
+      <option>Profile</option>
+      <option>Settings</option>
+      <option>Logout</option>
+    </select>
+  </div>
+
 </body>
 </html>

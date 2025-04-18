@@ -296,8 +296,8 @@ async function handleSubmitVariantEdit(productId) {
       warning.textContent = 'Color Is Empty'
       return
     }
-    if (color?.trim().length > 10) {
-      warning.textContent = 'Reduce name length below 11'
+    if (color?.trim()?.length > 15||color?.trim()?.length < 2) {
+      warning.textContent = 'Reduce color text length below 3-15'
       return
     }
     if (stock > 5000 || stock < 1) {

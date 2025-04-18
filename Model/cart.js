@@ -10,6 +10,7 @@ const cartScheme = new mongo.Schema({
   OrderQuantity: {
     type: Number,
   },
+  name:String,
   OrderPrice: {
     type: Number,
   },

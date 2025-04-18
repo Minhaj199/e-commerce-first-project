@@ -15,7 +15,7 @@ module.exports = {
                 category: { $exists: true },
             });
             const message = req.query.message;
-            const errMessage = req.query.errMessage;
+            const errMessage = req.query.errMessage
             res.render("admin/addProductPage", {
                 categoryCollection,
                 message,

@@ -11,7 +11,7 @@ const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
 const productItemModel = require("./Model/prouctItems");
 const { Types } = require("mongoose");
-const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning } = require("./utils/hbsHelpers");
+const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero } = require("./utils/hbsHelpers");
 
 
 
@@ -64,8 +64,8 @@ app.get("/", async (req, res) => {
 app.use("/user", require("./router/user"));
 app.use("/admin", require("./router/admin"));
 app.get('/sample',async(req,res)=>{
-  const product=await productItemModel.findById('67ff58d96dae652a0889e9ab')
-  res.render('sample',{product})
+  
+  res.render('sample')
 })
 
 
@@ -86,6 +86,7 @@ hbs.registerHelper("calculatePersatage",calculatePersatage);
 hbs.registerHelper('lookupQuantity',lookupQuantity);
 hbs.registerHelper('sumStock',sumStock)
 hbs.registerHelper('stockWarning',stockWarning)
+hbs.registerHelper('isZero',isZero)
 app.use(erro404);
 
 app.use(errorHandler);

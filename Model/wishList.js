@@ -27,6 +27,7 @@ const wishListChema = new mongo.Schema({
   total: {
     type: Number,
   },
+  name:String
 });
 const wishlist = new mongo.model("wishlist", wishListChema);
 module.exports = wishlist;
