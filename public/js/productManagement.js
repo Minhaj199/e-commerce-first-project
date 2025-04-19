@@ -1,12 +1,12 @@
 async function fun(event) {
-    console.log(event);
+   
     event.preventDefault();
     
   try {
     const prompt = await showAlertPropt(
       "Are you sure you want to delete the item?"
     );
-    console.log(prompt)
+   
     if (prompt) {
         
       event.target.submit()

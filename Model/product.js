@@ -51,6 +51,7 @@ const productsSchema = new mongo.Schema({
   images: {
     path: [String],
   },
+  deleteStatus:{type:Boolean,default:false}
 });
 const productModel = new mongo.model("Products", productsSchema);
 

@@ -21,6 +21,7 @@ const productsSchema = new mongo.Schema({
   variants:[{size:String,color:String,stock:Number}],
   price: {
     type: Number,
+    require:true
   },
   description: {
     type: String,
@@ -35,6 +36,7 @@ const productsSchema = new mongo.Schema({
   images: {
     path: [String],
   },
+  deleteStatus:{type:Boolean,default:false}
 });
 const productItemModel = new mongo.model("Product_items", productsSchema);
 

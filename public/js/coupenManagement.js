@@ -24,11 +24,11 @@ window.onclick = function (event) {
 document
   .querySelector("#add-submit")
   .addEventListener("click", async function () {
-    this.disable=true
+    this.disable = true
     const code = document.getElementById("code").value;
     const date = document.getElementById("date").value;
     const amount = document.getElementById("amount").value;
-   
+
     let isUser;
     const encodeCode = encodeURIComponent(code);
     const nowData = new Date();
@@ -71,10 +71,10 @@ document
                 showToast(data);
 
                 setTimeout(() => {
-                location.reload();  
+                  location.reload();
                 }, 3000);
-                
-                
+
+
               });
           } else {
             showToast("please enter a valid number");
@@ -115,9 +115,9 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
   const code = document.getElementById("code-edit").value;
   const encodeCode = encodeURIComponent(code);
   const id = document.getElementById("id").textContent;
-  console.log(id);
+
   if (code) {
-    console.log("inside code");
+
     const isUserPromise = await fetch(
       `/admin/fetchData?from=coupenEdit&code=${encodeCode}&ID=${id}`,
       {
@@ -126,9 +126,9 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
       }
     );
     isUser = await isUserPromise.json();
-    console.log(isUser);
 
-    console.log(isUser);
+
+
   } else if (code.length < 3) {
     showToast("Code Name should be Three letters");
   } else {
@@ -142,12 +142,12 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
       document.getElementById("Date").textContent;
     const amount = document.getElementById("edit-amount").value;
     const id = document.getElementById("id").textContent;
-    console.log(id);
+
     const nowData = new Date();
     const compareData = new Date(date);
 
     if (nowData > compareData) {
-      console.log("above date");
+
       showToast("You selected a past Data");
     } else if (code && amount && date) {
       if (code.trim() === "") {
@@ -160,7 +160,7 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
         showToast("Please give amount between 1 and 1000");
       } else {
         if (amount > 0) {
-          console.log("reached");
+
           fetch("/admin/editCoupen", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -172,10 +172,10 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
             .then((data) => {
               showToast("Coupen Changed");
               setTimeout(() => {
-              location.reload();  
+                location.reload();
               }, 3000);
-              
-              
+
+
             });
         } else {
           showToast("please enter a valid number");
@@ -191,7 +191,7 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
 
 async function deleteCoupen(id, code) {
   try {
-  const propt = await showAlertPropt(`Are you want to delete ${code} ?`); 
+    const propt = await showAlertPropt(`Are you want to delete ${code} ?`);
     if (propt) {
       const response = await fetch("/admin/deleteCoupen", {
         method: "DELETE",
@@ -199,23 +199,23 @@ async function deleteCoupen(id, code) {
         body: JSON.stringify({ id }),
       });
       const info = await response.json();
-      console.log(info);
+
       if (info === "deleted") {
         showToast(`${code} Deleted`);
         setTimeout(() => {
-        location.reload();  
+          location.reload();
         }, 3000);
-        
+
       }
     }
   } catch (error) {
     showToast('internal server error')
   }
-  
+
 }
 
 function showToast(message) {
-  console.log("inside tost");
+
   Toastify({
     text: message,
     duration: 7000,

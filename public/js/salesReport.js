@@ -1,5 +1,6 @@
 function filter(variable) {
-  console.log(variable);
+
+  
   location.href = `/admin/salesFiltering?filter=${variable}`;
 }
 function customFilter() {
@@ -35,7 +36,7 @@ btn.onclick = () => {
 async function createPdf() {
   const content = document.querySelector(".pdf");
 
-  console.log(content);
+ 
   const options = {
     filename: "handlebars_to_pdf.pdf",
     image: { type: "jpeg", quality: 0.98 },

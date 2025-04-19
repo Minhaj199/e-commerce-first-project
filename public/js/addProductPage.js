@@ -9,15 +9,15 @@ const form = document.getElementById('mainForm')
 
 form.addEventListener('submit', (e) => {
   ////////////adding value to hidden input field and validating it//////////////
+   if(!validate()){
+    e.preventDefault()
+    return
+   }
   const input = document.getElementById('varient_collection')
   const tbody = document.getElementById('productTableBody')
   const tbodyChild = tbody.childElementCount
   const mainSubmit=document.getElementById('main-submit-button')
-  mainSubmit.textContent='loading............'
-  mainSubmit.disabled=true
-  setTimeout(() => {
-    mainSubmit.disabled=false
-  }, 15000);
+ 
   input.value = (sessionStorage.getItem('value') && tbodyChild > 1) ? sessionStorage.getItem('value') : '[]'
 
   const varient = input.value
@@ -35,6 +35,12 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
     return false
   }
+  mainSubmit.textContent='loading............'
+  mainSubmit.disabled=true
+  setTimeout(() => {
+    mainSubmit.disabled=false
+    mainSubmit.textContent='submit'
+  }, 15000);
   sessionStorage.removeItem('value')
 })
 
@@ -347,11 +353,20 @@ function validate() {
   const photo3 = document.getElementById("field-3").value;
   const photo4 = document.getElementById("field-4").value;
   const photo5 = document.getElementById("field-5").value;
-
+  const brand=document.getElementById('brand-drop').value
+  const category=document.getElementById('category-drop').value
 
   if (name.trim() === "") {
     showToast("Blank space in Name is not allowed");
     return false;
+  }
+  if(brand?.trim()===''){
+    showToast('please insert brand')
+    return false
+  }
+  if(category?.trim()===''){
+    showToast('please insert category')
+    return false
   }
   if (photo1 === "") {
     showToast("Please add photo Field 1");
@@ -373,6 +388,7 @@ function validate() {
     showToast("Please add photo Field 5");
     return false;
   }
+
   return true;
 }
 

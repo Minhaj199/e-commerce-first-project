@@ -98,11 +98,13 @@ module.exports = {
             if (!id) {
                 throw new Error('id not found')
             }
-            
+
             const product = await productItemModel.findById(id)
             if (!product) res.json({ message: 'product not found' })
             const isDuplicate = product.variants.find(v => {
                 let docId = v._id.toString()
+
+
                 return docId !== varientId && v.size === size && v.color === color
             })
             if (isDuplicate) {
@@ -195,9 +197,10 @@ module.exports = {
                     const size = canceledData.Order[req.body.index].size;
 
                     const color = canceledData.Order[req.body.index].color;
-                    await productModel.updateOne(
+                    await productItemModel.updateOne(
                         { _id: ID },
-                        { $inc: { [`sizes.${size}.${color}`]: quantity } }
+                        { $inc: { 'variants.$[elem].stock': quantity } },
+                        { arrayFilters: [{ 'elem.size': size, 'elem.color': color }] }
                     );
                     const path = `Order.${req.body.index}.admin`;
                     let updateObject = {};
@@ -223,13 +226,13 @@ module.exports = {
 
                         amount = Math.floor(returnShipping + amount)
 
-                        await walletModel.updateOne(
+                        const result = await walletModel.updateOne(
 
                             { UserID: req.session.customerId },
                             { $inc: { Amount: amount } }
                         );
 
-                        await walletModel.updateOne(
+                        const result2 = await walletModel.updateOne(
                             { UserID: req.session.customerId },
                             {
                                 $push: {
@@ -242,6 +245,7 @@ module.exports = {
                                 },
                             }
                         );
+
                     })();
 
                     let amount = canceledData.Order[req.body.index].total;
@@ -277,6 +281,7 @@ module.exports = {
                     });
             }
         } catch (error) {
+            console.log(error)
             next(error)
         }
     },
@@ -304,13 +309,14 @@ module.exports = {
                 next(error)
             }
         } else {
+            ///////////////return accepted////////////////
             try {
                 const path = `Order.${req.body.index}.status`;
                 let updateObject = {};
                 updateObject[path] = req.body.status;
 
                 await orderModel
-                    .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
+                    .findByIdAndUpdate(req.body.ID, { $set: updateObject })
                 const paths = `Order.${req.body.index}.admin`;
                 let updateObjects = {};
                 updateObjects[paths] = false;
@@ -320,17 +326,14 @@ module.exports = {
                 );
 
                 const canceledData = await orderModel.findById(req.body.ID);
-
-                const ID = canceledData.Order[req.body.index].ProductID;
                 const quantity = canceledData.Order[req.body.index].quantity;
-
+                const ID = canceledData.Order[req.body.index].ProductID;
                 const size = canceledData.Order[req.body.index].size;
-
                 const color = canceledData.Order[req.body.index].color;
-
-                await productModel.updateOne(
-                    { _id: ID },
-                    { $inc: { [`sizes.${size}.${color}`]: quantity } }
+                const result = await productItemModel.updateOne(
+                    { _id: new Types.ObjectId(ID) },
+                    { $inc: { 'variants.$[elem].stock': quantity } },
+                    { arrayFilters: [{ 'elem.size': size, 'elem.color': color }] }
                 );
                 (async function () {
                     let amount = canceledData.Order[req.body.index].total;

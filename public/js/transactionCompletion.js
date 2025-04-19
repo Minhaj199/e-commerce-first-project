@@ -3,14 +3,14 @@ function ToChangeAddress() {
 }
 
 const allTotal = document.querySelectorAll(".All-total");
-console.log(allTotal);
+
 let subTotal = 0;
 
 allTotal.forEach((input) => {
   subTotal += parseInt(input.textContent);
 });
 
-console.log(subTotal);
+
 
 document.getElementById("add-sub-total").innerHTML = ` ${subTotal}`;
 const discount = parseInt(document.getElementById("discount").textContent);
@@ -83,7 +83,7 @@ document.querySelector(".submit").addEventListener("click", function () {
   eachQutantityNode.forEach((inputs) => {
     orderDetails.eachQuantity.push(parseInt(inputs.textContent));
   });
-  console.log(orderDetails);
+ 
   orderDetails.Order = [];
 
   for (let i = 0; i < orderDetails.productID.length; i++) {

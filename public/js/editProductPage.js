@@ -265,6 +265,10 @@ async function handleEditClick(id, button, index) {
       stockInput.disabled = false
       stockInput.value = stock
       const button = document.getElementById('update-btn')
+      const addSubmitButton = document.getElementById('add-submit-btn')
+      if(addSubmitButton){
+        addSubmitButton.remove()
+      }
       button.hidden = false
       button.dataset._id = id
       sessionStorage.setItem('editingRow', 'id-' + index)
@@ -370,7 +374,6 @@ async function showAlertPropt(message) {
   }
 }
 function handleResetVariantEdit() {
-
   const sizeInput = document.getElementById('size')
   const colorInput = document.getElementById('color')
   const stockInput = document.getElementById('qty')
@@ -382,6 +385,10 @@ function handleResetVariantEdit() {
   stockInput.value = 0
   stockInput.disabled = true
   button.hidden = true
+  const addButton = document.getElementById('add-submit-btn')
+  if(addButton){
+    addButton.remove()
+  }
   document.getElementById('add-btn').hidden = false
 }
 
@@ -392,10 +399,11 @@ function handleAddVariant(id) {
   document.getElementById('add-btn').hidden = true
   const submitButton = document.getElementById('update-btn');
   document.getElementById('cancel-edit').hidden = false
-  buttonDiv.removeChild(submitButton)
+  // buttonDiv.removeChild(submitButton)
+  submitButton.hidden=true
   const newSubmitButton = document.createElement('button');
   newSubmitButton.type = 'button';
-  newSubmitButton.id = 'update-btn'; // start as disabled
+  newSubmitButton.id = 'add-submit-btn'; // start as disabled
   newSubmitButton.className = 'btn btn-primary btn-sm';
   newSubmitButton.style.cssText = `
   width: 20%;

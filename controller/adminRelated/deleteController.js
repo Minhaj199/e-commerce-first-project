@@ -1,4 +1,4 @@
-const productModel = require('../../Model/product')
+
 const category = require('../../Model/catagory')
 const coupenModel = require('../../Model/coupen')
 const offerModel = require('../../Model/offer')
@@ -13,7 +13,9 @@ module.exports = {
     handleDeleteProduct: async (req, res) => {
         try {
             const del = req.params.id;
-            await productModel.deleteOne({ _id: del });
+            await productItemModel.findByIdAndUpdate( del,{deleteStatus:true} );
+            await cartModel.deleteMany({ProductId:new Types.ObjectId(del)})
+            await wishlistModel.deleteMany({ProductID:new Types.ObjectId(del)})
             res.redirect(
                 `/admin/product-management?dltMessage=Product Deleted Successfully`
             );
@@ -30,7 +32,7 @@ module.exports = {
                 res.status(400).json({message:'id not found'})
                 return
             }
-           let product=await productItemModel.findOne({'variants._id':id})
+           let product=await productItemModel.findOne({'variants._id':id,deleteStatus:true},)
            if(!product){
             return res.status(400).json({message:'product not found'})
            }

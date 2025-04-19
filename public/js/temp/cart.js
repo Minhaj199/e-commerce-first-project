@@ -97,14 +97,17 @@ async function submitToCart(id) {
               total,
             }),
           });
+          
           if (!response.ok) {
             const error =await response.json()
             console.log(error)
             throw new Error(error.message || 'internal server error')
+          }else{
+            sessionStorage.removeItem("size");
+            sessionStorage.removeItem("color");
+            sessionStorage.removeItem("count");
+            location.href = "/user/getpages?from=afterAddedToCart";
           }
-          sessionStorage.removeItem("size");
-          sessionStorage.removeItem("color");
-          location.href = "/user/getpages?from=afterAddedToCart";
         } catch (error) {
           showToast(error.message || 'internal server error')
         }

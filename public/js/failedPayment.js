@@ -2,10 +2,12 @@ async function retrayPayment(id, amount, coupenID) {
   const colorNode = document.querySelectorAll(".color");
 
   const sizeNode = document.querySelectorAll(".size");
+  const quantityNode=document.querySelectorAll('.quantity-values')
 
   let colors = [];
   let IDs = [];
   let sizes = [];
+  let orderQuantity=[]
   colorNode.forEach((values) => {
     colors.push(values.textContent);
     IDs.push(values.getAttribute("data-id"));
@@ -13,13 +15,19 @@ async function retrayPayment(id, amount, coupenID) {
   sizeNode.forEach((values) => {
     sizes.push(values.textContent);
   });
-
+  quantityNode.forEach(value=>{
+    orderQuantity.push(parseInt(value.textContent||0))
+  })
+  
   const encodeColores = encodeURIComponent(colors);
   const encodeIDs = encodeURIComponent(IDs);
   const encodeSizes = encodeURIComponent(sizes);
+  
 
+
+  //////////////checking every product have stock/////////////////
   const response = await fetch(
-    `/user/fetchData?color=${encodeColores}&IDs=${encodeIDs}&size=${encodeSizes}&from=retryPayment`,
+    `/user/fetchData?color=${encodeColores}&IDs=${encodeIDs}&size=${encodeSizes}&quantiy=${JSON.stringify(orderQuantity)}&from=retryPayment`,
     {
       method: "GET",
     }

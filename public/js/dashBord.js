@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   let response = await monthlySale.json();
 
-  console.log(response);
+
 
   function fetchData(filter) {
     const monthlyData = {

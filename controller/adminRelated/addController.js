@@ -1,5 +1,5 @@
 
-const productModel = require('../../Model/product')
+
 const cloudinary = require('../../utils/cludinary')
 const fs = require("fs");
 const category = require("../../Model/catagory");
@@ -35,18 +35,22 @@ module.exports = {
             }
 
             const imagePaths = urls.map((item) => item.url);
-            const finalImage = imagePaths.slice(0, 5);
-
+            const finalImage = imagePaths.slice(0, 5);  
+            const {Name,brand,category,price,description}=req.body
+            if(!Name||!brand||!category||!price){
+                res.status(400).json({message:'insufficient data'})
+            }
             const Newproduct = {
-                Name: req.body.Name,
-                brand: req.body.brand,
-                category: req.body.category,
+                Name,
+                brand,
+                category,
                 variants: idRemovedVarient,
-                price: req.body.price,
-                description: req.body.description,
+                price,
+                description,
                 images: {
                     path: finalImage,
                 },
+                
             };
             await productItemModel
                 .create(Newproduct)
@@ -169,7 +173,7 @@ module.exports = {
                     ProductIDs: req.body.productsID,
                 };
                 for (let i = 0; i < productArray.length; i++) {
-                    const result = await productModel.findByIdAndUpdate(productArray[i], {
+                    const result = await productItemModel.findByIdAndUpdate(productArray[i], {
                         $set: { offer_rate: req.body.rate },
                     });
                 }

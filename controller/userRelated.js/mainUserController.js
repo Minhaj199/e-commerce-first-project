@@ -20,7 +20,7 @@ module.exports = {
       let User = req.session.user;
 
       let user = req.session.customerId;
-      const Data = await productItemModel.find().limit(9).sort({ _id: -1 });
+      const Data = await productItemModel.find({deleteStatus:false}).limit(9).sort({ _id: -1 });
       const categoryCollecion = await categoryModel.findOne();
       res.render("index", { User, Data, categoryCollecion, user });
     } catch (error) {
@@ -31,10 +31,11 @@ module.exports = {
     /////////////render pages based on query//////////
     try {
       if (req.query.from === "cart") {
+
         const addedMessage = req.session.addedMessage;
         delete req.session.addedMessage;
         const UserId = req.session.customerId;
-        const User = await user.findById({ _id: UserId });
+        const User = await user.findById( UserId);
         await cartModel.updateMany({}, { $set: { status: true } });
         const getCart = await cartModel.aggregate([
           { $match: { UserId: new ObjectId(UserId) } },
@@ -65,7 +66,7 @@ module.exports = {
           const variant=product.variants.find(v=>v.size===sizes[i]&&v.color===colors[i])
           getCart[i].currentQuantity = variant?variant.stock:0
         }
-     
+       
         res.render("user/cart", {
           addedMessage,
           getCart,
@@ -144,7 +145,7 @@ module.exports = {
           });
           const deleteAddress = req.session.deleteAddress;
           delete req.session.deleteAddress;
-
+          
           res.render("user/checkout", {
             discount,
             getCart,
@@ -306,7 +307,7 @@ module.exports = {
         const searchWord = new RegExp("^" + req.query.search, "i")
 
         const Data = await productItemModel
-          .find({ Name: { $regex: searchWord } })
+          .find({ Name: { $regex: searchWord },deleteStatus:false })
           .limit(6);
 
         const CategoryCollection = await categoryModel.findOne();
@@ -318,7 +319,7 @@ module.exports = {
         const maxValue = parseInt(req.query.maxValue);
         if (minValue < maxValue) {
           const Data = await productItemModel.find({
-            $and: [{ price: { $lt: maxValue } }, { price: { $gt: minValue } }],
+            $and: [{ price: { $lt: maxValue } }, { price: { $gt: minValue } },{deleteStatus:false}]
           });
 
           const CategoryCollection = await categoryModel.findOne();
@@ -328,14 +329,14 @@ module.exports = {
           res.redirect("/user/all");
         }
       } else if (req.query.instruction === "lowToHigh") {
-        const Data = await productItemModel.find().sort({ price: 1 });
+        const Data = await productItemModel.find({deleteStatus:false}).sort({ price: 1 });
 
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else if (req.query.instruction === "HighToLow") {
-        const Data = await productItemModel.find().sort({ price: -1 });
+        const Data = await productItemModel.find({deleteStatus:false}).sort({ price: -1 });
 
         const CategoryCollection = await categoryModel.findOne();
 
@@ -344,7 +345,7 @@ module.exports = {
       } else if (req.query.from === "sortBrand") {
         const array = JSON.parse(decodeURIComponent(req.query.brand));
 
-        const Data = await productItemModel.find({ brand: { $in: array } });
+        const Data = await productItemModel.find({ brand: { $in: array },deleteStatus:false });
 
         const CategoryCollection = await categoryModel.findOne();
         let User = req.session.isUserAuthenticated;
@@ -366,6 +367,7 @@ module.exports = {
               { price: { $gt: minValue } },
               { price: { $lt: maxValue } },
               { brand: { $in: brand } },
+              {deleteStatus:false}
             ],
           })
           .sort({ price: sorting });
@@ -375,14 +377,14 @@ module.exports = {
         res.render("admin/shop", { Data, CategoryCollection, User });
       } else {
         const pageNumber = req.query.page;
-        const pagesOf = await productItemModel.find().count()
+        const pagesOf = await productItemModel.find({deleteStatus:false}).count()
         const pages = Math.ceil(pagesOf / 6)
         const pagesArray = []
         for (let i = 1; i <= pages; i++) {
           pagesArray.push(i)
         }
         const Data = await productItemModel
-          .find()
+          .find({deleteStatus:false})
           .skip((pageNumber - 1) * 6)
           .limit(6);
         const CategoryCollection = await categoryModel.findOne();
@@ -401,7 +403,7 @@ module.exports = {
   },
   getWomen: async (req, res, next) => {
     try {
-      const Data = await productItemModel.find({ category: "women" });
+      const Data = await productItemModel.find({ category: "women" ,deleteStatus:false});
       let User = req.session.isUserAuthenticated;
 
       res.render("admin/shop", { Data, User });
@@ -412,7 +414,7 @@ module.exports = {
 
   getMan: async (req, res, next) => {
     try {
-      const Data = await productItemModel.find({ category: "men" });
+      const Data = await productItemModel.find({ category: "men",deleteStatus:false });
       let User = req.session.isUserAuthenticated;
       res.render("admin/shop", { Data, User });
     } catch (error) {
@@ -440,6 +442,7 @@ module.exports = {
               { price: { $gt: minValue } },
               { price: { $lt: maxValue } },
               { brand: { $in: brand } },
+              {deleteStatus:false}
             ],
           })
           .sort({ price: sorting });
@@ -460,7 +463,7 @@ module.exports = {
           const sortVarialble = req.query.cat;
           const page = req.query.page;
           const Data = await productItemModel
-            .find({ category: sortVarialble })
+            .find({ category: sortVarialble,deleteStatus:false })
             .skip((page - 1) * 3)
             .limit(3);
 
@@ -489,7 +492,7 @@ module.exports = {
           const uniqueColor=Array.from(new Set(color))
           
           const relatedData = await productItemModel
-            .find({ category: Data.category })
+            .find({ category: Data.category ,deleteStatus:false})
             .limit(3);    
           res.render("admin/productDatails", { Data, relatedData, User,uniqueColor,uniqueSize });
 
@@ -575,7 +578,7 @@ module.exports = {
   },
   /////cart//////
   cart: async (req, res, next) => {
-    
+ 
     const{
       id,
       count,
@@ -586,6 +589,7 @@ module.exports = {
       total,
       name
     }=req.body
+ 
     const {customerId}=req.session
     if(!id||!count||!size||!price||!color||!from||!total||!customerId||!name){
       return res.status(400).json({message:'in sufficient data'})
@@ -609,16 +613,16 @@ module.exports = {
           payment_id: "paymentId",
           payment_Order_id: "orderID",
         };
-        
-        await cartModel
-          .create(addToCart)
-          .then((res) => {
-            return res.json(true)
-          })
-          .catch((error) => {
-            console.log(error)
+        const result= await cartModel.create(addToCart)
+        if(result){
+          
+          return res.json(true)
+        }else{
+         
             res.json('done');
-          });
+
+          }
+          
       }
     } catch (error) {
       console.log(error)
@@ -705,6 +709,7 @@ module.exports = {
       req.session.deleteInfo = "Removed Successfully";
       res.json('ok')
     } catch (error) {
+      console.log(error)
       res.json('error')
 
     }

@@ -30,7 +30,7 @@ module.exports = {
         try {
             let page = req.query.page || 1;
             let skip = 4;
-            const numOfPage = await productItemModel.find().count()
+            const numOfPage = await productItemModel.find({deleteStatus:false}).count()
             const dynamicPage = Math.ceil(numOfPage / 4);
             let dynamicPageArray = []
 
@@ -39,7 +39,7 @@ module.exports = {
             }
 
             const productData = await productItemModel
-                .find()
+                .find({deleteStatus:false})
                 .skip((page - 1) * skip)
                 .limit(4)
                 .sort({ _id: -1 });
@@ -367,7 +367,7 @@ module.exports = {
                     { $unwind: "$Order" },
                     {
                         $lookup: {
-                            from: "products",
+                            from: "product_items",
                             let: { productID: { $toObjectId: "$Order.ProductID" } }, // Convert string ID to ObjectId
                             pipeline: [
                                 { $match: { $expr: { $eq: ["$_id", "$$productID"] } } },
@@ -658,7 +658,7 @@ module.exports = {
 
             const id = orderData[index].Order.ProductID;
 
-            const proData = await productModel.findById(id);
+            const proData = await productItemModel.findById(id);
 
             let invoiceData = {
                 soldBy: proData.brand,

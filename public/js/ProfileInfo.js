@@ -4,7 +4,7 @@ function validateForm() {
   let email = document.getElementById("emailId").value;
   let phone = document.getElementById("form3Example9").value;
 
-  console.log(email);
+ 
   if (firstName.trim() === "") {
     let fn = document.getElementById("message");
     fn.textContent = "Please insert first name";

@@ -54,19 +54,20 @@
                 <div class="col-12 title-box">
                     <p>Add Product</p>
                 </div>
-                <form id="mainForm" style="height: 100%;" onsubmit='return validate()' method="post" action="/admin/add-Product"
+                {{!-- onsubmit='return validate()' --}}
+                <form id="mainForm" style="height: 100%;"  method="post" action="/admin/add-Product"
                     enctype="multipart/form-data">
                     <div class="col-12 name-box" style=" border:1px solid rgb(218, 218, 218)">
                         <label for="">Product name</label>
-                        <input value="product" type="text" id="name" name="Name" minlength="3" maxlength="35" required>
+                        <input  type="text" id="name" name="Name" minlength="3" maxlength="35" required>
                     </div>
                     <div class="col-12 brand-category-box" style="border:1px solid rgb(218, 218, 218)">
                         <div class="row brand-category-box-row  ">
                             <div class="col-4 brand-box ">
                                 <label for="">Brand</label>
-                                <select name="brand" id="" class="brand-dropdown" required>
+                                <select name="brand" id="brand-drop" class="brand-dropdown" required>
 
-                                    <option value="value" disabled selected>Choose Brand</option>
+                                    <option value="" disabled selected>Choose Brand</option>
                                     {{#each categoryCollection.brand }}
 
                                     <option value="{{this}}">{{this}}</option>
@@ -75,11 +76,10 @@
                             </div>
                             <div class="col-4 category-box">
                                 <label for="">Category</label>
-                                <select value name="category" id="" class="brand-dropdown" required>
-                                    <option  value="value" disabled selected>Xl</option>
+                                <select name="category" id="category-drop" class="brand-dropdown" required>
+                                    
                                     <option value="" disabled selected>Choose category</option>
                                     {{#each categoryCollection.category}}
-
                                     <option value="{{this}}">{{this}}</option>
                                     {{/each}}
                                 </select>
@@ -88,7 +88,7 @@
                             <div class="col-4"
                                 style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
                                 <label style="color: black;font-weight: bold;" for="">Selling price</label>
-                                <input value="100" type="number" min="1"  required style=" width: 127px;display: block;height: 43px;"
+                                <input  type="number" min="1"  required style=" width: 127px;display: block;height: 43px;"
                                     name="price">
                             </div>
                         </div>

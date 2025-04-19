@@ -49,10 +49,11 @@ inputFields.forEach((input) => {
 });
 
 const discount = parseInt(
-  document.getElementById("discount").textContent.replace("₹", "")
+  document.getElementById("discount").textContent.replace("₹", "")||0
 );
-const Total = totalSum - discount;
+const Total = totalSum - 0;
 
+document.getElementById("subtotal").innerHTML = `₹ ${totalSum}`;
 document.getElementById("subtotal").innerHTML = `₹ ${totalSum}`;
 document.getElementById("total").innerHTML = `₹ ${Total}`;
 

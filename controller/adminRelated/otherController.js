@@ -1,11 +1,11 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration" });
-const productModel = require("../../Model/product");
 const categoryModel = require("../../Model/catagory");
 const orderModel = require("../../Model/orders");
 const coupenModel = require("../../Model/coupen");
 const coupenTrackingModel = require("../../Model/coupenTracking");
 const offerModel = require("../../Model/offer");
+const productItemModel = require("../../Model/prouctItems");
 
 
 module.exports = {
@@ -76,7 +76,7 @@ module.exports = {
           res.json("Invalid code");
         }
       } else if (req.query.from === "OfferMgm") {
-        const data = await productModel.find({
+        const data = await productItemModel.find({
           $and: [
             { category: req.query.category },
             { offer_rate: { $exists: false } },
@@ -114,7 +114,7 @@ module.exports = {
         ]);
 
         const categorylist = await categoryModel.find();
-        console.log(categorylist);
+      
         res.json({ category, categorylist });
       } else if (req.query.from === "salesActual") {
         const data = await orderModel.aggregate([
