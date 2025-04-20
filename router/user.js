@@ -99,6 +99,13 @@ router.post('/createWishlist',isUserAuthenticated,userControl.addToWishlist)
 router.delete('/removeFromWishList',isUserAuthenticated,userControl.removeFromWishList)
 router.post('/wishToCart',isUserAuthenticated,userControl.addToCart)
 
+//////////////fetch coupen data for coupon listing////////////////
+router.get('/coupon-data',userControl.getCouponData)
+
+///////////get listing page of coupen/////////////
+router.get('/coupon-listing',userControl.getCouponList)
+
+
 
 router.get('/logOut',(userControl.logOut))
 

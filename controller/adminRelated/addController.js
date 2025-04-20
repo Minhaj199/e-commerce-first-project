@@ -6,7 +6,8 @@ const category = require("../../Model/catagory");
 const coupenModel = require("../../Model/coupen");
 const offerModel = require("../../Model/offer");
 const productItemModel = require("../../Model/prouctItems")
-const variatFormater = require('../../utils/variantFormater')
+const variatFormater = require('../../utils/variantFormater');
+const Normalisation = require('../../utils/makeCapitalLetter');
 module.exports = {
 
     postProduct: async (req, res, next) => {
@@ -137,10 +138,24 @@ module.exports = {
         }
     },
     coupen: async (req, res, next) => {
+       
+        const {
+            name,
+            startingDate,
+            endingDate,
+            code,
+            amount
+          }=req.body
+          if(!name||!startingDate||!endingDate||!code||!amount){
+            return res.status(400).json({message:'insufficient data'})
+          }
+          
         const coupenData = {
-            code: req.body.code,
-            Expiry: req.body.compareData,
-            amount: parseInt(req.body.amount),
+            name:name,
+            code,
+            startingDate:new Date(startingDate).setHours(0,0,0,0),
+            expiry:new Date(endingDate).setHours(23,59,59,999),
+            amount: parseInt(amount),
         };
         try {
             const result = await coupenModel.create(coupenData);
@@ -148,7 +163,7 @@ module.exports = {
                 res.json("Coupen created");
             }
         } catch (error) {
-            next(error)
+            res.status(400).json({message:error.message||'error on coupon insertion'})
         }
     },
     offer: async (req, res, next) => {

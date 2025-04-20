@@ -1,0 +1,1 @@
+////////////this function formate coupon data suitable for ui/////////

@@ -1,52 +1,57 @@
 window.onload = async function () {
-  const datas = await fetch("/admin/fetchData?from=chartData", {
-    method: "get",
-  });
-  const response = await datas.json();
-  const cat = response.category;
-  const catList = response.categorylist;
-  const soldCategories = cat;
-  const availableCategories = catList;
-  const categoryCounts = {};
-  soldCategories.forEach((item) => {
-    categoryCounts[item._id] = item.total;
-  });
-
-  availableCategories[0].category.forEach((category) => {
-    if (!categoryCounts.hasOwnProperty(category)) {
-      categoryCounts[category] = 0;
-    }
-  });
-
-  const labels = Object.keys(categoryCounts);
-  const counts = Object.values(categoryCounts);
-
-  var ctx = document.getElementById("myPieChart").getContext("2d");
-  var myPieChart = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Order sales by Category",
-          data: counts,
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.7)",
-            "rgba(54, 162, 235, 0.7)",
-            "rgba(255, 206, 86, 0.7)",
-            "rgba(75, 192, 192, 0.7)",
-            "rgba(153, 102, 255, 0.7)",
-            "rgba(255, 159, 64, 0.7)",
-          ],
-        },
-      ],
-    },
-    options: {},
-  });
+  try {
+    const datas = await fetch("/admin/fetchData?from=chartData", {
+      method: "get",
+    });
+    const response = await datas.json();
+    const cat = response.category;
+    const catList = response.categorylist;
+    const soldCategories = cat;
+    const availableCategories = catList;
+    const categoryCounts = {};
+    soldCategories.forEach((item) => {
+      categoryCounts[item._id] = item.total;
+    });
+  
+    availableCategories[0].category.forEach((category) => {
+      if (!categoryCounts.hasOwnProperty(category)) {
+        categoryCounts[category] = 0;
+      }
+    });
+  
+    const labels = Object.keys(categoryCounts);
+    const counts = Object.values(categoryCounts);
+  
+    var ctx = document.getElementById("myPieChart").getContext("2d");
+    var myPieChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Order sales by Category",
+            data: counts,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.7)",
+              "rgba(54, 162, 235, 0.7)",
+              "rgba(255, 206, 86, 0.7)",
+              "rgba(75, 192, 192, 0.7)",
+              "rgba(153, 102, 255, 0.7)",
+              "rgba(255, 159, 64, 0.7)",
+            ],
+          },
+        ],
+      },
+      options: {},
+    });
+  } catch (error) {
+    showAlert(error.message)
+  }
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const ctx = document.getElementById("salesChart").getContext("2d");
+  try {
+    const ctx = document.getElementById("salesChart").getContext("2d");
   let salesChart;
 
   const data = {
@@ -124,4 +129,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   document.getElementById("filter").addEventListener("change", function () {
     updateChart(this.value);
   });
+  } catch (error) {
+    
+  }
 });

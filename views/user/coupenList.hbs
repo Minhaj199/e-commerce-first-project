@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Listing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        .back-btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #555;
+        }
+        
+        .coupon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .coupon-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .coupon-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .coupon-header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .coupon-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .coupon-body {
+            padding: 15px;
+        }
+        
+        .coupon-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .coupon-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 80px;
+            color: #666;
+        }
+        
+        .code-section {
+            display: flex;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .coupon-code {
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #3a80d2;
+        }
+        
+        .expiring-soon {
+            border-top: 3px solid #ff6b6b;
+        }
+        
+        .expired {
+            opacity: 0.7;
+        }
+        
+        .expired .coupon-header {
+            background-color: #999;
+        }
+        
+        .active {
+            border-top: 3px solid #4cd964;
+        }
+        
+        @media (max-width: 768px) {
+            .coupon-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .show-toast {
+            opacity: 1;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Available Coupons</h1>
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </header>
+        
+        <div class="coupon-list" id="couponList">
+            <!-- Coupons will be added here by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">Code copied!</div>
+    <script src="/js/coupenListing.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+</html>

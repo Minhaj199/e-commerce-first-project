@@ -1,5 +1,6 @@
 async function retrayPayment(id, amount, coupenID) {
-  const colorNode = document.querySelectorAll(".color");
+  try {
+    const colorNode = document.querySelectorAll(".color");
 
   const sizeNode = document.querySelectorAll(".size");
   const quantityNode=document.querySelectorAll('.quantity-values')
@@ -39,7 +40,7 @@ async function retrayPayment(id, amount, coupenID) {
       "You cannot countinue this order because some product in the order is out of stock"
     );
   } else {
-    try {
+    
       const user = await fetch("/user/payment", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -104,11 +105,13 @@ async function retrayPayment(id, amount, coupenID) {
       rzp.on("payment.failed", () => {
         showToast("You paymen failed again");
       });
-    } catch (error) {
-      console.log(error)
-    }
+    
     
   }
+  } catch (error) {
+   showToast(error.message||'internal server error') 
+  }
+  
 }
 
 function generateInvoice(index) {

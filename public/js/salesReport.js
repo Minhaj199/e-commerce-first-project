@@ -34,7 +34,8 @@ btn.onclick = () => {
 };
 
 async function createPdf() {
-  const content = document.querySelector(".pdf");
+  try {
+    const content = document.querySelector(".pdf");
 
  
   const options = {
@@ -45,6 +46,10 @@ async function createPdf() {
   };
   await html2pdf().from(content).set(options).save();
   location.reload();
+  } catch (error) {
+    showAlert(error.message||'internal server error')
+  }
+  
 }
 function createExell() {
   const table = document.querySelector(".table");

@@ -1,15 +1,18 @@
 const mongo = require("mongoose");
 
 const coupenSchema = new mongo.Schema({
+  name:{
+    type:String,
+    unique:true
+  },
   code: {
     type: String,
     unique: true,
   },
-  createdAt: {
+  startingDate: {
     type: Date,
-    default: Date.now(),
   },
-  Expiry: {
+  expiry: {
     type: Date,
   },
   amount: {

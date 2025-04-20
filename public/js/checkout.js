@@ -2,50 +2,56 @@ let orderDetails = {};
 let info;
 let count = 0;
 document.getElementById("coupen-btn").addEventListener("click", async () => {
-  if (count === 0) {
-    const totalValue=parseInt(document.getElementById('Total').textContent||0)
-
-    if(totalValue<1000){
-      await showAlertMessage('COUPON INFO','Minimum order should be 1000')
-    return 
-    }
-    count++;
-    const code = document.getElementById("coupen-input")?.value?.trim();
-    if(code.trim()===''){
-      showToast('please insert code')
-      return
-    }
-    const encoded = encodeURIComponent(code);
-    const validateCoupen = await fetch(
-      `/user/fetchData?coupen=${encoded}&from=validateCoupen`,
-      {
-        method: "GET",
+  try {
+    if (count === 0) {
+      const totalValue=parseInt(document.getElementById('Total').textContent||0)
+  
+      if(totalValue<1000){
+        await showAlertMessage('COUPON INFO','Minimum order should be 1000')
+      return 
       }
-    );
-    info = await validateCoupen.json();
-
-    if (info.flag === true) {
-      const sub_total = parseInt(
-        document.getElementById("add-sub-total").textContent
+      count++;
+      const code = document.getElementById("coupen-input")?.value?.trim();
+      if(code.trim()===''){
+        showToast('please insert code')
+        return
+      }
+      const encoded = encodeURIComponent(code);
+      const validateCoupen = await fetch(
+        `/user/fetchData?coupen=${encoded}&from=validateCoupen`,
+        {
+          method: "GET",
+        }
       );
-
-      if (sub_total <= info.amount) {
-        showToast("Coupen amount greater than sub total.You cannot add");
+      info = await validateCoupen.json();
+  
+      if (info.flag === true) {
+        const sub_total = parseInt(
+          document.getElementById("add-sub-total").textContent
+        );
+  
+        if (sub_total <= info.amount) {
+          showToast("Coupen amount greater than sub total.You cannot add");
+        } else {
+  
+          orderDetails.CoupenID = info.coupenID;
+  
+          document.getElementById("discount").textContent = info.amount;
+          document.getElementById("Total").textContent = total - info.amount;
+          document.getElementById("coupen-input").value='';
+          showToast(info.message);
+        }
       } else {
-
-        orderDetails.CoupenID = info.coupenID;
-
-        document.getElementById("discount").textContent = info.amount;
-        document.getElementById("Total").textContent = total - info.amount;
-
-        showToast(info.message);
+        showToast(info);
+        setTimeout(() => {
+          location.reload();
+        }, 4100);
       }
-    } else {
-      showToast(info);
-      setTimeout(() => {
-        location.reload();
-      }, 4100);
+    }else{
+      showToast('already a code in use')
     }
+  } catch (error) {
+    showToast(error.message||'internal server error')
   }
 });
 
@@ -424,7 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
       pngElement.addEventListener("click", function () {
         const id = this.dataset.addressId;
         if (!id) {
-          console.error("ID not found.");
+          showToast("ID not found.");
           return;
         }
 
@@ -439,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
               location.reload();
             } else {
-              console.error("Server response error");
+              showToast("Server response error");
             }
           })
           .catch((error) => {
@@ -555,25 +561,30 @@ async function sumbitModalin(event) {
   ) {
     showToast("blank not allowed");
   } else {
-    const validation = editCheckAddAddress(editedData);
-
-    if (validation === true) {
-      const response = await fetch("/user/putAddress", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...editedData, id, from: "checkOutModalin" }),
-      });
-      const responded = await response.json();
-      if (responded === "ok") {
+    
+    try {
+      const validation = editCheckAddAddress(editedData);
+      if (validation === true) {
+        const response = await fetch("/user/putAddress", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...editedData, id, from: "checkOutModalin" }),
+        });
+        const responded = await response.json();
+        if (responded === "ok") {
+          location.reload();
+        } else {
+          showToast("Internal server error");
+        }
         location.reload();
-      } else {
-        showToast("Internal server error");
       }
-      location.reload();
+      return;  
+    } catch (error) {
+      showToast(error.message)
     }
-    return;
+    
   }
 }
 const addCloseBtn = document

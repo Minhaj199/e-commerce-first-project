@@ -62,19 +62,25 @@ module.exports = {
                 const isTotalValid=await cartModel.aggregate([{$match:{UserId:new Types.ObjectId(id)}},{$group:{_id:null,sum:{$sum:'$Total'}}}])
                 const totalOrderPrice=(isTotalValid.length&&isTotalValid[0]?.sum)?isTotalValid[0]?.sum+60:0
                 if(totalOrderPrice<1000){
-                    return res.json("Total order less than 1000");
+                    return res.json("Total order less than should be above 1000");
                 }
                 const validateCoupen = await coupenModel.find({
                     code: req.query.coupen,
                 });
 
                 if (validateCoupen.length !== 0) {
-                    const expiry = validateCoupen[0].Expiry;
+                    const expiry = validateCoupen[0].expiry;
+                    const starting = validateCoupen[0].startingDate;
+                   
                     const currentDate = new Date();
 
                     if (expiry < currentDate) {
                         res.json("Code Expird");
-                    } else {
+                        return
+                    }else if(starting>currentDate){
+                       return res.json('This code is will be redeamable from '+ starting.toLocaleDateString())
+                    }
+                     else {
                         const checkUsage = await coupenTrackingModel.findOne({
                             $and: [
                                 { UserID: req.session.customerId },
@@ -180,8 +186,6 @@ module.exports = {
                 await cartModel.deleteOne({ _id: orderDetails.CartIDs[i] });
             }
             for (let i = 0; i < orderDetails.productID.length; i++) {
-                console.log(orderDetails.sizes[i])
-                console.log(orderDetails.colors[i])
                 quantity = orderDetails.Order[i].quantity;
                 await productItemModel
                     .findOneAndUpdate(
@@ -310,7 +314,7 @@ module.exports = {
         } else {
             ///////////////canceling order////////
             try {
-                console.log('hreeee')
+            
                 const path = `Order.${req.body.index}.status`;
                 let updateObject = {};
                 updateObject[path] = "Requested for Cancelation";
@@ -374,12 +378,5 @@ module.exports = {
             next(error)
         }
     },
-    //   paymentNotification: async (req, res) => {
-    //     try {
-    //       const notification = req.body;
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   },
 
 }

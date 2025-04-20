@@ -3,7 +3,8 @@
 })();
 
 async function createPdf() {
-  const content = document.querySelector(".table-form");
+  try {
+    const content = document.querySelector(".table-form");
 
   const options = {
     filename: "invoiceGenerateDemo.pdf",
@@ -12,4 +13,8 @@ async function createPdf() {
     jsPDF: { unit: "in", format: "a3", orientation: "portrait" },
   };
   await html2pdf().from(content).set(options).save();
+  } catch (error) {
+    console.error(error)
+  }
+  
 }

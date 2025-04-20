@@ -31,16 +31,22 @@ module.exports = {
   fetchData: async (req, res, next) => {
     try {
       if (req.query.from === "coupen") {
-        const result = await coupenModel.findOne({ code: req.query.code });
-
+        const {code,name}=req.query
+        if(!code||!name){
+          return res.status(400).json({message:'in sufficient data'})
+        }
+        const result = await coupenModel.findOne({$or:[{code:code},{name:name}]})
         if (result) {
-          return res.json("used");
+          if(result.name===name){
+            return res.json("name used");
+          }else if(result.code===code){
+            return res.json("name code");
+          }
         } else {
           res.json("unUsed");
         }
       } else if (req.query.from === "editCoupen") {
         const coupenData = await coupenModel.findById(req.query.id);
-
         res.json(coupenData);
       } else if (req.query.from === "validateCoupen") {
         const validateCoupen = await coupenModel.find({
@@ -60,7 +66,7 @@ module.exports = {
                 { CoupenID: validateCoupen[0]._id },
               ],
             });
-
+          
             if (checkUsage) {
               res.json("Code Already used");
             } else {
@@ -138,13 +144,14 @@ module.exports = {
 
         res.json(array);
       } else if (req.query.from === "coupenEdit") {
-        const result = await coupenModel.findOne({ code: req.query.code });
+        const {code,name}=req.body
+        const result = await coupenModel.findOne({$or:[{code},{name}] });
         const id = result?._id.toString();
-
         if (result) {
           if (id === req.query.ID) {
             res.json("unUsed");
           } else {
+            
             return res.json("used");
           }
         } else {

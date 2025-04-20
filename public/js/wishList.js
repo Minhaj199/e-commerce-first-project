@@ -18,16 +18,21 @@ async function removeFromWishList(id) {
   
 }
 document.querySelector(".cart__btn").addEventListener("click", async () => {
-  const response = await fetch("/user/wishToCart", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  });
-  const message = await response.json();
-  if (message === "success") {
-    location.href = "/user/getpages?from=cart";
-  }else{
-    showToast('no items')
+  try {
+    const response = await fetch("/user/wishToCart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const message = await response.json();
+    if (message === "success") {
+      location.href = "/user/getpages?from=cart";
+    }else{
+      showToast('no items')
+    }
+  } catch (error) {
+    showToast(error.message||'internal server error')
   }
+  
 });
 function showToast(message) {
   

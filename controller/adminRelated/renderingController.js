@@ -1,6 +1,6 @@
 const productModel = require('../../Model/product')
 const userModel = require('../../Model/user')
-const category = require('../../Model/catagory')
+const categoryModel = require('../../Model/catagory')
 const orderModel = require('../../Model/orders')
 const dateFunction = require('../../utils/DateFormating')
 const offerModel = require('../../Model/offer')
@@ -11,7 +11,7 @@ module.exports = {
 
     addProduct: async (req, res, next) => {
         try {
-            const categoryCollection = await category.findOne({
+            const categoryCollection = await categoryModel.findOne({
                 category: { $exists: true },
             });
             const message = req.query.message;
@@ -43,9 +43,10 @@ module.exports = {
                 .skip((page - 1) * skip)
                 .limit(4)
                 .sort({ _id: -1 });
-            const categoryCollection = await category.findOne({
+            const categoryCollection = await categoryModel.findOne({
                 category: { $exists: true },
             });
+            
             const message = req.query.message;
             const errMessage = req.query.errMessage;
             const updMessage = req.query.updMessage;
@@ -70,9 +71,8 @@ module.exports = {
     },
     editProduct: async (req, res, next) => {
         try {
-
             const ProductData = await productItemModel.findById(req.params.id);
-            const CatAndBrand = await category.findOne();
+            const CatAndBrand = await categoryModel.findOne();
             const cat = ProductData.category;
             
             res.render("admin/editProduct", { ProductData, CatAndBrand, cat });
@@ -257,7 +257,7 @@ module.exports = {
     },
     categoryManagement: async (req, res, next) => {
         try {
-            let newdoc = await category.findOne({ category: { $exists: true } });
+            let newdoc = await categoryModel({ category: { $exists: true } });
             let catMessage = req.query.catMessage;
             let editedMessage = req.query.editMessage;
             let dltMessage = req.query.dltMessage;
@@ -279,7 +279,7 @@ module.exports = {
         try {
             const categoryIndex = req.params.id;
 
-            const doc = await category.findByIdAndUpdate({
+            const doc = await categoryModel.findByIdAndUpdate({
                 _id: "65e085036e57f3e5630201fd",
             });
             const element = doc.category[categoryIndex];
@@ -293,7 +293,7 @@ module.exports = {
         try {
             const categoryIndex = req.params.id;
 
-            const doc = await category.findByIdAndUpdate({
+            const doc = await categoryModel.findByIdAndUpdate({
                 _id: "65e085036e57f3e5630201fd",
             });
             const element = doc.category[categoryIndex];
@@ -305,7 +305,7 @@ module.exports = {
     brandPage: async (req, res, next) => {
         try {
             if (req.query.To === "brand") {
-                let newdoc = await category.findOne({ brand: { $exists: true } });
+                let newdoc = await categoryModel.findOne({ brand: { $exists: true } });
                 let brandAddedMessage = req.query.brandAddedMessage;
                 let brandEditedMessage = req.query.brandEditedMessage;
                 let dltMessage = req.query.dltMessage;
@@ -320,17 +320,17 @@ module.exports = {
             } else if (req.query.from === "editButton") {
                 const categoryIndex = req.query.index;
 
-                const doc = await category.findOne({ brand: { $exists: true } });
+                const doc = await categoryModel.findOne({ brand: { $exists: true } });
                 const element = doc.brand[categoryIndex];
                 res.render("admin/editBrand", { element, categoryIndex });
             } else if ((req.query.from === "DeleteButton")) {
                 const categoryIndex = req.query.index;
 
-                const doc = await category.findOne({ brand: { $exists: true } });
+                const doc = await categoryModel.findOne({ brand: { $exists: true } });
                 const element = doc.brand[categoryIndex];
                 res.render("admin/deleteBrand", { element, categoryIndex });
             } else {
-                let newdoc = await category.findOne({ brand: { $exists: true } });
+                let newdoc = await categoryModel.findOne({ brand: { $exists: true } });
                 res.render("admin/BrandManagement", { newdoc });
             }
         } catch (error) {
@@ -397,9 +397,9 @@ module.exports = {
 
                 for (let i = 0; i < coupenData.length; i++) {
                     coupenData[i].FormatedExpiry =
-                        coupenData[i].Expiry.toLocaleDateString();
-                    coupenData[i].FormatedCreatedAt =
-                        coupenData[i].createdAt.toLocaleDateString();
+                        coupenData[i].expiry.toLocaleDateString();
+                    coupenData[i].Formatedstarting =
+                        coupenData[i].startingDate.toLocaleDateString();
                 }
 
                 res.render("admin/manageCoupen", { coupenData });
@@ -434,7 +434,7 @@ module.exports = {
 
                     delete req.session.offerNotAdded;
                     delete req.session.offerAdded;
-                    const category = await category.findOne();
+                    const category = await categoryModel.findOne();
 
                     const offerData = await offerModel
                         .find()

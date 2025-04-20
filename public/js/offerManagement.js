@@ -42,6 +42,7 @@ async function selectCategory() {
 async function edit(ID) {
 
 
+ try {
   const response = await fetch("/admin/editOffer", {
     method: "put",
     headers: {
@@ -59,6 +60,9 @@ async function edit(ID) {
   } else {
     alert("error");
   }
+ } catch (error) {
+  showToast(error.error)
+ }
 }
 
 async function deleteOffer(id) {

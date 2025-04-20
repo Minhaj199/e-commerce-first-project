@@ -10,6 +10,7 @@ const wishlistModel = require("../../Model/wishList");
 const walletModel = require("../../Model/wallets");
 const dateFunction = require("../../utils/DateFormating");
 const productItemModel = require("../../Model/prouctItems");
+const coupen = require("../../Model/coupen");
 
 
 
@@ -313,7 +314,7 @@ module.exports = {
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("user/productListing", { Data, CategoryCollection, User });
       } else if (req.query.from === "sortBySixe") {
         const minValue = parseInt(req.query.minValue);
         const maxValue = parseInt(req.query.maxValue);
@@ -324,7 +325,7 @@ module.exports = {
 
           const CategoryCollection = await categoryModel.findOne();
           let User = req.session.isUserAuthenticated;
-          res.render("admin/shop", { Data, CategoryCollection, User });
+          res.render("user/productListing", { Data, CategoryCollection, User });
         } else {
           res.redirect("/user/all");
         }
@@ -334,14 +335,14 @@ module.exports = {
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("user/productListing", { Data, CategoryCollection, User });
       } else if (req.query.instruction === "HighToLow") {
         const Data = await productItemModel.find({deleteStatus:false}).sort({ price: -1 });
 
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("user/productListing", { Data, CategoryCollection, User });
       } else if (req.query.from === "sortBrand") {
         const array = JSON.parse(decodeURIComponent(req.query.brand));
 
@@ -349,7 +350,7 @@ module.exports = {
 
         const CategoryCollection = await categoryModel.findOne();
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("user/productListing", { Data, CategoryCollection, User });
       } else if (req.query.from === "sorting") {
         const CategoryCollection = await categoryModel.findOne();
         const maxValue = req.query.maxValue;
@@ -374,7 +375,7 @@ module.exports = {
 
         let User = req.session.isUserAuthenticated;
 
-        res.render("admin/shop", { Data, CategoryCollection, User });
+        res.render("user/productListing", { Data, CategoryCollection, User });
       } else {
         const pageNumber = req.query.page;
         const pagesOf = await productItemModel.find({deleteStatus:false}).count()
@@ -390,7 +391,7 @@ module.exports = {
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
-        res.render("admin/shop", {
+        res.render("user/productListing", {
           Data,
           CategoryCollection,
           User,
@@ -406,7 +407,7 @@ module.exports = {
       const Data = await productItemModel.find({ category: "women" ,deleteStatus:false});
       let User = req.session.isUserAuthenticated;
 
-      res.render("admin/shop", { Data, User });
+      res.render("user/productListing", { Data, User });
     } catch (error) {
       next(error)
     }
@@ -416,7 +417,7 @@ module.exports = {
     try {
       const Data = await productItemModel.find({ category: "men",deleteStatus:false });
       let User = req.session.isUserAuthenticated;
-      res.render("admin/shop", { Data, User });
+      res.render("user/productListing", { Data, User });
     } catch (error) {
       next(error)
     }
@@ -449,7 +450,7 @@ module.exports = {
 
         let User = req.session.isUserAuthenticated;
 
-        res.render("admin/shop", {
+        res.render("user/productListing", {
           Data,
           CategoryCollection,
           User,
@@ -467,7 +468,7 @@ module.exports = {
             .skip((page - 1) * 3)
             .limit(3);
 
-          res.render("admin/shop", {
+          res.render("user/productListing", {
             Data,
             CategoryCollection,
             User,
@@ -810,5 +811,25 @@ module.exports = {
     }
 
   },
+  getCouponData:async(req,res,next)=>{
+    try {
+      const couponData=await coupen.find()
+      if(!couponData){
+        return res.status(400).json({message:'coupen data not found'})
+      }
+      res.json(couponData)
+    } catch (error) {
+     res.status(400).json({message:error.message||'coupen error'})
+      
+    }
+  },
+  getCouponList:(req,res)=>{
+    try {
+      res.render('user/coupenList')
+    } catch (error) {
+     res.status(400).json({message:error.message||'coupen error'})
+      
+    }
+  }
 
 };

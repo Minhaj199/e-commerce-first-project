@@ -378,20 +378,49 @@ module.exports = {
     },
     coupen: async (req, res, next) => {
         try {
+            
+            const { name, code, amount, id,starting:startingDate,ending:expiry }=req.body
+            if(!name||!code||!amount||!id||!startingDate||!expiry){
+                throw new Error('in sufficient data')
+            }
+            const editedData={name,code,amount:Number(amount),startingDate:new Date(startingDate),expiry:new Date(expiry)}
+            const couponToBeEdited=await coupenModel.findById(id).lean()
+            if(!couponToBeEdited){
+                throw new Error('coupen not found to edit')
+            }
+            let isUpdated=false
+           
+            
+            for(let key in editedData){
+                if(couponToBeEdited[key]!==editedData[key]){
+                   
+                    if(key==='startingDate'||key==='expiry'){
+                        if(couponToBeEdited[key].toLocaleDateString()===editedData[key].toLocaleDateString()){
+                            continue
+                        }else{
+                            isUpdated=true
+                            break
+                        }            
+                    }else{
 
-            const editedData = {
-                code: req.body.code,
-                Expiry: req.body.compareData,
-                amount: req.body.amount,
-            };
-            await coupenModel.updateOne(
+                        isUpdated=true
+                        
+                        break
+                    }
+                }
+            }
+            if(!isUpdated){
+                throw new Error('upadation not found')
+            }
+           const response= await coupenModel.updateOne(
                 { _id: req.body.id },
-                editedData
+                {...editedData,name:name}
             );
-
+            if(response)
             res.json("Coupen Updated");
         } catch (error) {
-            next(error)
+            console.log(error)
+            res.status(400).json({message:error.message||'internal server error'})
         }
     },
     deleteField: async (req, res, next) => {
