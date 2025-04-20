@@ -1,12 +1,12 @@
 
-const category = require('../../Model/catagory')
-const coupenModel = require('../../Model/coupen')
-const offerModel = require('../../Model/offer')
-const userModel = require('../../Model/user')
-const walletModel = require('../../Model/wallets')
-const cartModel = require('../../Model/cart')
-const wishlistModel = require('../../Model/wishList')
-const productItemModel = require('../../Model/prouctItems')
+const category = require('../../model/catagory')
+const coupenModel = require('../../model/coupen')
+const offerModel = require('../../model/offer')
+const userModel = require('../../model/user')
+const walletModel = require('../../model/wallets')
+const cartModel = require('../../model/cart')
+const wishlistModel = require('../../model/wishList')
+const productItemModel = require('../../model/prouctItems')
 const { Types } = require('mongoose')
 
 module.exports = {
@@ -73,11 +73,19 @@ module.exports = {
     },
     category: async (req, res, next) => {
         try {
-            const documentId = "65e085036e57f3e5630201fd";
-            const elementId = req.params.id;
-
-            await category.findOneAndUpdate(
-                { _id: documentId },
+            const fixedCategory=['Men','Women','Kids']
+            const {id:elementId} = req.params;
+            const isFixedCategory=fixedCategory.find(elem=>{
+                return elem.toLocaleLowerCase()===elementId.toLocaleLowerCase()
+            })
+            if(isFixedCategory){
+                res.redirect(
+                    "/admin/managecategory?dltMessage= This is a fixed category"
+                );
+                return
+            }
+             await category.updateOne(
+                {},
                 { $pull: { category: elementId } }
             );
             res.redirect(
@@ -89,8 +97,20 @@ module.exports = {
     },
     brand: async (req, res, next) => {
         try {
-            const elementId = req.body.cate;
 
+            const {cate:elementId} = req.body
+           if(!elementId){
+            res.redirect(
+                "/admin/getBrandPages?To=brand&brandAddedMessage=not found"
+            );
+            return
+           }
+            if(elementId.toLocaleLowerCase()==='others'){
+                res.redirect(
+                    "/admin/getBrandPages?To=brand&brandAddedMessage=This category can't be deleted"
+                );
+                return
+            }
             await category.updateOne(
                 { brand: { $exists: true } },
                 { $pull: { brand: elementId } }

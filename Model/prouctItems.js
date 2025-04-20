@@ -38,6 +38,6 @@ const productsSchema = new mongo.Schema({
   },
   deleteStatus:{type:Boolean,default:false}
 });
-const productItemModel = new mongo.model("Product_items", productsSchema);
+const productItemModel = mongo.models.Product_items|| mongo.model("Product_items", productsSchema);
 
 module.exports = productItemModel;

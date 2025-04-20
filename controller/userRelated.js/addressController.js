@@ -1,5 +1,5 @@
-const user = require('../../Model/user')
-const addressModel = require("../../Model/address");
+const user = require('../../model/user')
+const addressModel = require("../../model/address");
 const { ObjectId } = require("mongodb");
 
 module.exports = {

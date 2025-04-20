@@ -1,15 +1,15 @@
 
-const orderModel = require("../../Model/orders");
-const cartModel = require("../../Model/cart");
-const coupenModel = require("../../Model/coupen");
-const coupenTrackingModel = require("../../Model/coupenTracking");
-const walletModel = require("../../Model/wallets");
-const user = require("../../Model/user");
+const orderModel = require("../../model/orders");
+const cartModel = require("../../model/cart");
+const coupenModel = require("../../model/coupen");
+const coupenTrackingModel = require("../../model/coupenTracking");
+const walletModel = require("../../model/wallets");
+const user = require("../../model/user");
 const RazorPay = require("razorpay");
 const lodash = require("lodash");
 const path = require("path");
 const { Types } = require("mongoose");
-const productItemModel = require("../../Model/prouctItems");
+const productItemModel = require("../../model/prouctItems");
 
 
 module.exports = {

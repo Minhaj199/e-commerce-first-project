@@ -1,12 +1,11 @@
-const productModel = require('../../Model/product')
-const userModel = require('../../Model/user')
-const categoryModel = require('../../Model/catagory')
-const orderModel = require('../../Model/orders')
-const dateFunction = require('../../utils/DateFormating')
-const offerModel = require('../../Model/offer')
+const categoryModel = require('../../model/catagory')
+const orderModel = require('../../model/orders')
+const dateFunction = require('../../utils/dateFormating')
+const offerModel = require('../../model/offer')
 const { ObjectId } = require('mongodb')
-const coupenModel = require('../../Model/coupen')
-const productItemModel=require("../../Model/prouctItems")
+const coupenModel = require('../../model/coupen')
+const productItemModel=require("../../model/prouctItems")
+const user = require('../../model/user')
 module.exports = {
 
     addProduct: async (req, res, next) => {
@@ -84,7 +83,7 @@ module.exports = {
     deleteProduct: async (req, res, next) => {
         try {
 
-            const ProductData = await productModel.findById(req.params.id);
+            const ProductData = await productItemModel.findById(req.params.id);
             res.render("admin/ProductDelete", { ProductData });
         } catch (error) {
             next(error)
@@ -106,16 +105,16 @@ module.exports = {
     setProductMgtSorted: async (req, res, next) => {
         try {
             if (req.body.category == "Men") {
-                const productData = await productModel.find({ category: "Men" });
+                const productData = await product_items.find({ category: "Men" });
                 res.render("admin/productMangement", { productData });
             } else if (req.body.category == "Women") {
-                const productData = await productModel.find({ category: "Women" });
+                const productData = await product_items.find({ category: "Women" });
                 res.render("admin/productMangement", { productData });
             } else if (req.body.category == "kids") {
-                const productData = await productModel.find({ category: "Kids" });
+                const productData = await product_items.find({ category: "Kids" });
                 res.render("admin/productMangement", { productData });
             } else {
-                const productData = await productModel.find();
+                const productData = await product_items.find();
                 res.render("admin/productMangement", { productData });
             }
         } catch (error) {
@@ -134,7 +133,7 @@ module.exports = {
     },
     dashBord: async (req, res, next) => {
         try {
-            const userCount = await userModel.find({ status: true }).count();
+            const userCount = await user.find({ status: true }).count();
 
             const totalSaleObj = await orderModel.aggregate([
                 { $unwind: "$Order" },
@@ -143,7 +142,7 @@ module.exports = {
             ]);
 
             const totalSale = totalSaleObj[0]?.total;
-            const products = await productModel.find().count();
+            const products = await productItemModel.find().count();
 
             const category = await orderModel.aggregate([
                 { $unwind: "$Order" },
@@ -225,14 +224,14 @@ module.exports = {
     userManagement: async (req, res, next) => {
         try {
             let page = req.query.page || 1;
-            let NumberOfPage = await userModel.find().count()
+            let NumberOfPage = await productItemModel.find().count()
             let pages = Math.ceil(NumberOfPage / 3)
             let dynamicPageArray = []
             for (let i = 1; i <= pages; i++) {
                 dynamicPageArray.push(i)
             }
             let limit = 4;
-            let userData = await userModel
+            let userData = await productItemModel
                 .find()
                 .skip((page - 1) * limit)
                 .limit(limit)
@@ -257,10 +256,11 @@ module.exports = {
     },
     categoryManagement: async (req, res, next) => {
         try {
-            let newdoc = await categoryModel({ category: { $exists: true } });
+            let newdoc = await categoryModel.findOne({ category: { $exists: true } });
             let catMessage = req.query.catMessage;
             let editedMessage = req.query.editMessage;
             let dltMessage = req.query.dltMessage;
+           
             res.render("admin/categoryManagement", {
                 newdoc,
                 catMessage,
@@ -309,7 +309,7 @@ module.exports = {
                 let brandAddedMessage = req.query.brandAddedMessage;
                 let brandEditedMessage = req.query.brandEditedMessage;
                 let dltMessage = req.query.dltMessage;
-                res.render("admin/BrandManagement", {
+                res.render("admin/brandManagement", {
                     newdoc,
                     brandAddedMessage,
                     brandEditedMessage,
@@ -331,7 +331,7 @@ module.exports = {
                 res.render("admin/deleteBrand", { element, categoryIndex });
             } else {
                 let newdoc = await categoryModel.findOne({ brand: { $exists: true } });
-                res.render("admin/BrandManagement", { newdoc });
+                res.render("admin/brandManagement", { newdoc });
             }
         } catch (error) {
             next(error)
@@ -359,7 +359,7 @@ module.exports = {
                     data[i].Date = format.toLocaleDateString();
                 }
 
-                res.render("admin/OrderMangement", { data });
+                res.render("admin/orderMangement", { data });
             } else if (req.query.from === "orderProductDetails") {
                 const OrderID = req.query.proID;
                 const ProductData = await orderModel.aggregate([
@@ -391,7 +391,7 @@ module.exports = {
                     { $unwind: "$Order" },
                 ]);
 
-                res.render("admin/OrderProductDetails", { ProductData, orderData });
+                res.render("admin/orderProductDetails", { ProductData, orderData });
             } else if (req.query.from === "coupen") {
                 const coupenData = await coupenModel.find().sort({ _id: -1 });
 
@@ -440,7 +440,7 @@ module.exports = {
                         .find()
                         .populate("ProductIDs")
                         .sort({ _id: -1 });
-                    res.render("admin/OfferManagement", {
+                    res.render("admin/offerManagement", {
                         success,
                         error,
                         offerData,

@@ -1,11 +1,11 @@
-const user = require("../../Model/user");
+const user = require("../../model/user");
 const bcrypt = require("bcrypt");
-const forgotEmail = require('../../Model/otp/forgoEmail')
+const forgotEmail = require('../../model/otp/forgoEmail')
 const capitalisation = require("../../utils/makeCapitalLetter");
 const otpGenerator = require("otp-generator");
-const otpSchema = require("../../Model/otp/otp");
-const OTP = require("../../Model/otp/otp");
-const walletModel = require('../../Model/wallets')
+const otpSchema = require("../../model/otp/otp");
+const OTP = require("../../model/otp/otp");
+const walletModel = require('../../model/wallets')
 
 let data = {};
 let email;

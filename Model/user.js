@@ -3,14 +3,13 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration.env" });
 
 
+const db = process.env.DB_STRING
 
-
-
- const db = process.env.DB_STRING
 
 mongo.connect(db).then(() => {
   console.log('connected')
 });
+
 
 const userScheme = new mongo.Schema({
   first_name: {
@@ -44,5 +43,6 @@ const userScheme = new mongo.Schema({
 });
 
 const user = new mongo.model("users", userScheme);
+
 
 module.exports = user;

@@ -14,7 +14,7 @@ const offerSchema = new mongo.Schema({
     type: Boolean,
     default: true,
   },
-  ProductIDs: [{ type: mongo.Types.ObjectId, ref: "Products" }],
+  ProductIDs: [{ type: mongo.Types.ObjectId, ref: "Product_items" }],
 });
 
 const offer = new mongo.model("offer", offerSchema);

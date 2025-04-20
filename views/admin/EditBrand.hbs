@@ -51,6 +51,7 @@
                             <form class="t-form" onsubmit="return validate()" action= "/admin/editBrand/{{categoryIndex}}?_method=PUT" method="POST">
                                 <label for="">Make change in Brand</label>
                                 <input class="txt-inp" type="text" minlength="3" maxlength="10" name="cate" value="{{element}}">
+                                <input type="hidden" minlength="3" maxlength="10" name="current" value="{{element}}">
                                 <input class="submit-btn" type="submit">
                             </form>
                         </div>

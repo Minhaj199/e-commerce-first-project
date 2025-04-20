@@ -1,11 +1,11 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration" });
-const categoryModel = require("../../Model/catagory");
-const orderModel = require("../../Model/orders");
-const coupenModel = require("../../Model/coupen");
-const coupenTrackingModel = require("../../Model/coupenTracking");
-const offerModel = require("../../Model/offer");
-const productItemModel = require("../../Model/prouctItems");
+const categoryModel = require("../../model/catagory");
+const orderModel = require("../../model/orders");
+const coupenModel = require("../../model/coupen");
+const coupenTrackingModel = require("../../model/coupenTracking");
+const offerModel = require("../../model/offer");
+const productItemModel = require("../../model/prouctItems");
 
 
 module.exports = {

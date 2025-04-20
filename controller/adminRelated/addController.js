@@ -2,12 +2,11 @@
 
 const cloudinary = require('../../utils/cludinary')
 const fs = require("fs");
-const category = require("../../Model/catagory");
-const coupenModel = require("../../Model/coupen");
-const offerModel = require("../../Model/offer");
-const productItemModel = require("../../Model/prouctItems")
+const category = require("../../model/catagory");
+const coupenModel = require("../../model/coupen");
+const offerModel = require("../../model/offer");
+const productItemModel = require("../../model/prouctItems")
 const variatFormater = require('../../utils/variantFormater');
-const Normalisation = require('../../utils/makeCapitalLetter');
 module.exports = {
 
     postProduct: async (req, res, next) => {
@@ -109,30 +108,61 @@ module.exports = {
     },
     category: async (req, res, next) => {
         try {
-            const Data = req.body.cate;
-            await category.findOneAndUpdate(
-                { _id: "65e085036e57f3e5630201fd" },
-                { $addToSet: { category: Data } },
-                { upsert: true, new: true }
-            );
-            res.redirect(
-                "/admin/managecategory?catMessage=category Added Successfully"
-            );
+            const {cate:newCategory} = req.body;
+            if(!newCategory){
+                res.redirect("/admin/managecategory?dltMessage=category date not found")
+                return
+            }
+            const categoryData= await category.findOne()
+                if(!categoryData){
+                    await category.updateMany({},{$set:{category:[newCategory]}},{upsert:true})
+                   return res.redirect(
+                        "/admin/managecategory?catMessage=category Added Successfully"
+                    );
+                }else{
+                   const isDuplicate=categoryData.category.find(elem=>elem.toLocaleLowerCase()===newCategory.toLocaleLowerCase())
+                   if(isDuplicate){
+                    res.redirect("/admin/managecategory?dltMessage=Category already exists")
+                     return
+                   }else{
+                    categoryData.category.push(newCategory)
+                    await categoryData.save()
+                    res.redirect("/admin/managecategory?catMessage=category Added Successfully")
+                     return
+                   }
+                }
+            
         } catch (error) {
             next(error)
         }
     },
     brand: async (req, res, next) => {
         try {
-            const Data = req.body.brand;
-            await category.findOneAndUpdate(
-                { brand: { $exists: true } },
-                { $addToSet: { brand: Data } },
-                { upsert: true, new: true }
-            );
-            res.redirect(
-                "/admin/getBrandPages?To=brand&brandAddedMessage=Brand Added Successfully"
-            );
+            const {brand:newBrand} = req.body;
+            if(!newBrand){
+                res.redirect("/admin/getBrandPages?dltMessage=brand date not found")
+                return
+            }
+            const brandData= await category.findOne()
+                if(!brandData){
+                    await category.updateMany({},{$set:{brand:[newBrand]}},{upsert:true})
+                   return res.redirect(
+                       "/admin/getBrandPages?To=brand&brandAddedMessage=Brand Added Successfully"
+                    );
+                }else{
+                   const isDuplicate=brandData.brand.find(elem=>elem.toLocaleLowerCase()===newBrand.toLocaleLowerCase())
+                   if(isDuplicate){
+                   
+                    res.redirect("/admin/getBrandPages?To=brand&dltMessage=Brand already exists")
+                     return
+                   }else{
+                    brandData.brand.push(newBrand)
+                    await brandData.save()
+                    res.redirect("/admin/getBrandPages?To=brand&brandAddedMessage=category Added Successfully")
+                     return
+                   }
+                }
+            
         } catch (error) {
             next(error)
         }

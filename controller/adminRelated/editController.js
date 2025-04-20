@@ -1,14 +1,12 @@
-
-const productModel = require('../../Model/product')
 const cloudinary = require('../../utils/cludinary')
 const fs = require("fs");
-const category = require("../../Model/catagory");
-const coupenModel = require("../../Model/coupen");
-const offerModel = require("../../Model/offer");
-const userModel = require("../../Model/user");
-const walletModel = require("../../Model/wallets");
-const orderModel = require("../../Model/orders");
-const productItemModel = require('../../Model/prouctItems');
+const category = require("../../model/catagory");
+const coupenModel = require("../../model/coupen");
+const offerModel = require("../../model/offer");
+const userModel = require("../../model/user");
+const walletModel = require("../../model/wallets");
+const orderModel = require("../../model/orders");
+const productItemModel = require('../../model/prouctItems');
 const { Types } = require('mongoose');
 
 
@@ -153,12 +151,33 @@ module.exports = {
 
     category: async (req, res, next) => {
         try {
-            const documentId = "65e085036e57f3e5630201fd";
+            
+        
             const elementId = req.params.id;
             const newName = req.body.cate;
 
-            await category.findOneAndUpdate(
-                { _id: documentId },
+            const fixedCategory=[0,1,2]
+            const isFixedCategory=fixedCategory.find(elem=>elem===Number(elementId))
+            
+            if(isFixedCategory===0||isFixedCategory){
+                res.redirect(
+                    "/admin/managecategory?dltMessage= This is a fixed category"
+                );
+                return
+            }
+            const categoryData=await category.findOne()
+            if(!categoryData){
+                return
+            }
+            const isDuplicate=categoryData.category.find(el=>el.toLocaleLowerCase()===newName.toLocaleLowerCase())
+            if(isDuplicate){
+                res.redirect(
+                    "/admin/managecategory?dltMessage= Already exist"
+                );
+                return
+            }
+            await category.updateOne(
+                {},
                 { $set: { [`category.${elementId}`]: newName } }
             );
             res.redirect(
@@ -170,13 +189,35 @@ module.exports = {
 
     },
     brand: async (req, res, next) => {
+      const { cate ,current }= req.body
         try {
-            const Data = req.body.brand;
-            await category.findOneAndUpdate(
-                { brand: { $exists: true } },
-                { $addToSet: { brand: Data } },
-                { upsert: true, new: true }
-            );
+            if(!current||!cate){
+                res.redirect("/admin/getBrandPages?To=brand&dltMessage=insufficient data")
+                return
+            }
+            if(current.toLowerCase()==='others'){
+                res.redirect("/admin/getBrandPages?To=brand&dltMessage=Others cannot be editted")
+                return
+            }
+            
+            
+            
+           const result= await category.findOne()
+          
+            const isExits=result.brand.find(elem=>cate.toLowerCase()===elem.toLowerCase())
+            if(isExits){
+                res.redirect("/admin/getBrandPages?To=brand&dltMessage=current item already exist")
+                return
+            }
+            const newArray=result.brand.map(el=>{
+                if(el.toLowerCase()===current.toLowerCase()){
+                    return cate
+                }else{
+                    return el
+                }
+            })
+            result.brand=newArray
+            await result.save()
             res.redirect(
                 "/admin/getBrandPages?To=brand&brandAddedMessage=Brand Added Successfully"
             );
@@ -427,7 +468,7 @@ module.exports = {
         try {
 
             for (let i = 0; i < req.body.proID.length; i++) {
-                await productModel.findByIdAndUpdate(req.body.proID[i], {
+                await productItemModel.findByIdAndUpdate(req.body.proID[i], {
                     $unset: { offer_rate: "" },
                 });
             }
@@ -441,7 +482,7 @@ module.exports = {
             const data = await offerModel.findById(req.body.ID);
             if (data.status === true) {
                 for (let i = 0; i < data.ProductIDs.length; i++) {
-                    await productModel.findByIdAndUpdate(data.ProductIDs[i], {
+                    await productItemModel.findByIdAndUpdate(data.ProductIDs[i], {
                         $set: { offer_rate: 0 },
                     });
                 }
@@ -450,7 +491,7 @@ module.exports = {
                 });
             } else {
                 for (let i = 0; i < data.ProductIDs.length; i++) {
-                    await productModel.findByIdAndUpdate(data.ProductIDs[i], {
+                    await productItemModel.findByIdAndUpdate(data.ProductIDs[i], {
                         $set: { offer_rate: data.rate },
                     });
                 }

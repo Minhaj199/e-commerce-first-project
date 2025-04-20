@@ -1,16 +1,15 @@
-const user = require("../../Model/user");
+const user = require("../../model/user");
 const bcrypt = require("bcrypt");
-const categoryModel = require("../../Model/catagory");
-const addressModel = require("../../Model/address");
+const categoryModel = require("../../model/catagory");
+const addressModel = require("../../model/address");
 const { ObjectId } = require("mongodb");
-const lodash = require("lodash");
-const cartModel = require("../../Model/cart");
-const orderModel = require("../../Model/orders");
-const wishlistModel = require("../../Model/wishList");
-const walletModel = require("../../Model/wallets");
-const dateFunction = require("../../utils/DateFormating");
-const productItemModel = require("../../Model/prouctItems");
-const coupen = require("../../Model/coupen");
+const cartModel = require("../../model/cart");
+const orderModel = require("../../model/orders");
+const wishlistModel = require("../../model/wishList");
+const walletModel = require("../../model/wallets");
+const dateFunction = require("../../utils/dateFormating");
+const productItemModel = require("../../model/prouctItems");
+const coupen = require("../../model/coupen");
 
 
 
@@ -294,7 +293,7 @@ module.exports = {
           );
         }
 
-        res.render("user/Wallet", { walletData });
+        res.render("user/wallet", { walletData });
       }
     } catch (error) {
       next(error)
@@ -670,7 +669,6 @@ module.exports = {
         }
       } else if (req.body.from === "updteCartQty") {
         req.session.dom = req.body.curID;
-
         await cartModel
           .findByIdAndUpdate(req.body.curID, {
             $set: { OrderQuantity: req.body.newVal, Total: req.body.newTotal },
