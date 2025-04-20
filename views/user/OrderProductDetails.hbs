@@ -225,7 +225,7 @@
                                 {{!-- {{#isEqual {{orderData.[0].PaymentOption}} 'Cash on delevery'}} --}}
                             <hr>
                                 <th class="final-order-heading">Payment</th>
-                                <th style="padding-left: 70px;padding-top:30px;color: black    ;word-break:keep-all;">{{orderData.[0].PaymentOption}}</th>
+                                <th style="text-align: end;padding-top:30px;color: black    ;word-break   ;">{{orderData.[0].PaymentOption}}</th>
                                 
                             </tr>
                            
@@ -237,7 +237,7 @@
                
             </div>
             <div class="col-12" style="height: 5%;display:flex;justify-content: center;align-items: center;margin-top: 2%;">
-                {{#isEqual orderData.[0].PaymentOption "payment-Failed"}}
+                {{#isEqual orderData.[0].PaymentOption "Failed"}}
                 <button
                     onclick='retrayPayment("{{orderData.[0]._id}}","{{orderData.[0].TotalOrderPrice}}","{{orderData.[0].coupenID}}")'
                     style="border: none;padding: 5% 10%;background: violet;font-weight: bold;">RETRY PAYMENT

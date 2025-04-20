@@ -49,7 +49,7 @@ module.exports = {
           },
           { $unwind: "$Products" },
         ]);
-        
+        console.log(getCart)
         const codeApplied = req.session.codeApplied;
         delete req.session.codeApplied;
         const deleteInfo = req.session.deleteInfo;
@@ -76,7 +76,7 @@ module.exports = {
           deleteInfo,
         });
       } else if (req.query.from === "afterAddedToCart") {
-        // const User=await user.findById({_id:req.session.customerId})
+        
         req.session.addedMessage = "Product Added To Cart";
         res.redirect("/user/getPages?from=cart");
       } else if (req.query.from === "cartToCheckOut") {
@@ -192,8 +192,10 @@ module.exports = {
         
         res.render("user/transactionCompletion", { orderData, ProductData });
       } else if (req.query.from === "orderFailed") {
-        const OrderID = req.session.OrderID;
-        delete req.session.OrderID;
+        console.log('hiiii')
+        // const OrderID = req.session.OrderID;
+        const OrderID = '6804ef421ba0ee9ff4f9b885'
+        // delete req.session.OrderID;
 
         const orderData = await orderModel.aggregate([
           { $match: { _id: new ObjectId(OrderID) } },
@@ -213,7 +215,7 @@ module.exports = {
           { $unwind: "$Order" },
           {
             $lookup: {
-              from: "products",
+              from: "product_items",
               let: { productID: { $toObjectId: "$Order.ProductID" } },
               pipeline: [
                 { $match: { $expr: { $eq: ["$_id", "$$productID"] } } },

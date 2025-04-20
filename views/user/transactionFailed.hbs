@@ -69,18 +69,18 @@
                     <div style="background-color: red;" class="col-12 successMessage">
                         <div class="col-12"
                             style="height: 75%;background-color: red;display: flex;justify-content: center;align-items: center;">
-                            <h2>Order Placed Successfully</h2>
+                            <h2>Your Order is pending</h2>
                         </div>
                         <div class="col-12" style="height:25% ;display: flex;justify-content: center;align-items: center;">
                             <button id="home" style="padding:10px 50px;margin-right: 30px;border: none;border-radius: 10px;">Go Home</button>
-                            <button id="order-history" style="padding:10px 50px ;border: none;border-radius: 10px;">Go To Orders</button>
+                            <button data-id="{{this._id}}" id="order-history" style="padding:10px 50px ;border: none;border-radius: 10px;">Go To Orders</button>
                         </div>
                     </div>
                     <div class="address-box">
 
                             <div style="" class="col-2 button-box">
                                <h5>Billed Address</h5>
-                            
+                                <p style="margin-top: 5px;">Please retry in my order</p>
                             </div>
                         <div style="" class="col-10 address-inner-box">
                             <h3 style="margin-top: 2%;font-weight: bolder;">{{orderData.[0].address.Name}}</h3>
@@ -99,18 +99,18 @@
                 </div>
                 </div>
                
-                <div id="oderId" class="col-11  order" >
+                <div id="oderId"   class="col-11  order" >
                     <div style="height:100px;display: flex;justify-content: center;align-items: center;" class="col-12">
                         <h2>Order Detail</h2>
                     </div>
                     <div id="order-id" class="col-5" data-id="{{orderData.[0]._id}}"  style="height: 30px margin-bottom: 10px;font">
                         OrderID:{{orderData.[0]._id}}
                     </div>
-                    <div class="col-12" style="height: 300px;overflow: auto;">
+                    <div class="col-12" style=" height: 300px;overflow: auto;">
 
-                    <table style="background-color: rgb(233, 233, 233);">
+                    <table   style="background-color: rgb(233, 233, 233); min-width: 100%;">
                        <thead style="border-bottom: 1px solid rgb(144, 143, 143);">
-                        <tr>
+                        <tr class='transaion-order-table'>
                             <th>NO</th>
                             <th >Product</th>
                             <th style="width: 30%;">Name</th>
@@ -180,11 +180,12 @@
                             </tr>
                             
                             </tr>
-                            <tr>
+                            <tr style="background-color: ">
                                 {{!-- {{#isEqual {{orderData.[0].PaymentOption}} 'Cash on delevery'}} --}}
-                            <hr>
-                                <th class="final-order-heading">Payment</th>
-                                <th style="padding-left: 15px;padding-top:30px;color: black    ;word-break: break-all;">{{orderData.[0].PaymentOption}}</th>
+                            {{!-- <hr> --}}
+                                <th  class="final-order-heading">Payment</th>
+                                <th style="text-align: end;padding-top:30px;color: black    ;word-break: break-all;">{{orderData.[0].PaymentOption}}</th>
+                                
                             
                             </tr>
                             

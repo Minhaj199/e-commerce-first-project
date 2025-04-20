@@ -199,11 +199,11 @@ document.querySelector(".submit").addEventListener("click", async function () {
           const rzp = new Razorpay(options);
           rzp.open();
           rzp.on("payment.failed", () => {
-            order(orderDetails, discount, shiping, total, "payment-Failed");
+            order(orderDetails, discount, shiping, total, "Failed");
 
             for (let i = 0; i < orderDetails.Order.length; i++) {
               orderDetails.Order[i].admin = false;
-              orderDetails.Order[i].status = "payment-Failed";
+              orderDetails.Order[i].status = "Order-Failed";
             }
 
             fetch("/user/orderFailed", {

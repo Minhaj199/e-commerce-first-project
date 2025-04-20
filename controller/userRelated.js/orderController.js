@@ -214,23 +214,27 @@ module.exports = {
     handleFailed: async (req, res,next) => {
         ///////////handling failed order from checkout page///////////
         try {
+            const {orderDetails} = req.body  
+            const {customerId}=req.session
+            if(!orderDetails||!customerId){
+                return
+            }       
             const Order = {
-                UserId: req.session.customerId,
-                PaymentOption: req.body.orderDetails.paymentOption,
-                SubTotal: req.body.orderDetails.subTotal,
-                Order: req.body.orderDetails.Order,
-                Discount: req.body.orderDetails.discount,
-                ShippingCharge: req.body.orderDetails.deleveryCharge,
-                TotalOrderPrice: req.body.orderDetails.total,
-                AddressID: req.body.orderDetails.addressID,
-                payment_Order_id: req.body.orderDetails.paymentOrderID,
-                payment_id: req.body.orderDetails.paymentID,
-                coupenID: req.body.orderDetails.CoupenID,
+                UserId: customerId,
+                PaymentOption: orderDetails.paymentOption,
+                SubTotal: orderDetails.subTotal,
+                Order: orderDetails.Order,
+                Discount: orderDetails.discount,
+                ShippingCharge: orderDetails.deleveryCharge,
+                TotalOrderPrice: orderDetails.total,
+                AddressID: orderDetails.addressID,
+                payment_Order_id: orderDetails.paymentOrderID,
+                payment_id: orderDetails.paymentID,
+                coupenID: orderDetails.CoupenID,
             };
-            for (let i = 0; i < req.body.orderDetails.CartIDs.length; i++) {
-                await cartModel.deleteOne({ _id: req.body.orderDetails.CartIDs[i] });
+            for (let i = 0; i < orderDetails.CartIDs.length; i++) {
+                await cartModel.deleteOne({ _id: orderDetails.CartIDs[i] });
             }
-            let OrderID;
             await orderModel
                 .create(Order)
                 .then((result) => {
