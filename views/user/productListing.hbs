@@ -50,8 +50,14 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="#">Login</a>
-            <a href="#">Register</a>
+            <div hidden id="logout">
+                            <a href="/user/logOut">Log out</a>
+                            <a href="/user/registration" style="display: none;">Register</a>
+                            </div>
+                            <div id="login">
+                            <a href="/user/log-in">Login &nbsp;/</a>
+                            <a href="/user/registration">Register</a>
+                            </div>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -166,6 +172,7 @@
                 
                 <div class="col-lg-9 col-md-9">
                     <div class="row">
+
                         {{#each Data}}
                         <div class="col-lg-4 col-md-6" >
                             <div class="product__item">
@@ -275,8 +282,9 @@
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
-            <form class="search-model-form" action="/user/all">
+            <form class="search-model-form" onsubmit="return insert()"  action="/user/all">
                 <input type="text" name="search" id="search-input" placeholder="Search here.....">
+                <input type="hidden" id="current-category" name="current">
             </form>
         </div>
     </div>
@@ -295,6 +303,31 @@
     <script src="/js/temp/jquery.nicescroll.min.js"></script>
     <script src="/js/temp/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded',async()=>{
+    try {
+        const isUserLogged=await fetch('/user/user-logged')
+        if(!isUserLogged.ok){
+            const err=await isUserLogged.json()
+            console.log(err)
+            throw  new Error(err.message||'internal server error')
+        }
+        const isAuthenticated=await isUserLogged.json()
+        const logout=document.getElementById('logout')
+        const login=document.getElementById('login')
+        if(isAuthenticated){
+            login.hidden=true
+            logout.hidden=false
+        }else{
+            login.hidden=false
+            logout.hidden=true
+        }
+        console.log(isAuthenticated) 
+    } catch (error) {
+        showToast(error.message||'internal server error')
+    }
+})
+    </script>
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 document.querySelector(".brand-filter").addEventListener("click", () => {
+ 
   const checkNod = document.querySelectorAll(".bran-checkbox");
   let minValue = parseInt(document.getElementById("minAmount").value) || 0;
   let maxValue =
@@ -74,4 +75,14 @@ function showToast(message) {
     gravity: "top",
     position: "center",
   }).showToast();
+}
+
+function insert(){
+  console.log('hiii')
+  const currntCategory=document.getElementById('current-category')
+  const category = document
+    .querySelector(".brand-filter")
+    .getAttribute("data-cat");
+    currntCategory.value=category
+  return true
 }

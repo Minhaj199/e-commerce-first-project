@@ -6,10 +6,11 @@ const hbs = require("hbs");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const morgan=require('morgan')
+const fs=require('fs')
 
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
-const productItemModel = require("./Model/prouctItems");
+const productItemModel = require("./model/prouctItems");
 const { Types } = require("mongoose");
 const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero } = require("./utils/hbsHelpers");
 
@@ -59,7 +60,14 @@ app.get("/", async (req, res) => {
 
 // routes require
 
+///////////checkin upload folder exitest and create//////////
+(()=>{
+  const isExist=fs.existsSync('uploads')
+  if(!isExist){
+    fs.mkdir('uploads',()=>{})
+  }
 
+})()
 
 app.use("/user", require("./router/user"));
 app.use("/admin", require("./router/admin"));
@@ -71,13 +79,7 @@ app.get('/sample',async(req,res)=>{
 
 app.use(express.static(path.join(__dirname, "public")));
 
-///partials
 
-
-// hbs.registerPartials("views/partials");
-// hbs.registerPartials("views/partials");
-// hbs.registerPartials("views/partials");
-// hbs.registerPartials("views/partials");
 
 ///helper
 hbs.registerHelper("isEqual",isEqual);

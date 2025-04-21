@@ -104,7 +104,9 @@ router.get('/coupon-data',userControl.getCouponData)
 
 ///////////get listing page of coupen/////////////
 router.get('/coupon-listing',userControl.getCouponList)
+/////////////checkin is userlogged for main user navbar to show login and logout
 
+router.get ('/user-logged',auth.isUserLogged)
 
 
 router.get('/logOut',(userControl.logOut))

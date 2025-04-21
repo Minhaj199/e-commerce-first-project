@@ -23,17 +23,15 @@
         }
         
         header {
-            display: flex;
-            justify-content: space-between;
+            display: flex !important;
+            justify-content: space-between !important;
             align-items: center;
             padding: 20px 0;
             border-bottom: 1px solid #e0e0e0;
             margin-bottom: 20px;
         }
         
-        h1 {
-            color: #333;
-        }
+        
         
         .back-btn {
             background-color: #333;
@@ -181,9 +179,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
+    {{>userMainHeader}}
     <div class="container">
         <header>
-            <h1>Available Coupons</h1>
+            <h1 style="font-size: 45px !important;">Available Coupons</h1>
             <button class="back-btn" onclick="goBack()">Back</button>
         </header>
         
@@ -193,6 +192,55 @@
     </div>
     
     <div class="toast" id="toast">Code copied!</div>
+     <footer style="z-index:1 ; border-top: 1px solid black; margin-top: 130px;" class="footer">
+        
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-7">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="/">
+                                <h1 class="m-fashion-logo">M-fashion</h1>
+                            </a>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            cilisis.</p>
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-5">
+                    <div class="footer__widget">
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <div class="footer__widget">
+                        <h6>Account</h6>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="#">Checkout</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-8">
+                    <div class="footer__newslatter">
+                        <h6>NEWSLETTER</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Email">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+
+                </div>
+            </div>
+        
+    </footer>
     <script src="/js/coupenListing.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>

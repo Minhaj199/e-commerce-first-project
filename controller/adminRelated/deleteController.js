@@ -32,7 +32,9 @@ module.exports = {
                 res.status(400).json({message:'id not found'})
                 return
             }
-           let product=await productItemModel.findOne({'variants._id':id,deleteStatus:true},)
+            
+            let product=await productItemModel.findOne({'variants._id':id,deleteStatus:false})
+            
            if(!product){
             return res.status(400).json({message:'product not found'})
            }

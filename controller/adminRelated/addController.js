@@ -23,6 +23,7 @@ module.exports = {
             const idRemovedVarient = variatFormater(variants)
 
             const uploader = async (path) => await cloudinary.uploads(path, "Images");
+           
             let urls = [];
             const files = req.files;
             for (const file of files) {

@@ -1,7 +1,8 @@
 function validateForm() {
   let firstName = document.getElementById("form3Example1m").value;
   let lastName = document.getElementById("form3Example1n").value;
-  let email = document.querySelector(".email").value;
+  let email = document.getElementById('form3Example8').value
+ 
   let phone = document.getElementById("form3Example9").value;
   let password = document.getElementById("form3Example10").value;
   let confirmPassword = document.getElementById("form3Example11").value;
@@ -19,7 +20,7 @@ function validateForm() {
     fn.textContent = "Insert First Name ";
     return false;
   }
-  if (firstName.length < 4) {
+  if (firstName.length < 3) {
     findingAllBlankField(
       firstName,
       lastName,
@@ -29,7 +30,7 @@ function validateForm() {
       phone
     );
     let fn = document.getElementById("first-name");
-    fn.textContent = "Should be more than four characters";
+    fn.textContent = "Should be more than three characters";
     return false;
   }
   if (firstName.length > 10) {
@@ -43,6 +44,19 @@ function validateForm() {
     );
     let fn = document.getElementById("first-name");
     fn.textContent = "Should be less than 10 characters";
+    return false;
+  }
+  if (!isNaN(firstName) ) {
+    findingAllBlankField(
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phone
+    );
+    let fn = document.getElementById("first-name");
+    fn.textContent = "Plase insert text name";
     return false;
   }
   if (lastName.trim() === "") {

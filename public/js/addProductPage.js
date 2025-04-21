@@ -360,10 +360,15 @@ function validate() {
     showToast("Blank space in Name is not allowed");
     return false;
   }
+  if (!isNaN (name.trim())) {
+    showToast("Please insert text name");
+    return false;
+  }
   if(brand?.trim()===''){
     showToast('please insert brand')
     return false
   }
+  
   if(category?.trim()===''){
     showToast('please insert category')
     return false

@@ -96,8 +96,9 @@ module.exports = {
             if (!id) {
                 throw new Error('id not found')
             }
-
+          
             const product = await productItemModel.findById(id)
+          
             if (!product) res.json({ message: 'product not found' })
             const isDuplicate = product.variants.find(v => {
                 let docId = v._id.toString()

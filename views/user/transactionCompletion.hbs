@@ -126,13 +126,9 @@
                                 <td>{{increment @index}}</td>
                                 <td><img style="width: 100px;" src="{{this.ProductDetails.images.path.[0]}}" alt=""></td>
                                 <td class="name">{{this.ProductDetails.Name}}</th>
-                                
-                                
                                 <td class='price'>{{this.Order.price}}</td>
-                                
                                 <td class='quatity'>{{this.Order.quantity}}</td>
-                                <td class="All-total">{{this.Order.total}}</td>
-                                
+                                <td class="All-total">{{this.Order.total}}</td>                         
                                 <input class="IDs" type="text" value="{{this.Products._id}}" data-Size="{{this.Size}}" data-Color="{{this.Color}}"data-CartID="{{this._id}}" data-Price="{{this.Price}}"  hidden>
                             </tr>
                             {{/each}}

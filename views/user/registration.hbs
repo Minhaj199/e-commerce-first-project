@@ -14,7 +14,7 @@
     <title>Registration</title>
     <style>
         body{
-            background-color:#555657!important;
+            background-color:#dcddde!important;
         }
         nav-bar{
             
@@ -24,84 +24,86 @@
 
 
 <body>
-    {{> partial}}
-<section class="h-100 bg-dark">
-    
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-                <div class="card card-registration my-4">
-                    <div class="row g-0">
-                        <div class="col-xl-6 d-none d-xl-block">
-                            <img src="/images/img.jpg"
-                                alt="Sample photo" class="img-fluid"
-                                style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
-                        </div>
-                        
-                        <div class="col-xl-6">
-                              <div class="back">
-                                <a href="/user/log-in"><p  class="back">&lt;Back</p></a>
-                            
-                        </div>
-                            <div class="card-body p-md-5 text-black">
-                                <h3 class="mb-5 text-uppercase" style="display: flex;justify-content: center;">USER SIGN-UP</h3>
-                                {{#if error}}
-                                <p id="warning"  style="color:red;align-items: center;">{{error}}</p>
-                                {{/if}}
-                              
-                                <div class="row">
-                                    <div class="col-md-6 mb-4 div-height" >
-                                        <form action="/user/registration" method="post" onsubmit="return validateForm()">
-                                        <div class="form-outline">
-                                            <label class="form-label" for="form3Example1m">First name</label>
-                                            <input autofocus type="text" id="form3Example1m"
-                                                class="form-control form-control-lg" /name="First_name" >
-                                            <p style="color:red;align-items: center;" id="first-name"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4 div-height">
-                                        <div class="form-outline">
-                                        <label class="form-label" for="form3Example1n">Last name</label>
-                                            <input type="text" id="form3Example1n"
-                                                class="form-control form-control-lg" name="Last_name" />
-                                                <p style="color:red;align-items: center;" id="second-name"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-outline mb-4 div-height" >
-                                    <label class="form-label" for="form3Example8">Email</label>
-                                    <input type="text"   id="form3Example8" class="form-control form-control-lg email" name="Email" />
-                                    <p style="color:red;align-items: center;" id="Email"></p>
-                                </div>
-                                <div class="form-outline mb-4 div-height">
-                                    <label class="form-label" for="form3Example9">PHONE</label>
-                                    <input type="text" id="form3Example9" class="form-control form-control-lg" name="phone"/>
-                                    
-                                    <p style="color:red;align-items: center;" id="Phone"></p>
-                                </div>
-                                <div class="form-outline mb-4 div-height">
-                                    <label class="form-label" for="form3Example9">Password</label>
-                                    <input type="password" id="form3Example10" class="form-control form-control-lg" name="password" />
-                                    <p style="color:red;align-items: center;" id="Password"></p>
-                                    
-                                </div>
-                                <div class="form-outline mb-4 div-height">
-                                    <label class="form-label" for="form3Example9">Confirm password</label>
-                                    <input type="password" id="form3Example11" class="form-control form-control-lg" />
-                                    <p style="color:red;align-items: center;" id="Conform-password"></p>
-                                </div>
-                                <div class="d-flex justify-content-center pt-3 ">
-                                    <button type="submit" class="btn btn-warning ">Submit form</button>
-                                </div>
-                  </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    {{> userMainHeader}}
+<section class="h-100 " style="margin-bottom: 150px;" >
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-10">
+        <div class="card shadow-lg border-0">
+          <div class="row g-0">
+            <!-- Left Column -->
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center p-4 bg-warning text-white">
+              <div class="w-100 mb-4">
+                <a href="/user/log-in" class="text-white font-weight-bold">
+                  &larr; Back
+                </a>
+              </div>
+              <h2 class="text-center font-weight-bold">Welcome!</h2>
+              <p class="text-center">Please fill in the form to create an account.</p>
+              
             </div>
-        </div>
-    </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+              <div class="card-body p-5">
+                <h3 class="mb-4 text-center text-uppercase font-weight-bold">User Sign-Up</h3>
+
+                {{#if error}}
+                <div class="alert alert-danger text-center" id="warning">{{error}}</div>
+                {{/if}}
+
+                <form action="/user/registration" method="post" onsubmit="return validateForm()">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="form3Example1m">First Name</label>
+                      <input autofocus type="text" class="form-control" id="form3Example1m" name="First_name">
+                      <small class="text-danger" id="first-name"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="form3Example1n">Last Name</label>
+                      <input type="text" class="form-control" id="form3Example1n" name="Last_name">
+                      <small class="text-danger" id="second-name"></small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form3Example8">Email</label>
+                    <input type="text" class="form-control" id="form3Example8" name="Email">
+                    <small class="text-danger" id="Email"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form3Example9">Phone</label>
+                    <input type="text" class="form-control" id="form3Example9" name="phone">
+                    <small class="text-danger" id="Phone"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form3Example10">Password</label>
+                    <input type="password" class="form-control" id="form3Example10" name="password">
+                    <small class="text-danger" id="Password"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form3Example11">Confirm Password</label>
+                    <input type="password" class="form-control" id="form3Example11">
+                    <small class="text-danger" id="Conform-password"></small>
+                  </div>
+
+                  <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg px-5">Submit</button>
+                  </div>
+                </form>
+
+              </div> <!-- card-body -->
+            </div> <!-- col-md-6 -->
+          </div> <!-- row -->
+        </div> <!-- card -->
+      </div> <!-- col-lg-10 -->
+    </div> <!-- row -->
+  </div> <!-- container -->
 </section>
+  {{>footer}} 
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

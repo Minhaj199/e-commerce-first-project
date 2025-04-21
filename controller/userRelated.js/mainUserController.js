@@ -49,7 +49,7 @@ module.exports = {
           },
           { $unwind: "$Products" },
         ]);
-        console.log(getCart)
+      
         const codeApplied = req.session.codeApplied;
         delete req.session.codeApplied;
         const deleteInfo = req.session.deleteInfo;
@@ -192,10 +192,10 @@ module.exports = {
         
         res.render("user/transactionCompletion", { orderData, ProductData });
       } else if (req.query.from === "orderFailed") {
-        console.log('hiiii')
-        // const OrderID = req.session.OrderID;
-        const OrderID = '6804ef421ba0ee9ff4f9b885'
-        // delete req.session.OrderID;
+      
+        const OrderID = req.session.OrderID;
+      
+        delete req.session.OrderID;
 
         const orderData = await orderModel.aggregate([
           { $match: { _id: new ObjectId(OrderID) } },
@@ -306,16 +306,31 @@ module.exports = {
   getAll: async (req, res, next) => {
     try {
       if (req.query.search) {
-        const searchWord = new RegExp("^" + req.query.search, "i")
+        
+        const category=(req?.query?.current)?req.query.current:''
+        if(category!==''){
+          const searchWord = new RegExp(req.query.search, "i")
 
         const Data = await productItemModel
-          .find({ Name: { $regex: searchWord },deleteStatus:false })
+          .aggregate([{$match:{category}},{$match:{ Name: { $regex: searchWord },deleteStatus:false }}])
           .limit(6);
 
         const CategoryCollection = await categoryModel.findOne();
 
         let User = req.session.isUserAuthenticated;
         res.render("user/productListing", { Data, CategoryCollection, User });
+        }else{
+          const searchWord = new RegExp(req.query.search, "i")
+        const Data = await productItemModel
+          .aggregate([{$match:{ Name: { $regex: searchWord },deleteStatus:false }}])
+          .limit(6);
+
+        const CategoryCollection = await categoryModel.findOne();
+
+        let User = req.session.isUserAuthenticated;
+        res.render("user/productListing", { Data, CategoryCollection, User });
+        }
+        
       } else if (req.query.from === "sortBySixe") {
         const minValue = parseInt(req.query.minValue);
         const maxValue = parseInt(req.query.maxValue);

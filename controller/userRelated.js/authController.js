@@ -18,8 +18,8 @@ module.exports = {
             message = req.session.successOfReset
             delete req.session.successOfReset
         }
-        req.session.customerId = '664a090b1ed93fff5bc4b85a';
-                        req.session.isUserAuthenticated = true;
+        // req.session.customerId = '664a090b1ed93fff5bc4b85a';
+        //                 req.session.isUserAuthenticated = true;
         res.render("./user/login", { message });
     },
     handleLoginSubmission: async (req, res, next) => {
@@ -180,6 +180,7 @@ module.exports = {
                     lowerCaseAlphabets: false,
                     specialChars: false,
                 });
+                console.log('im reset',email)
                 const userData = { email, otp };
                 await otpSchema.create(userData);
                 res.render("user/otpEnterForReg");
@@ -281,6 +282,14 @@ module.exports = {
             }
         } catch (error) {
             next(error)
+        }
+    },
+    isUserLogged: async (req, res,next) => {
+        try {
+            const isUserAuthenticated= (req?.session?.isUserAuthenticated)?true:false
+            res.json(isUserAuthenticated)
+        } catch (error) {
+            res.status(400).json({message:error.message||'internal server error'})
         }
     }
 }

@@ -1,9 +1,11 @@
 document.getElementById('main-form').addEventListener('submit',()=>{
-  const loader = document.getElementById('loader');
-  if (loader) loader.style.display = 'flex';
-  setTimeout(()=>{
-    loader.hidden=true
-  },8000)
+  const mainSubmit=document.getElementById('main-submit-button')
+  mainSubmit.textContent='loading............'
+  mainSubmit.disabled=true
+  setTimeout(() => {
+    mainSubmit.disabled=false
+    mainSubmit.textContent='submit'
+  }, 30000);
 })
 
 

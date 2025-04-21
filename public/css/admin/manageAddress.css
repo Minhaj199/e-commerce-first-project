@@ -11,6 +11,9 @@
     flex-direction: column;
 
 }
+p{
+  color: black !important;
+}
 .row-1{
     height:100%
   }
@@ -90,7 +93,7 @@
   width: 80%;
   height: 90%;
   border: 1px solid rgb(157, 155, 155);
-  margin-left: 10%;
+  margin-left: 10% ;
   margin-top: 2%;
   overflow: auto;
   
