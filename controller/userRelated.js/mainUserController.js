@@ -258,7 +258,7 @@ module.exports = {
           { $unwind: "$Order" },
         ]);
 
-        res.render("user/OrderProductDetails", { ProductData, orderData });
+        res.render("user/orderProductDetails", { ProductData, orderData });
       } else if (req.query.from == "getMyOrder") {
         const data = await orderModel
           .find({ UserId: req.session.customerId })
