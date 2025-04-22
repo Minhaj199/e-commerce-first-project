@@ -22,13 +22,13 @@ function increment(value){
   }
 
   function sumStock(variants){
-    console.log(variants)
+   
     if (!Array.isArray(variants)) return 0;
     const sum= variants.reduce((sum, item) => {
         const stock = Number(item.stock) || 0;
         return sum + stock;
       }, 0);
-      console.log(sum)
+    
       return sum
   }
   function stockWarning(stock){

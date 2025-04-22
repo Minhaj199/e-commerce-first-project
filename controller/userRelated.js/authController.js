@@ -180,7 +180,7 @@ module.exports = {
                     lowerCaseAlphabets: false,
                     specialChars: false,
                 });
-                console.log('im reset',email)
+                
                 const userData = { email, otp };
                 await otpSchema.create(userData);
                 res.render("user/otpEnterForReg");

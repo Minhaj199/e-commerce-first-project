@@ -1,8 +1,8 @@
 function Invoice(date){
-    
-    let day=date.getDate()
-    let month=date.getMonth()+1
-    let year=date.getFullYear()
+    const parsedDate=new Date(date)
+    let day=parsedDate.getDate()
+    let month=parsedDate.getMonth()+1
+    let year=parsedDate.getFullYear()
 
     if(day<10){
         day='0'+day

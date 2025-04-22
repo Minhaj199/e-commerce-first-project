@@ -124,9 +124,8 @@ module.exports = {
     },
     login: (req, res, next) => {
         try {
-            // res.render("admin/adminLogIn");
+            res.render("admin/adminLogIn");
             req.session.isAdminAuthenticated = true;
-            res.redirect("/admin/product-management");
         } catch (error) {
             next(error)
         }
@@ -224,14 +223,14 @@ module.exports = {
     userManagement: async (req, res, next) => {
         try {
             let page = req.query.page || 1;
-            let NumberOfPage = await productItemModel.find().count()
+            let NumberOfPage = await user.find().count()
             let pages = Math.ceil(NumberOfPage / 3)
             let dynamicPageArray = []
             for (let i = 1; i <= pages; i++) {
                 dynamicPageArray.push(i)
             }
             let limit = 4;
-            let userData = await productItemModel
+            let userData = await user
                 .find()
                 .skip((page - 1) * limit)
                 .limit(limit)
