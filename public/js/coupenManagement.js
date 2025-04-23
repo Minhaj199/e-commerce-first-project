@@ -212,7 +212,7 @@ async function deleteCoupen(id, name) {
       const info = await response.json();
 
       if (info === "deleted") {
-        showToast(`${code} Deleted`);
+        showToast(`${name} Deleted`);
         setTimeout(() => {
           location.reload();
         }, 3000);
