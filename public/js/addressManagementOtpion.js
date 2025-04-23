@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => {
           if (response.ok) {
-            location.reload();
+            location.reload()
             console.log("Server responded successfully");
           } else {
             console.error("Server response error");

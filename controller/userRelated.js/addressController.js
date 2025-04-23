@@ -118,9 +118,8 @@ module.exports = {
         await addressModel
           .updateOne({ _id: req.body.id }, { status: true })
 
-          .then((result) => {
-            res.send("success");
-          });
+          return res.send("success");
+        
       }
     } catch (error) { 
       next(error)
