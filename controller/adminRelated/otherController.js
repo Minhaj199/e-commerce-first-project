@@ -86,6 +86,7 @@ module.exports = {
           $and: [
             { category: req.query.category },
             { offer_rate: { $exists: false } },
+            {deleteStatus:false}
           ],
         });
 

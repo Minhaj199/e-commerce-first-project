@@ -296,7 +296,7 @@ module.exports = {
                 _id: "65e085036e57f3e5630201fd",
             });
             const element = doc.category[categoryIndex];
-            res.render("admin/deletecategory", { element, categoryIndex });
+            res.render("admin/deleteCategory", { element, categoryIndex });
         } catch (error) {
             next(error)
         }
