@@ -272,7 +272,7 @@ module.exports = {
 
     },
     addcategory: (req, res) => {
-        res.render("admin/addcategory");
+        res.render("admin/addCategory");
     },
     editCategory: async (req, res, next) => {
         try {
