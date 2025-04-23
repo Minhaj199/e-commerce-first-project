@@ -282,7 +282,7 @@ module.exports = {
                 _id: "65e085036e57f3e5630201fd",
             });
             const element = doc.category[categoryIndex];
-            res.render("admin/editcategory", { element, categoryIndex });
+            res.render("admin/editCategory", { element, categoryIndex });
 
         } catch (error) {
             next(error)
