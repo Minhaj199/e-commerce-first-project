@@ -34,7 +34,7 @@ const orderSchema = new mongo.Schema({
 
   OrderPlacedDate: {
     type: Date,
-    default: new Date(),
+    default:()=> new Date(),
   },
   coupenID: {
     type: mongo.Types.ObjectId,
