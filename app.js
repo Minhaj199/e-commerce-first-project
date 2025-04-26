@@ -87,8 +87,5 @@ hbs.registerHelper('isZero',isZero)
 app.use(erro404);
 
 app.use(errorHandler);
-
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`connected to port ${PORT}`);
-});
+app.listen(process.env.PORT,()=>console.log(`server is running on http://localhost:${process.env.PORT}`))
+module.exports=app

@@ -105,16 +105,21 @@ module.exports = {
     setProductMgtSorted: async (req, res, next) => {
         try {
             if (req.body.category == "Men") {
-                const productData = await product_items.find({ category: "Men" });
+                const productData = await productItemModel.find({ category: "Men" });
                 res.render("admin/productMangement", { productData });
-            } else if (req.body.category == "Women") {
-                const productData = await product_items.find({ category: "Women" });
+            }else if(req.body.category==='all'){
+
+                res.redirect("/admin/product-management");
+            }
+             else if (req.body.category == "Women") {
+                
+                const productData = await productItemModel.find({ category: "Women" });
                 res.render("admin/productMangement", { productData });
             } else if (req.body.category == "kids") {
-                const productData = await product_items.find({ category: "Kids" });
+                const productData = await productItemModel.find({ category: "Kids" });
                 res.render("admin/productMangement", { productData });
             } else {
-                const productData = await product_items.find();
+                const productData = await productItemModel.find();
                 res.render("admin/productMangement", { productData });
             }
         } catch (error) {
