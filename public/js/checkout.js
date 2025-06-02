@@ -3,11 +3,16 @@ let info;
 let count = 0;
 document.getElementById("coupen-btn").addEventListener("click", async () => {
   try {
+     const coupenDiscountField=document.getElementById("discount")
+   if(parseInt(coupenDiscountField.textContent)>0){
+    showToast('A coupen already applied');
+    return
+   }
     if (count === 0) {
       const totalValue=parseInt(document.getElementById('Total').textContent||0)
   
       if(totalValue<1000){
-        await showAlertMessage('COUPON INFO','Minimum order should be 1000')
+        await showAlertMessageshowPromt('COUPON INFO','Minimum order should be 1000')
       return 
       }
       count++;
@@ -24,7 +29,7 @@ document.getElementById("coupen-btn").addEventListener("click", async () => {
         }
       );
       info = await validateCoupen.json();
-  
+
       if (info.flag === true) {
         const sub_total = parseInt(
           document.getElementById("add-sub-total").textContent
@@ -54,6 +59,43 @@ document.getElementById("coupen-btn").addEventListener("click", async () => {
     showToast(error.message||'internal server error')
   }
 });
+async function applyCoupen(element,discountAmount,orderValue,_id){
+  
+const prompt=   await showPromt('COUPON INFO','Once a order placed,coupon cannot be re-used')
+    if(!prompt){
+      return
+    }
+   try {
+   const coupenDiscountField=document.getElementById("discount")
+   if(parseInt(coupenDiscountField.textContent)>0){
+    showToast('A coupen already applied');
+    return
+   }
+    if (count === 0) {
+      const totalValue=parseInt(document.getElementById('Total').textContent||0)
+  
+      if(totalValue<orderValue){
+        await showAlertMessage(`COUPON INFO','Minimum order should be ${orderValue}`)
+      return 
+      }
+     
+          document.getElementById("Total").textContent = total - discount;
+          const totalField=document.getElementById("Total")
+          totalField.textContent=total - discountAmount
+          coupenDiscountField.textContent=discountAmount
+          showToast('coupen applied')
+          element.closest('tr').hidden=true
+                  orderDetails.CoupenID=_id
+
+      
+    }else{
+      showToast('already a code in use')
+    }
+  } catch (error) {
+    console.log(error)
+    showToast(error.message||'internal server error')
+  }
+}
 
 function ToChangeAddress() {
   try {
@@ -61,19 +103,20 @@ function ToChangeAddress() {
     const order = document.querySelector(".order");
     const btn = document.querySelector(".change-btn");
     const add = document.querySelector(".add-button-img");
-
+    const form=document.getElementById('coupen-table')
     if (order.style.display !== "none") {
       order.style.display = "none";
       address.style.display = "block";
       btn.textContent = "Back";
       add.style.display = "block";
       localStorage.setItem("visible", "address");
-      fetch("");
+      form.style.display='none'
     } else {
       order.style.display = "block";
       address.style.display = "none";
       btn.textContent = "Change";
       add.style.display = "none";
+      form.style.display='table'
       localStorage.setItem("visible", "order");
     }
   } catch (error) {}
@@ -530,9 +573,7 @@ async function modaling(id) {
   } catch (error) {}
 }
 
-// span.onclick = function () {
-//   modal.style.display = "none";
-// };
+
 async function sumbitModalin(event) {
   event.preventDefault();
   let editedData = {};
@@ -658,6 +699,7 @@ window.onclick = function (event) {
 };
 
 /////coupen code apply//////
+
 
 function order(orderDetails, discount, shiping, total, failed) {
   orderDetails.paymentOption = failed || paymentOption;
@@ -1069,6 +1111,27 @@ async function showAlertMessage(title,message) {
       text: message,
       icon: "warning",
       showCancelButton: false,
+      confirmButtonColor: "#b50c00",
+      cancelButtonColor: "##bfbcbb",
+      confirmButtonText: "confirm",
+    });
+    if (result.isConfirmed) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    alert("internal server error");
+    return false;
+  }
+}
+async function showPromt(title,message) {
+  try {
+    const result = await Swal.fire({
+      title: title,
+      text: message,
+      icon: "warning",
+      showCancelButton: true,
       confirmButtonColor: "#b50c00",
       cancelButtonColor: "##bfbcbb",
       confirmButtonText: "confirm",

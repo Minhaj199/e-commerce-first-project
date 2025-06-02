@@ -3,12 +3,10 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./configaration.env" });
 
 
-const db = process.env.DB_STRING
 
 
-mongo.connect(db).then(() => {
-  console.log('connected')
-});
+
+
 
 
 const userScheme = new mongo.Schema({

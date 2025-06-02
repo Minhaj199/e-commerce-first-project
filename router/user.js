@@ -87,7 +87,7 @@ router.post('/payment',isUserAuthenticated,orderController.paymentGateway)
 router.post('/retryPayment',isUserAuthenticated,orderController.retryPayment)
 router.get('/payment',isUserAuthenticated,orderController.getUserInfo)
 router.patch('/payment',isUserAuthenticated,userControl.addIDs)
-// router.post('/webhook',isUserAuthenticated,userControl.paymentNotification)
+
 
 ////////returnProduct//////
 
@@ -103,7 +103,7 @@ router.post('/wishToCart',isUserAuthenticated,userControl.addToCart)
 router.get('/coupon-data',userControl.getCouponData)
 
 ///////////get listing page of coupen/////////////
-router.get('/coupon-listing',userControl.getCouponList)
+router.get('/coupon-listing',isUserAuthenticated,userControl.getCouponList)
 /////////////checkin is userlogged for main user navbar to show login and logout
 
 router.get ('/user-logged',auth.isUserLogged)

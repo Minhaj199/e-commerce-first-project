@@ -65,7 +65,7 @@
     {{> headerPartial}}
     <!-- Header Section End -->
     <div class="row first-row">
-        <div class="col-9 main-content">
+        <div style="overflow: hidden;" class="col-9 main-content">
             <div class="col-12 titile-box">
                 <h2>Checkout</h2>
             </div>
@@ -95,9 +95,45 @@
 
 
                     </div>
-                    <div style="height: 50px;width:100%;margin-top: 2%;display: flex;">
 
-                        <div style="height: 100%;padding: 0;" class="col-10">
+                    <div style="overflow: auto;height: 50px;width:100%;height: 100%;;margin-top: 20px;display: flex;">
+                        {{#if (isArrayEmpty coupens)}}
+                        <table id="coupen-table" style="background-color: aliceblue"  class="table table-light  ">
+                            <thead>
+                                <tr >
+                                    <th style="width: 100px;"  scope="col">Coupons</th>
+                                </tr>
+
+                                <tr >
+                                    <th style="max-width: 50px;width:50px" scope="col">no</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Expiry</th>
+                                    <th scope="col">Discount</th>
+                                    <th scope="col">Min.order value</th>
+                                    <th scope="col">
+                                       
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {{#each coupens}}
+                                <tr>
+                                    <th style="max-width: 30px;" scope="row">{{increment @index}}</th>
+                                    <td>{{this.name}}</td>
+                                    <td>{{formatHelper this.expiry}}</td>
+                                    <td>{{this.amount}}</td>
+                                    <td>{{this.orderValue}}</td>
+                                    <td> <img width="50px" onclick="applyCoupen(this,'{{this.amount}}','{{this.orderValue}}','{{this._id}}')" style="cursor: pointer;" src="/images/Icons/apply.png" alt=""></td>
+                                </tr>
+                                {{/each}}
+                                
+                            </tbody>
+                        </table>
+                        {{else}}
+                        <div  style="border:1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;"><h3>No valid coupon available</h3></div>
+                        {{/if}}
+                        {{!-- <div style="height: 100%;padding: 0;" class="col-10">
                             {{#if removeFromCheckout}}
 
                             <div class="alert alert-danger" role="alert">
@@ -110,10 +146,8 @@
                                 {{deleteAddress}}
                             </div>
                             {{/if}}
-                        </div>
-                        <div style="height: 100%;padding:0" class="col-1">
-                            <img class="add-button-img" width="60%" src="/images/Icons/addCheckout.png" alt="+">
-                        </div>
+                        </div> --}}
+                        
                         <div id="myAddModal" class="modal">
 
                             <!-- Modal content -->
@@ -191,50 +225,12 @@
 
                     </div>
                 </div>
-
-                <div id="oderId" class="col-11  order">
-                    <div style="height:100px;display: flex;justify-content: center;align-items: center;" class="col-12">
-                        <h2>Order Detail</h2>
-                    </div>
-                    <div class="col-12 " style="height: 500px;">
-                        <table
-                            style="text-align: center;border:1px solid rgba(0, 0, 0, .1);background-color:aliceblue;">
-                            <thead style="border:1px solid rgba(0, 0, 0, .1);">
-                                <tr style="padding-bottom: 50px;">
-                                    <th>NO</th>
-                                    <th>Product</th>
-                                    <th style="width: 30%;">Name</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each getCart}}
-                                <tr>
-
-                                    <td class="count">{{increment @index}}</td>
-                                    <td><img style="width: 100px;" src="{{this.Products.images.path.[0]}}" alt=""></td>
-                                    <td class="name">{{this.Products.Name}}</th>
-                                    <td class='price'>{{this.OrderPrice}}</td>
-                                    <td class='quatity'>{{this.OrderQuantity}}</td>
-                                    <td class="All-total">{{this.Total}}</td>
-                                    <td><img style=" padding-right: 6px;" width="2000px;"
-                                            onclick='remove("{{this._id}}")' src="/images/Icons/close.png" alt=""></td>
-                                    <input class="IDs" type="text" value="{{this.Products._id}}"
-                                        data-Size="{{this.Size}}" data-Color="{{this.Color}}" data-CartID="{{this._id}}"
-                                        data-Price="{{this.Price}}" hidden>
-                                </tr>
-                                {{/each}}
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
                 <div class="col-11 change-address">
-                    <div class="col-12 address-titile">
+                    <div class="col-12 address-titile " style=",position:relative;">
                         <p>Manage Address</p>
+
+                        
+                            <img style="position: absolute;bottom:-20px;cursor: pointer;" class="add-button-img" width="5%" src="/images/Icons/addCheckout.png" alt="+">
                     </div>
                     <div style="padding: 0;" class="col-12 address-body">
                         {{#each addressData}}
@@ -273,24 +269,24 @@
 
                                                         </label> --}}
                                                         <input placeholder="name"
-                                                            style="margin-top: 5%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            style="margin-top: 5%;margin-left: 1%;border: none;padding: 1% 10%;"
                                                             type="text" id="name" name="name" required>
 
                                                         {{!-- <label style="margin-left: 10%;" for="name">Email:</label>
                                                         --}}
                                                         <input
-                                                            style="margin-top: 5%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            style="margin-top: 5%;margin-left: 6%;border: none;padding: 1% 6%;"
                                                             class="inputs" type="email" id="Email" name="Email">
                                                         <br>
                                                         {{!-- <label for="">Phone</label> --}}
                                                         <input
-                                                            style="margin-top: 3%;margin-left: 1%;background-color: antiquewhite;border: none;padding: 1% 10%;"
+                                                            style="margin-top: 3%;margin-left: 1%;border: none;padding: 1% 10%;"
                                                             class="inputs" type="text" id="mobile" placeholder="Mobile"
                                                             name="Mobile" required>
                                                         {{!-- <label for="" style="margin-left: 9%;">Locality</label>
                                                         --}}
                                                         <input
-                                                            style="margin-top: 3%;margin-left: 6%;background-color: antiquewhite;border: none;padding: 1% 6%;"
+                                                            style="margin-top: 3%;margin-left: 6%;border: none;padding: 1% 6%;"
                                                             class="inputs" type="text" id="Locality" name="Locality"
                                                             placeholder="Locality" required>
                                                         <br>
@@ -343,7 +339,7 @@
                             </div>
                             <div class="col-12 addrss-inner">
 
-                                <h3 style="color: blue;">{{this.Name}} </h3>
+                                <h3>{{this.Name}} </h3>
                                 <p style="color: black;margin-top: 1%;"> Mobile:
                                     {{this.Mobile}}&nbsp;&nbsp;Email:{{this.Email}} </p>
                                 <p style="color: black;"></p>
@@ -358,7 +354,49 @@
 
                     </div>
                 </div>
+
+                <div style="margin-top: 300px;" id="oderId" class="col-11  order">
+                    <div style="height:100px;display: flex;justify-content: center;align-items: center;" class="col-12">
+                        <h2>Order Detail</h2>
+                    </div>
+                    <div class="col-12 " style="height: 500px;">
+                        <table
+                            style="text-align: center;border:1px solid rgba(0, 0, 0, .1);background-color:aliceblue;">
+                            <thead style="border:1px solid rgba(0, 0, 0, .1);">
+                                <tr style="padding-bottom: 50px;">
+                                    <th>NO</th>
+                                    <th>Product</th>
+                                    <th style="width: 30%;">Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each getCart}}
+                                <tr>
+
+                                    <td class="count">{{increment @index}}</td>
+                                    <td><img style="width: 100px;" src="{{this.Products.images.path.[0]}}" alt=""></td>
+                                    <td class="name">{{this.Products.Name}}</th>
+                                    <td class='price'>{{this.OrderPrice}}</td>
+                                    <td class='quatity'>{{this.OrderQuantity}}</td>
+                                    <td class="All-total">{{this.Total}}</td>
+                                    <td><img style=" padding-right: 6px;" width="5px;" onclick='remove("{{this._id}}")'
+                                            src="/images/Icons/close.png" alt=""></td>
+                                    <input class="IDs" type="text" value="{{this.Products._id}}"
+                                        data-Size="{{this.Size}}" data-Color="{{this.Color}}" data-CartID="{{this._id}}"
+                                        data-Price="{{this.Price}}" hidden>
+                                </tr>
+                                {{/each}}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
         </div>
         <div class="col-3 billing-colum">
             <div style="width: 100%;height: 56%;margin-top: 23%;background-color:aliceblue;">
@@ -424,9 +462,11 @@
             <div class="coupen-box" style="padding:0;position: relative;" class="col-12">
                 <input id="coupen-input" type="text" placeholder="COUPON CODE" value="">
                 <button id="coupen-btn">Apply</button>
-                <p onclick="openTandC()" style="color:rgba(0, 0, 0, .5);position: absolute;right:10px; cursor: pointer;"> T &#x26 C </p>
+                <p onclick="openTandC()"
+                    style="color:rgba(0, 0, 0, .5);position: absolute;right:10px; cursor: pointer;"> T &#x26 C </p>
             </div>
         </div>
+
     </div>
 
 
@@ -434,90 +474,11 @@
     <!-- Instagram End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-7">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            cilisis.</p>
-                        <div class="footer__payment">
-                            <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-3.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-4.png" alt=""></a>
-                            <a href="#"><img src="img/payment/payment-5.png" alt=""></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-5">
-                    <div class="footer__widget">
-                        <h6>Quick links</h6>
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="footer__widget">
-                        <h6>Account</h6>
-                        <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Orders Tracking</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-sm-8">
-                    <div class="footer__newslatter">
-                        <h6>NEWSLETTER</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <div class="footer__copyright__text">
-                        <p>Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This
-                            template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
-                                href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                    </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </div>
-            </div>
-        </div>
-    </footer>
+
     <!-- Footer Section End -->
 
     <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form" method="#">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
-        </div>
-    </div>
+
     <!-- Search End -->
 
     <!-- Js Plugins -->

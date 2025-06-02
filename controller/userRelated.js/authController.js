@@ -18,8 +18,7 @@ module.exports = {
             message = req.session.successOfReset
             delete req.session.successOfReset
         }
-        // req.session.customerId = '664a090b1ed93fff5bc4b85a';
-        //                 req.session.isUserAuthenticated = true;
+       
         res.render("./user/login", { message });
     },
     handleLoginSubmission: async (req, res, next) => {
@@ -54,10 +53,12 @@ module.exports = {
     },
     renderForgot: (req, res) => {
         ///// get from forgot page////
+
+
         delete req.session.user,
             delete req.session.customerId,
             delete req.session.isUserAuthenticated;
-        res.render("user/forgot/forgotEmail");
+        res.render("user/forgot/forgotEmail")
     },
     resetPassword: async (req, res, next) => {
       
@@ -262,6 +263,7 @@ module.exports = {
                 Email: req.body.Email,
                 phone_Number: req.body.phone,
                 password: req.body.password,
+                
             };
             email = req.body.Email;
             const check = await user.findOne({ Email: req.body.Email });

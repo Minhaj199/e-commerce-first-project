@@ -10,6 +10,7 @@ const walletModel = require("../../model/wallets");
 const dateFunction = require("../../utils/dateFormating");
 const productItemModel = require("../../model/prouctItems");
 const coupen = require("../../model/coupen");
+const coupenTracking = require("../../model/coupenTracking");
 
 
 
@@ -49,7 +50,7 @@ module.exports = {
           },
           { $unwind: "$Products" },
         ]);
-      
+
         const codeApplied = req.session.codeApplied;
         delete req.session.codeApplied;
         const deleteInfo = req.session.deleteInfo;
@@ -61,12 +62,12 @@ module.exports = {
           acc+=curr.Total
           return acc
         },0)
+
         for (let i = 0; i < proId.length; i++) {
           const product = await productItemModel.findById({ _id: proId[i] });
           const variant=product.variants.find(v=>v.size===sizes[i]&&v.color===colors[i])
           getCart[i].currentQuantity = variant?variant.stock:0
         }
-       
         res.render("user/cart", {
           addedMessage,
           getCart,
@@ -76,7 +77,6 @@ module.exports = {
           deleteInfo,
         });
       } else if (req.query.from === "afterAddedToCart") {
-        
         req.session.addedMessage = "Product Added To Cart";
         res.redirect("/user/getPages?from=cart");
       } else if (req.query.from === "cartToCheckOut") {
@@ -85,14 +85,20 @@ module.exports = {
           const checkCart = await cartModel.aggregate([
             { $match: { UserId: new ObjectId(userID) } },
           ]);
-
+          let totalValue=checkCart?.reduce((acc,curr)=>{
+            acc+=curr.Total
+            return acc
+          },0)
           let proId = checkCart.map((item) => item.ProductId);
           let colors = checkCart.map((item) => item.Color);
           let sizes = checkCart.map((item) => item.Size);
           let OrderQuantity = checkCart.map((item) => item.OrderQuantity);
-          
-          for (let i = 0; i < proId.length; i++) {
-            const propertyName = `sizes.${sizes[i]}.${colors[i]}`;
+          const usedCouponsDraft=await coupenTracking.find({UserID:userID},{CoupenID:1,_id:0})
+          const usercopuneIds=usedCouponsDraft?.map(el=>el.CoupenID)
+          const coupens=await coupen.aggregate([{$match:{$and:[{startingDate:{$lte:new Date()}},{expiry:{$gte:new Date()}},{orderValue:{$lte:totalValue}},{_id:{$nin:usercopuneIds}}]}}])
+
+            for (let i = 0; i < proId.length; i++) {
+           
             const product = await productItemModel.findById(proId[i]);
           
             if(!product){
@@ -102,8 +108,8 @@ module.exports = {
             const currentVarinet = product.variants.find(v=>v.size===sizes[i]&&v.color===colors[i]);
             
             if(!currentVarinet){
+
               return res.status(400).json({message:'variant not found'})
-              
             }
             const qty=currentVarinet.stock||0
             if (OrderQuantity[i] > qty) {
@@ -145,7 +151,6 @@ module.exports = {
           });
           const deleteAddress = req.session.deleteAddress;
           delete req.session.deleteAddress;
-          
           res.render("user/checkout", {
             discount,
             getCart,
@@ -153,6 +158,7 @@ module.exports = {
             removeFromCheckout,
             addressData,
             deleteAddress,
+            coupens
           });
         } catch (error) {
           console.log(error);
@@ -302,7 +308,6 @@ module.exports = {
     }
   },
   //////////////category////////////
-
   getAll: async (req, res, next) => {
     try {
       if (req.query.search) {
@@ -734,8 +739,7 @@ module.exports = {
   addIDs: async (req, res, next) => {
     ////////////add order id to cart collection for payment//////////
     try {
-      // if (req.body.hasOwnProperty("retryPayment")) {
-      // }
+      
 
       await cartModel.findByIdAndUpdate(req.session.customerId, {
         $set: {
@@ -828,8 +832,12 @@ module.exports = {
   },
   getCouponData:async(req,res,next)=>{
     try {
-      const couponData=await coupen.find()
-      if(!couponData){
+      
+      const userID=req.session.customerId
+            const usedCouponsDraft=await coupenTracking.find({UserID:userID},{CoupenID:1,_id:0})
+            const usercopuneIds=usedCouponsDraft?.map(el=>el.CoupenID)
+            const couponData=await coupen.aggregate([{$match:{$and:[{expiry:{$gte:new Date()}},{_id:{$nin:usercopuneIds}}]}}])
+            if(!couponData){
         return res.status(400).json({message:'coupen data not found'})
       }
       res.json(couponData)
@@ -838,8 +846,9 @@ module.exports = {
       
     }
   },
-  getCouponList:(req,res)=>{
+  getCouponList:async(req,res)=>{
     try {
+      
       res.render('user/coupenList')
     } catch (error) {
      res.status(400).json({message:error.message||'coupen error'})

@@ -10,7 +10,8 @@ const fs=require('fs')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
 
-const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero } = require("./utils/hbsHelpers");
+const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero, dateFormater, isArrayEmpty } = require("./utils/hbsHelpers");
+const database = require("./model/connection");
 
 
 
@@ -44,6 +45,13 @@ app.use(require("./middleware/cacheControl"));
 
 
 
+//////////database/////////
+try {
+  database()
+  
+} catch (error) {
+  process.exit(1)
+}
 
 
 app.get("/", async (req, res) => {
@@ -84,6 +92,9 @@ hbs.registerHelper('lookupQuantity',lookupQuantity);
 hbs.registerHelper('sumStock',sumStock)
 hbs.registerHelper('stockWarning',stockWarning)
 hbs.registerHelper('isZero',isZero)
+hbs.registerHelper('formatHelper',dateFormater)
+hbs.registerHelper('isArrayEmpty',isArrayEmpty)
+
 app.use(erro404);
 
 app.use(errorHandler);

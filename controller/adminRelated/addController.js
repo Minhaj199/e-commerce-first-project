@@ -175,9 +175,10 @@ module.exports = {
             startingDate,
             endingDate,
             code,
-            amount
+            amount,
+            orderValue
           }=req.body
-          if(!name||!startingDate||!endingDate||!code||!amount){
+          if(!name||!startingDate||!endingDate||!code||!amount||!orderValue){
             return res.status(400).json({message:'insufficient data'})
           }
           
@@ -187,6 +188,7 @@ module.exports = {
             startingDate:new Date(startingDate).setHours(0,0,0,0),
             expiry:new Date(endingDate).setHours(23,59,59,999),
             amount: parseInt(amount),
+            orderValue
         };
         try {
             const result = await coupenModel.create(coupenData);

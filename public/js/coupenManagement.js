@@ -21,8 +21,7 @@ window.onclick = function (event) {
   }
 };
 
-
-//////////////////add coupen
+//////////////////add coupen/////
 document
   .querySelector("#add-submit")
   .addEventListener("click", async function () {
@@ -32,8 +31,9 @@ document
     const startingDate = document.getElementById("start-date").value;
     const endingDate = document.getElementById("expirey-date").value;
     const amount = document.getElementById("amount").value;
+    const orderValue=document.getElementById('order-value').value
 
-    const validateAddData = validateAdd(name, code, startingDate, endingDate, amount)
+    const validateAddData = validateAdd(name, code, startingDate,orderValue,endingDate, amount)
     if (!validateAddData) {
       return
     }
@@ -54,7 +54,7 @@ document
         }
         isUser = await isUserPromise.json();
         if (isUser === 'name used') {
-          const namewarning = document.getElementById('name-warning')
+         const namewarning = document.getElementById('name-warning')
           namewarning.textContent = 'Name already used.'
           namewarning.classList.remove('d-none')
           return false
@@ -71,7 +71,7 @@ document
                 const response = await fetch("/admin/addCoupen", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ name, startingDate, endingDate, code, amount }),
+                  body: JSON.stringify({ name, startingDate, endingDate, code, amount,orderValue}),
                 })
                 if (!response.ok) {
                   const error = await response.json()
@@ -122,17 +122,22 @@ async function editData(id) {
 
 
     const datasTobeEditedParsed = await datasTobeEdited.json();
+    
     document.getElementById("name-edit").value = datasTobeEditedParsed.name;
     document.getElementById("code-edit").value = datasTobeEditedParsed.code;
     document.getElementById("start-date-edit").value = dateFormater(datasTobeEditedParsed.startingDate)
     document.getElementById("date-edit").value = dateFormater(datasTobeEditedParsed.expiry)
+    
+    
     document.getElementById("edit-amount").value = datasTobeEditedParsed.amount;
-    document.getElementById("edit-submit-button").dataset.id = datasTobeEditedParsed._id;
-    document.getElementById("Date").textContent = datasTobeEditedParsed.expiry;
+   document.getElementById("edit-submit-button").dataset.id = datasTobeEditedParsed._id;
+   document.getElementById("edit-order-amount").value = datasTobeEditedParsed.orderValue;
+  //  document.getElementById("Date").textContent = datasTobeEditedParsed.expiry;
+
 
 
   } catch (error) {
-
+    console.log(error)
   }
 
 }
@@ -145,7 +150,9 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
   const starting = document.getElementById("start-date-edit").value 
   const ending=document.getElementById("date-edit").value 
   const amount=document.getElementById("edit-amount").value
-  if(!(validateEdit (name, code, starting, ending, amount))){
+  const amountValue=document.getElementById("edit-order-amount").value
+  console.log(amountValue)
+  if(!(validateEdit (name, code, starting, ending, amount,amountValue))){
     return
   }
   try {
@@ -198,7 +205,7 @@ document.querySelector(".edit-submit").addEventListener("click", async () => {
 
 });
 
-// const dataToBeEdit=await
+
 
 async function deleteCoupen(id, name) {
   try {
@@ -256,47 +263,64 @@ async function showAlertPropt(message) {
     return false;
   }
 }
-
 /////////validating adding data///
-const validateAdd = (name, code, startingDate, endingDate, amount) => {
+const validateAdd = (name, code, startingDate,orderValue ,endingDate, amount) => {
+  const namewarning=document.getElementById('name-warning')
+  const codewarning = document.getElementById('code-warning')
+  const startingDatewarning = document.getElementById('start-warning')
+   const orderWarning=document.getElementById('order-warning')
+    const endingDatewarning = document.getElementById('expiry-warning')
+    const amountWaring=document.getElementById('amount-warning')
+  if(!namewarning.classList.contains('d-none')){
+    namewarning.classList.add('d-none')
+   
+  } if(!codewarning.classList.contains('d-none')){
+  codewarning.classList.add('d-none')  
+  }
+  if(!startingDatewarning.classList.contains('d-none')){
+    startingDatewarning.classList.add('d-none')
+  }
+  if(!orderWarning.classList.contains('d-none')){
+    orderWarning.classList.add('d-none')
+  }
+  if(!endingDatewarning.classList.contains('d-none')){
+    endingDatewarning.classList.add('d-none')
+  }
+  if(!amountWaring.classList.contains('d-none')){
+    amountWaring.classList.add('d-none')
+  }
+  
 
 
   if (name === '') {
-    const namewarning = document.getElementById('name-warning')
     namewarning.textContent = 'Please enter a valid name.'
     namewarning.classList.remove('d-none')
+    console.log(namewarning.classList.contains('d-none'))
     return false
-  } else {
-    const namewarning = document.getElementById('name-warning')
-    namewarning.classList.add('d-none')
   }
   if (name.length <= 2 || name.length > 10) {
-    const namewarning = document.getElementById('name-warning')
+ 
     namewarning.textContent = 'Please enter between 3-9.'
     namewarning.classList.remove('d-none')
     return false
-  } else {
-    const namewarning = document.getElementById('name-warning')
-    namewarning.classList.add('d-none')
   }
   if (!isNaN(name)) {
-    const namewarning = document.getElementById('name-warning')
+
     namewarning.textContent = 'Please insert Letter name.'
     namewarning.classList.remove('d-none')
     return false
-  } else {
-    const namewarning = document.getElementById('name-warning')
-    namewarning.classList.add('d-none')
   }
-  if (code.trim() === '') {
-
-    const codewarning = document.getElementById('code-warning')
+  if (code.trim() === ''){
+   
     codewarning.textContent = 'Please enter a valid code.'
     codewarning.classList.remove('d-none')
     return false
-  } else {
-    const codewarning = document.getElementById('code-warning')
-    codewarning.classList.add('d-none')
+  } 
+  if(orderValue<=999||orderValue>=10000000||orderValue===0){
+    
+    orderWarning.innerHTML='minimum order value is 1000 '
+    orderWarning.classList.remove('d-none')
+    return
   }
   if (code.trim().length <= 2 || code.trim().length >= 16) {
 
@@ -304,30 +328,21 @@ const validateAdd = (name, code, startingDate, endingDate, amount) => {
     codewarning.textContent = 'Please enter between 3-15.'
     codewarning.classList.remove('d-none')
     return false
-  } else {
-    const codewarning = document.getElementById('code-warning')
-    codewarning.classList.add('d-none')
   }
   if (startingDate === '') {
-    const startingDatewarning = document.getElementById('start-warning')
+    
     startingDatewarning.textContent = 'Please enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+  
   if (endingDate === '') {
-    const endingDatewarning = document.getElementById('expiry-warning')
+   
     endingDatewarning.textContent = 'Please enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-warning')
-    endingDatewarning.classList.add('d-none')
-  }
+  
   const nowDate = new Date()
   nowDate.setHours(0, 0, 0, 0)
   const startDateFormated = new Date(startingDate)
@@ -335,149 +350,117 @@ const validateAdd = (name, code, startingDate, endingDate, amount) => {
   const edingDateFormated = new Date(endingDate)
   edingDateFormated.setHours(23, 59, 59, 999)
   if (startDateFormated === '') {
-    const startingDatewarning = document.getElementById('start-warning')
+
     startingDatewarning.textContent = 'Please enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+  
   if (startDateFormated < nowDate) {
     const startingDatewarning = document.getElementById('start-warning')
     startingDatewarning.textContent = 'Enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+  
   if (edingDateFormated === '') {
-    const endingDatewarning = document.getElementById('expiry-warning')
+
     endingDatewarning.textContent = 'Please enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-warning')
-    endingDatewarning.classList.add('d-none')
-  }
+  
   if (edingDateFormated < nowDate) {
-    const endingDatewarning = document.getElementById('expiry-warning')
+    
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-warning')
-    endingDatewarning.classList.add('d-none')
-  }
-  if (amount > 1000 || amount < 1) {
-    const amountwarning = document.getElementById('amount-warning')
-    amountwarning.textContent = 'Please enter a between 1-1000.'
-    amountwarning.classList.remove('d-none')
+  
+  if (amount > 3000 || amount < 1) {
+    
+    amountWaring.textContent = 'Please enter a between 1-3000.'
+    amountWaring.classList.remove('d-none')
     return false
-  } else {
-    const amountwarning = document.getElementById('amount-warning')
-    amountwarning.classList.add('d-none')
-  }
+  } 
   if (edingDateFormated < nowDate) {
-    const endingDatewarning = document.getElementById('expiry-warning')
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-warning')
-    endingDatewarning.classList.add('d-none')
-  }
+  
   if (edingDateFormated < startDateFormated) {
-    const endingDatewarning = document.getElementById('expiry-warning')
+   
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-warning')
-    endingDatewarning.classList.add('d-none')
+  if((Math.floor(orderValue/2))<amount){
+    amountWaring.textContent= `value must be at less than ₹${Math.floor(orderValue/2) } (half of order value)`
+    amountWaring.classList.remove('d-none')
+    return false
   }
   return true
 }
 
 //////////////edit validate data////
 
-const validateEdit = (name, code, startingDate, endingDate, amount) => {
-
-
+const validateEdit = (name, code, startingDate, endingDate,amount,orderValue) => {
+  const namewarning=document.getElementById('name-edit-warning')
+   namewarning.classList.add('d-none')
+  const codewarning = document.getElementById('code-edit-warning')
+  codewarning.classList.add('d-none')
+  const startingDatewarning = document.getElementById('start-edit-warning')
+  startingDatewarning.classList.add('d-none')
+  const endingDatewarning = document.getElementById('expiry-edit-warning')
+  endingDatewarning.classList.add('d-none')
+  const orderWarning=document.getElementById('amountValue-edit-warning')
+  orderWarning.classList.add('d-none')
+   const amountwarning = document.getElementById('amount-edit-warning')
+   amountwarning.classList.add('d-none')
+  
   if (name === '') {
-    const namewarning = document.getElementById('name-edit-warning')
+    
     namewarning.textContent = 'Please enter a valid name.'
     namewarning.classList.remove('d-none')
     return false
-  } else {
-    const namewarning = document.getElementById('name-edit-warning')
-    namewarning.classList.add('d-none')
   }
   if (name.length <= 2 || name.length > 10) {
-    const namewarning = document.getElementById('name-edit-warning')
     namewarning.textContent = 'Please enter between 3-9.'
     namewarning.classList.remove('d-none')
     return false
-  } else {
-    const namewarning = document.getElementById('name-edit-warning')
-    namewarning.classList.add('d-none')
   }
   if (!isNaN(name)) {
-    const namewarning = document.getElementById('name-edit-warning')
     namewarning.textContent = 'Please insert Letter name.'
     namewarning.classList.remove('d-none')
     return false
-  } else {
-    const namewarning = document.getElementById('name-edit-warning')
-    namewarning.classList.add('d-none')
-  }
+  } 
   if (code.trim() === '') {
 
-    const codewarning = document.getElementById('code-edit-warning')
+    
     codewarning.textContent = 'Please enter a valid code.'
     codewarning.classList.remove('d-none')
     return false
-  } else {
-    const codewarning = document.getElementById('code-edit-warning')
-    codewarning.classList.add('d-none')
   }
   if (code.trim().length <= 2 || code.trim().length >= 16) {
-
-    const codewarning = document.getElementById('code-edit-warning')
     codewarning.textContent = 'Please enter between 3-15.'
     codewarning.classList.remove('d-none')
     return false
-  } else {
-    const codewarning = document.getElementById('code-edit-warning')
-    codewarning.classList.add('d-none')
-  }
+  } 
   if (startingDate === '') {
-    const startingDatewarning = document.getElementById('start-edit-warning')
+    
     startingDatewarning.textContent = 'Please enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-edit-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+  
   if (endingDate === '') {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
+    
     endingDatewarning.textContent = 'Please enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
-    endingDatewarning.classList.add('d-none')
-  }
+ 
   const nowDate = new Date()
   nowDate.setHours(0, 0, 0, 0)
   const startDateFormated = new Date(startingDate)
@@ -485,73 +468,57 @@ const validateEdit = (name, code, startingDate, endingDate, amount) => {
   const edingDateFormated = new Date(endingDate)
   edingDateFormated.setHours(23, 59, 59, 999)
   if (startDateFormated === '') {
-    const startingDatewarning = document.getElementById('start-edit-warning')
     startingDatewarning.textContent = 'Please enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-edit-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+ 
   if (startDateFormated < nowDate) {
-    const startingDatewarning = document.getElementById('start-edit-warning')
     startingDatewarning.textContent = 'Enter a valid starting date.'
     startingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const startingDatewarning = document.getElementById('start-edit-warning')
-    startingDatewarning.classList.add('d-none')
-  }
+  
   if (edingDateFormated === '') {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
+   
     endingDatewarning.textContent = 'Please enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
-    endingDatewarning.classList.add('d-none')
-  }
+ 
   if (edingDateFormated < nowDate) {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
-    endingDatewarning.classList.add('d-none')
+  
+  if(orderValue<=999||orderValue>=10000000||orderValue===0){
+      
+    orderWarning.innerHTML='minimum order value is 1000 '
+    orderWarning.classList.remove('d-none')
+    return false
   }
-  if (amount > 1000 || amount < 1) {
-    const amountwarning = document.getElementById('amount-edit-warning')
-    amountwarning.textContent = 'Please enter a between 1-1000.'
+  if (amount > 3000 || amount < 1) {
+   
+    amountwarning.textContent = 'Please enter a between 1-3000.'
     amountwarning.classList.remove('d-none')
     return false
-  } else {
-    const amountwarning = document.getElementById('amount-edit-warning')
-    amountwarning.classList.add('d-none')
-  }
+  } 
   if (edingDateFormated < nowDate) {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
-  }
-  else {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
-    endingDatewarning.classList.add('d-none')
   }
   if (edingDateFormated < startDateFormated) {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
     endingDatewarning.textContent = 'Enter a valid expiry date.'
     endingDatewarning.classList.remove('d-none')
     return false
   }
-  else {
-    const endingDatewarning = document.getElementById('expiry-edit-warning')
-    endingDatewarning.classList.add('d-none')
+  
+  if((Math.floor(orderValue/2))<amount){
+    amountwarning.textContent= `value must be at less than ₹${Math.floor(orderValue/2) } (half of order value)`
+    amountwarning.classList.remove('d-none')
+    return false
   }
   return true
 }

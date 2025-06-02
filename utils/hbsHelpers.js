@@ -37,4 +37,18 @@ function increment(value){
   function isZero(value){
     return value==0
   }
-module.exports={isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning,isZero}
+  const dateFormater=(date)=>{
+    console.log(date)
+    const day=date.getDay()
+    const month=date.getMonth()+1
+    const year=date.getFullYear()
+    console.log(day)
+    console.log(month)
+    console.log(year)
+    return `${day}-${month}-${year}`
+  }
+   const isArrayEmpty=(array)=>{
+    
+    return array.length!==0
+  }
+module.exports={isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning,isZero,dateFormater,isArrayEmpty}

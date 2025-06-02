@@ -58,7 +58,7 @@
                         <div class="coupon-info">
                             <div class="info-item">
                                 <span class="info-label">Credit:</span>
-                                <span>Order Above 1000</span>
+                                <span>Order Above ${coupon.orderValue}</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">Start:</span>

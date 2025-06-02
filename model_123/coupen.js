@@ -18,6 +18,9 @@ const coupenSchema = new mongo.Schema({
   amount: {
     type: Number,
   },
+  orderValue:{
+    type:Number
+  }
 });
 
 const coupen = new mongo.model("coupen", coupenSchema);
