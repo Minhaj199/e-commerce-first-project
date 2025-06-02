@@ -10,7 +10,7 @@ const fs=require('fs')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
 
-const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero, dateFormater, isArrayEmpty } = require("./utils/hbsHelpers");
+const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero, dateFormater, isArrayEmpty, isStringsEqual } = require("./utils/hbsHelpers");
 const database = require("./model/connection");
 
 
@@ -94,6 +94,7 @@ hbs.registerHelper('stockWarning',stockWarning)
 hbs.registerHelper('isZero',isZero)
 hbs.registerHelper('formatHelper',dateFormater)
 hbs.registerHelper('isArrayEmpty',isArrayEmpty)
+hbs.registerHelper('stringEqualityChecker',isStringsEqual)
 
 app.use(erro404);
 

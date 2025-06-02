@@ -263,7 +263,6 @@ module.exports = {
           { $unwind: "$address" },
           { $unwind: "$Order" },
         ]);
-
         res.render("user/orderProductDetails", { ProductData, orderData });
       } else if (req.query.from == "getMyOrder") {
         const data = await orderModel
@@ -291,11 +290,15 @@ module.exports = {
         ]);
         res.render("user/wishList", { data,total:data?.length||0 });
       } else if (req.query.from === "wallet") {
-        const walletData = await walletModel.findOne({
+        let walletData = await walletModel.findOne({
           UserID: req.session.customerId,
         });
-
-        for (let i = 0; i < walletData.transaction.length; i++) {
+        if(!walletData){
+         const wallet= await walletModel.create({UserID: req.session.customerId})
+          walletData=[wallet]
+       
+        }
+        for (let i = 0; i < (walletData?.transaction?.length||0); i++) {
           walletData.transaction[i].formatedDate = dateFunction.Invoice(
             walletData.transaction[i].date
           );

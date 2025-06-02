@@ -58,7 +58,6 @@ async function deleteAddress(element) {
         }
       })
       .then((data) => {
-        console.log(data);
       })
 
       .catch((error) => {

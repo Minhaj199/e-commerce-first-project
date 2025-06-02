@@ -230,7 +230,9 @@ module.exports = {
         ///// change order status from order management page//////
         try {
             if (req.body.from === "changeStatus") {
+              
                 if (req.body.status === "Canceled") {
+                    
                     const canceledData = await orderModel.findById(req.body.ID);
 
                     const ID = canceledData.Order[req.body.index].ProductID;
@@ -245,6 +247,7 @@ module.exports = {
                         { arrayFilters: [{ 'elem.size': size, 'elem.color': color }] }
                     );
                     const path = `Order.${req.body.index}.admin`;
+                    console.log(path)
                     let updateObject = {};
                     updateObject[path] = false;
                     await orderModel.findByIdAndUpdate(
@@ -256,7 +259,7 @@ module.exports = {
                         let amount = canceledData.Order[req.body.index].total;
 
                         if (canceledData.Discount > 0) {
-                            let discount = canceledData.Discount / canceledData.Order.length;
+                            let discount = canceledData.Discount / canceledData.numberOfOrders;
                             if (discount <= amount) {
                                 let sample = amount;
                                 amount = sample - discount;
@@ -285,6 +288,9 @@ module.exports = {
                                         date: new Date(),
                                     },
                                 },
+                            },
+                            {
+                                upsert:true
                             }
                         );
 
@@ -292,8 +298,9 @@ module.exports = {
 
                     let amount = canceledData.Order[req.body.index].total;
                     let DiscountedAmount = amount;
+                    let discount=0
                     if (canceledData.Discount > 0) {
-                        let discount = Math.ceil(canceledData.Discount / canceledData.Order.length);
+                         discount = Math.ceil(canceledData.Discount / canceledData.numberOfOrders);
                         if (discount <= DiscountedAmount) {
                             let sample = DiscountedAmount;
                             DiscountedAmount = sample - discount;
@@ -307,6 +314,7 @@ module.exports = {
                                 numberOfOrders: -1,
                                 TotalOrderPrice: -DiscountedAmount,
                                 SubTotal: -amount,
+                                Discount:-discount,
                                 ShippingCharge: -returnShipping
                             },
                         }
@@ -380,8 +388,9 @@ module.exports = {
                 (async function () {
                     let amount = canceledData.Order[req.body.index].total;
                     let DiscountedAmount = amount;
+                    let discount=0
                     if (canceledData.Discount > 0) {
-                        const discount = canceledData.Discount / canceledData.Order.length;
+                         discount = canceledData.Discount / canceledData.numberOfOrders;
                         if (discount <= amount) {
                             let sample = amount;
                             DiscountedAmount = sample - discount;
@@ -396,6 +405,7 @@ module.exports = {
                             SubTotal: -amount,
                             TotalOrderPrice: -DiscountedAmount,
                             numberOfOrders: -1,
+                            Discount:-discount
                         },
                     });
                     await walletModel.updateOne(

@@ -132,7 +132,7 @@
                             <th class="padding-right">Price</th>
                             <th class="padding-right">Quantity</th>
                             <th class="padding-right">Total</th>
-                            <th>Status</th>
+                            <th>Delivery</th>
                             
                             <th></th>
                            
@@ -152,8 +152,12 @@
                                 
                                 <td class='quatity quantity-values'>{{this.Order.quantity}}</td>
                                 <td class='quatity'>{{this.Order.total}}</td>
+                                {{!-- {{/if (stringEqualityChecker this.Order.status '')}} --}}
+                               {{#if (stringEqualityChecker this.Order.status 'Order-Failed')}}
+                                <td>Retry</td>
+                                {{else}}
                                 <td>{{this.Order.status}}</td>
-                                
+                                {{/if}}
                                 
                                 {{#isEqual this.Order.status 'Delivered' }}
                                 <td><button onclick='returnProduct("{{@index}}")' class="return">Return</button></td>
@@ -222,11 +226,19 @@
                             
                             </tr>
                             <tr>
-                                {{!-- {{#isEqual {{orderData.[0].PaymentOption}} 'Cash on delevery'}} --}}
+                                
                             <hr>
                                 <th class="final-order-heading">Payment</th>
                                 <th style="text-align: end;padding-top:30px;color: black    ;word-break   ;">{{orderData.[0].PaymentOption}}</th>
                                 
+                            </tr>
+                            <hr>
+                                <th class="final-order-heading">Order</th>
+                                {{#if (stringEqualityChecker orderData.[0].PaymentOption 'Failed')}}
+                                <th style="text-align: end;padding-top:30px;color: red    ;word-break   ;">{{orderData.[0].PaymentOption}}</th>
+                                {{else}}
+                                <th style="text-align: end;padding-top:30px;color: green    ;word-break   ;">SUCCESS</th>
+                                {{/if}}
                             </tr>
                            
                         </thead>
@@ -311,7 +323,6 @@
         
     </footer>
     <!-- Js Plugins -->
-    {{!-- <script src="/js/transactionCompletion.js"></script> --}}
     <script src="/js/temp/jquery-3.3.1.min.js"></script>
     <script src="/js/temp/bootstrap.min.js"></script>
     <script src="/js/temp/jquery.magnific-popup.min.js"></script>

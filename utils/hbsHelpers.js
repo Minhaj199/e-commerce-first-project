@@ -38,17 +38,18 @@ function increment(value){
     return value==0
   }
   const dateFormater=(date)=>{
-    console.log(date)
+  
     const day=date.getDay()
     const month=date.getMonth()+1
     const year=date.getFullYear()
-    console.log(day)
-    console.log(month)
-    console.log(year)
+  
     return `${day}-${month}-${year}`
   }
    const isArrayEmpty=(array)=>{
     
     return array.length!==0
   }
-module.exports={isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning,isZero,dateFormater,isArrayEmpty}
+   const isStringsEqual=(string1,string2)=>{
+    return string1===string2
+  }
+module.exports={isStringsEqual,isEqual,increment,calculatePersatage,lookupQuantity,sumStock,stockWarning,isZero,dateFormater,isArrayEmpty}

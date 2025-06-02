@@ -10,6 +10,7 @@ const walletSchema = new mongo.Schema({
   },
   Amount: {
     type: Number,
+    default:0
   },
 });
 const wallet = mongo.model("wallet", walletSchema);

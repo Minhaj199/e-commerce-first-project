@@ -108,6 +108,9 @@ module.exports = {
                 const WalletAmount = await walletModel.findOne({
                     UserID: req.session.customerId,
                 });
+                if(!WalletAmount){
+                    await walletModel.create({UserID: req.session.customerId})
+                }
                 const amount = WalletAmount?.Amount || 0;
 
                 res.json(amount);
@@ -322,7 +325,7 @@ module.exports = {
                 const path = `Order.${req.body.index}.status`;
                 let updateObject = {};
                 updateObject[path] = "Requested for Cancelation";
-
+                
                 await orderModel
                     .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
                     .then((result) => {

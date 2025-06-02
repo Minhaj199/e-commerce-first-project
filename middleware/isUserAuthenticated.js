@@ -5,7 +5,6 @@ const isUserAuthenticatedRestricted = (req, res, next) => {
     
     next();
   } else {
-    console.log(8)
     res.redirect("/user/log-in");
   }
 };
