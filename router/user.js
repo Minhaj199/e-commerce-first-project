@@ -2,29 +2,32 @@ const express=require('express')
 const router=express.Router()
 
 
-const userControl=require('../controller/userRelated.js/mainUserController')
+const userControl=require('../controller/userRelated/mainUserController')
 const userAuthenticated=require('../middleware/userAuthenticated')
 const isUserAuthenticated=require('../middleware/isUserAuthenticated')
 const isUserBlocked=require('../middleware/userBlocked')
-const auth=require('../controller/userRelated.js/authController')
-const orderController=require('../controller/userRelated.js/orderController')
-const addressController = require('../controller/userRelated.js/addressController')
-
+const auth=require('../controller/userRelated/authController')
+const orderController=require('../controller/userRelated/orderController')
+const addressController = require('../controller/userRelated/addressController')
+const searchAndSortController=require('../controller/userRelated/serachAndSortingController')
+const cartController=require('../controller/userRelated/cartController')
+const renderController=require('../controller/userRelated/renderingController')
 
 //landing
 
 router.get('/',userControl.getLanding)
-router.all('/getpages',isUserAuthenticated,userControl.renderPages)
+router.all('/getpages',isUserAuthenticated,renderController.renderPages)
 router.get('/fetchData',orderController.checkoutUtilityRouter)
 
 
 
 ////cart///
 
-router.post('/cart',isUserBlocked,isUserAuthenticated,userControl.cart)
-router.get('/getQuantity',userControl.getQuantity)
-router.patch('/patchCart',isUserAuthenticated,userControl.patchCart)
-router.delete('/dltFromCart',isUserAuthenticated,userControl.dltFromCart)
+router.post('/cart',isUserBlocked,isUserAuthenticated,cartController.cart)
+router.get('/getQuantity',cartController.getQuantity)
+router.patch('/patchCart',isUserAuthenticated,cartController.patchCart)
+router.delete('/dltFromCart',isUserAuthenticated,cartController.dltFromCart)
+
 
 //login
 router.get('/log-in',userAuthenticated,auth.renderLoginPage)
@@ -42,12 +45,13 @@ router.post('/log-in/OTP',isUserBlocked,auth.handleOtpSharing)
 router.post('/log-in/otpResend',isUserBlocked,auth.handleResendOtp)
 router.put('/log-in/passwordReseted',isUserBlocked,auth.resetPassword)
 
+/////////// cetegory and serarching/////////////
+router.get('/all',isUserBlocked,searchAndSortController.getAll)
 
-//catagory
 
-router.get('/all',isUserBlocked,userControl.getAll)
-router.get('/women',isUserBlocked,userControl.getWomen)
-router.get('/men',isUserBlocked,userControl.getMan)
+////catagory//////
+router.get('/women',isUserBlocked,searchAndSortController.getWomen)
+router.get('/men',isUserBlocked,searchAndSortController.getMan)
 router.get('/cat',isUserBlocked,userControl.cat)
 
 //product Data

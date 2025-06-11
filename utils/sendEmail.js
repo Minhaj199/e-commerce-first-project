@@ -12,6 +12,9 @@ const mailSender = async (emailAddress, title, body) => {
         user: process.env.SMTP_MAIL,
         pass: process.env.SMPT_PASSWORD,
       },
+      tls:{
+        rejectUnauthorized: false
+      }
     });
 
     //SEND EMAIL TO USER
@@ -23,6 +26,7 @@ const mailSender = async (emailAddress, title, body) => {
     });
     return info;
   } catch (error) {
+    console.log(error)
   }
 };
 

@@ -1,5 +1,5 @@
 
-const error404=(req,res,next)=>{
+const error404=(req,res)=>{
     res.render("error", { message: 'page not found' });
 }
 

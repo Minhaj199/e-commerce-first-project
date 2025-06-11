@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/admin/userManagement.css">
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>User Management</title>
 
 </head>
@@ -102,7 +103,7 @@
                             </thead>
                             <tbody>
                                 {{#each userData}}
-                                <tr>
+                                <tr id="btn-tr-{{@index}}">
                                     <td>
                                         {{this.formatedDate}}
                                     </td>
@@ -125,19 +126,19 @@
                                             Blocked
                                             {{/if}}
                                     </td>
-                                    <td>
+                                    <td id="btn-td-{{@index}}">
                                         
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <form action="/admin/getUnBlock/{{this._id}}?_method=PUT" method="POST" onsubmit="return status('{{this.status}}','{{this.Email}}',event)" >
+                                        <div id="action-group" class="btn-group" role="group" aria-label="Basic example">
+                                            {{!-- <form action="/admin/getUnBlock/{{this._id}}?_method=PUT" method="POST" onsubmit="return status('{{this.status}}','{{this.Email}}',event)" > --}}
                                             {{#if this.status }}
-                                            <button type="Submit" name="unblock" style="width: 90px;" class="btn btn-danger for-js">Block</button>
+                                            <button type="button" name="block" onclick="access('{{this._id}}','{{@index}}')"  id="block-btn-{{@index}}" style="width: 90px;" class="btn btn-danger for-js">Block</button>
                                             {{else}}
-                                            <button type="Submit" name="unblock" style="width: 90px;" class="btn btn-success for-js">Unblock</button>
+                                            <button  type="button" onclick="access('{{this._id}}','{{@index}}')" name="unblock" id="unblock-btn-{{@index}}" style="width: 90px;" class="btn btn-success for-js">Unblock</button>
                                             {{/if}} 
-                                            </form>
-                                    <form action="/admin/getDelete/{{this._id}}?_method=DELETE" method="POST" onsubmit="return fun('{{this.Email}}',event)">
-                                                <button type="Submit"  class="btn btn-dark">Delete</button>
-                                            </form>
+                                           
+                
+                                                <button type="Submit" id="delet-btn-{{@index}}" onclick="deleteUser('{{this._id}}','{{this.first_name}}',{{@index}})"  class="btn btn-dark">Delete</button>
+                                
                                         </div>
                                         </form>
                                     </td>
@@ -181,7 +182,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

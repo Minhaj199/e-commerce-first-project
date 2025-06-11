@@ -255,8 +255,8 @@ async function handleEditClick(id, button, index) {
     const cells = row.querySelectorAll('td')
     const size = cells[0]?.textContent.trim().toUpperCase()
     const color = cells[1]?.textContent.trim()
-    const stock = Number(cells[2]?.textContent.trim())
-    if (stock && size && color) {
+    const stock = Number(cells[2]?.textContent.trim()||0)
+    if (stock>=0 && size && color) {
       const sizeDropdown = document.getElementById('size')
       sizeDropdown.disabled = false
       document.getElementById(size).selected = true

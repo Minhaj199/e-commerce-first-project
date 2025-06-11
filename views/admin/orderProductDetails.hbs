@@ -123,7 +123,7 @@
                             </thead>
                             <tbody>
                                 {{#each ProductData}}
-                                <tr>
+                                <tr >
 
                                     <td>{{increment @index}}</td>
                                     <td><img style="width: 100px;" src="{{this.ProductDetails.images.path.[0]}}" alt="">
@@ -133,13 +133,12 @@
                                     <td class="All-total">{{this.Order.color}}</td>
                                     <td class="All-total">{{this.Order.size}}</td>
                                     <td class='price'>{{this.Order.price}}</td>
-
                                     <td class='quatity'>{{this.Order.quantity}}</td>
                                     <td class='quatity'>{{this.Order.total}}</td>
                                     {{#isEqual this.Order.status "Requested for Return"}}
-                                    <td style="cursor: pointer;color:red" onclick='showReason("{{this.Order.reason}}")'>{{this.Order.status}}</td>
+                                    <td id="order-status-col-{{@index}}" style="cursor: pointer;color:red" onclick='showReason("{{this.Order.reason}}")'>{{this.Order.status}}</td>
                                     {{else}}
-                                    <td  onclick='showReason("{{this.Order.reason}}")'>{{this.Order.status}}</td>
+                                    <td id="del-col-{{@index}}" onclick='showReason("{{this.Order.reason}}")'>{{this.Order.status}}</td>
                                     {{/isEqual}}
                                     <div id="my-modalin" class="modalin">
                                         <div class="contene-modalin">
@@ -152,21 +151,16 @@
                                     <td>
                                     {{#if this.Order.admin}}
                                     {{#isEqual this.Order.status "Requested for Return"}}
-                                        <select name="ReturnStatus" class="drop" onchange='productReturn(this.value, "{{this._id}}",{{@index}})' >
-                                            <option >Manage Return</option>
+                                        <select id="drop-item-{{@index}}" name="ReturnStatus"  class="drop" onchange='productReturn(this.value, "{{this._id}}","{{@index}}")' >
+                                            <option value="">Manage Return</option>
                                             <option value="Return Accept">Accept</option>
                                             <option value="Return Reject">Reject</option>
-                                        
-                                            
-                                        
                                         </select>
                                     {{else}}
-                                    
-                                    <select name="orderStatus" class="drop" onchange='ChangeStatus(this.value, "{{this._id}}",{{@index}})' >
-                                        <option value="Pending">Manage Status</option>
+                                    <select id="delivery-drop-{{@index}}" name="orderStatus" class="drop" onchange='ChangeStatus(this.value, "{{this._id}}",{{@index}},this)' >
+                                        <option  value="Pending">Manage Status</option>
                                         <option value="Pending">Pending</option>
                                         <option value="Delivered">Delivered</option>
-                                    
                                         <option value="Canceled">Cancel</option>
                                     
                                     </select>
@@ -197,7 +191,7 @@
                         <thead>
                             <tr>
                                 <th style="padding-left:1px ;color:#880606">Sub Totoal</th>
-                                <th id="add-sub-total" style="padding-left: 120px; color: black;">
+                                <th  id="add-sub-total" style="padding-left: 120px; color: black;">
                                     {{orderData.[0].SubTotal}}</th>
 
                             </tr>

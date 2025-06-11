@@ -1,5 +1,4 @@
 const mongo = require("mongoose");
-const coupen = require("./coupen");
 
 const trackingSchema = new mongo.Schema({
   UserID: {

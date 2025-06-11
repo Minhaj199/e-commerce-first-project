@@ -17,7 +17,7 @@ document.querySelector(".brand-filter").addEventListener("click", () => {
     showToast("maximum value should not be less than zero");
   } else if (maxValue <= minValue) {
     showToast("maximum value should be greater than minimum value");
-  } else if (maxValue === NaN || maxValue === NaN) {
+  } else if (maxValue === isNaN || maxValue === isNaN) {
     showToast("Only number allowed");
   } else {
     let brand = [];
@@ -46,6 +46,8 @@ document.querySelector(".brand-filter").addEventListener("click", () => {
     }
 
     if (category) {
+      console.log(category,maxValue,minValue,sort,stringBrand)
+      return
       location.href = `/user/cat?cat=${category}&maxValue=${maxValue}&minValue=${minValue}&sort=${sort}&from=sorting&brand=${stringBrand}`;
     } else {
       location.href = `/user/all?maxValue=${maxValue}&minValue=${minValue}&sort=${sort}&from=sorting&brand=${stringBrand}`;
@@ -78,7 +80,6 @@ function showToast(message) {
 }
 
 function insert(){
-  console.log('hiii')
   const currntCategory=document.getElementById('current-category')
   const category = document
     .querySelector(".brand-filter")

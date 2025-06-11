@@ -11,10 +11,7 @@ document.getElementById("coupen-btn").addEventListener("click", async () => {
     if (count === 0) {
       const totalValue=parseInt(document.getElementById('Total').textContent||0)
   
-      if(totalValue<1000){
-        await showAlertMessageshowPromt('COUPON INFO','Minimum order should be 1000')
-      return 
-      }
+     
       count++;
       const code = document.getElementById("coupen-input")?.value?.trim();
       if(code.trim()===''){

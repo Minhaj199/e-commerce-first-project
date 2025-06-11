@@ -9,7 +9,7 @@ const walletModel = require('../../model/wallets')
 
 let data = {};
 let email;
-let globalEmail = null;
+let globalEmail;
 let otp = null;
 module.exports = {
     renderLoginPage: (req, res) => {
@@ -18,7 +18,7 @@ module.exports = {
             message = req.session.successOfReset
             delete req.session.successOfReset
         }
-       
+
         res.render("./user/login", { message });
     },
     handleLoginSubmission: async (req, res, next) => {
@@ -61,7 +61,7 @@ module.exports = {
         res.render("user/forgot/forgotEmail")
     },
     resetPassword: async (req, res, next) => {
-      
+
         try {
             const emailObj = await forgotEmail.findOne({ email: req.session.emailID });
             const email = emailObj.email
@@ -90,7 +90,7 @@ module.exports = {
         //// get sign up page////
         res.render("./user/registration");
     },
-    handleSignupPost: async (req, res,next) => {
+    handleSignupPost: async (req, res, next) => {
         ////////////// handle submitt data and ridirect to naviagation page////////
         try {
             data = {
@@ -131,7 +131,7 @@ module.exports = {
             } else {
                 res.redirect("/log-in/OTP")
             }
-        } catch (error1) {
+        } catch (err) {
             const error = new Error("internal server error");
             error.statusCode = 500;
             next(error);
@@ -171,7 +171,7 @@ module.exports = {
             next(error);
         }
     },
-    handleResendOtp: async (req, res,next) => {
+    handleResendOtp: async (req, res, next) => {
 
         ////////////handle resend otp///////////
         if (req.query.from === "register") {
@@ -181,7 +181,7 @@ module.exports = {
                     lowerCaseAlphabets: false,
                     specialChars: false,
                 });
-                
+
                 const userData = { email, otp };
                 await otpSchema.create(userData);
                 res.render("user/otpEnterForReg");
@@ -200,11 +200,11 @@ module.exports = {
                 await otpSchema.create(userData);
                 res.render("user/forgot/otpEnter");
             } catch (error) {
-               next(error)
+                next(error)
             }
         }
     },
-    validateOTP: async (req, res,next) => {
+    validateOTP: async (req, res, next) => {
         ////////////validate otp and redirect to password reset page///////////
         if (req.query.from === "Register") {
             try {
@@ -233,7 +233,7 @@ module.exports = {
                 }
 
             } catch (error) {
-              next(error)
+                next(error)
             }
         } else {
             try {
@@ -248,14 +248,14 @@ module.exports = {
                     res.render("user/forgot/otpEnter", { message: "invalid otp or OTP Expired" });
                 }
             } catch (error) {
-               next(error)
+                next(error)
             }
         }
     },
     getSignUp: (req, res) => {
         res.render("./user/registration");
     },
-    postSignup: async (req, res,next) => {
+    postSignup: async (req, res, next) => {
         try {
             data = {
                 first_name: capitalisation(req.body.First_name),
@@ -263,7 +263,7 @@ module.exports = {
                 Email: req.body.Email,
                 phone_Number: req.body.phone,
                 password: req.body.password,
-                
+
             };
             email = req.body.Email;
             const check = await user.findOne({ Email: req.body.Email });
@@ -286,12 +286,12 @@ module.exports = {
             next(error)
         }
     },
-    isUserLogged: async (req, res,next) => {
+    isUserLogged: async (req, res) => {
         try {
-            const isUserAuthenticated= (req?.session?.isUserAuthenticated)?true:false
+            const isUserAuthenticated = (req?.session?.isUserAuthenticated) ? true : false
             res.json(isUserAuthenticated)
         } catch (error) {
-            res.status(400).json({message:error.message||'internal server error'})
+            res.status(400).json({ message: error.message || 'internal server error' })
         }
     }
 }

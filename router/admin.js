@@ -6,7 +6,6 @@ const upload = require('../middleware/multer')
 
 const isAdminAuthenticated = require('../middleware/isAdminAuthenticated')
 const AdminAuthenticated = require('../middleware/adminAuthenticated')
-const productMgtController = require('../controller/adminRelated/addController')
 const renderingController = require('../controller/adminRelated/renderingController')
 const editController = require('../controller/adminRelated/editController')
 const deleteController = require('../controller/adminRelated/deleteController')
@@ -69,8 +68,8 @@ router.get('/log-out', adminCon.sign_out)
 //////////user management ///////////////////
 
 router.get('/userManagemnent', AdminAuthenticated, renderingController.userManagement)
-router.put('/getUnBlock/:id', AdminAuthenticated, editController.handleBlockAndUnblock)
-router.delete('/getDelete/:id', AdminAuthenticated, deleteController.user)
+router.patch('/blockandunblock/:id',AdminAuthenticated ,editController.handleBlockAndUnblock)
+router.delete('/getDelete/:id', AdminAuthenticated, deleteController.deleteUser)
 
 //////////Brand management/////////
 

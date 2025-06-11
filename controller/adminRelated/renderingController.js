@@ -4,7 +4,7 @@ const dateFunction = require('../../utils/dateFormating')
 const offerModel = require('../../model/offer')
 const { ObjectId } = require('mongodb')
 const coupenModel = require('../../model/coupen')
-const productItemModel=require("../../model/prouctItems")
+const productItemModel = require("../../model/prouctItems")
 const user = require('../../model/user')
 module.exports = {
 
@@ -29,7 +29,7 @@ module.exports = {
         try {
             let page = req.query.page || 1;
             let skip = 4;
-            const numOfPage = await productItemModel.find({deleteStatus:false}).count()
+            const numOfPage = await productItemModel.find({ deleteStatus: false }).count()
             const dynamicPage = Math.ceil(numOfPage / 4);
             let dynamicPageArray = []
 
@@ -38,20 +38,20 @@ module.exports = {
             }
 
             const productData = await productItemModel
-                .find({deleteStatus:false})
+                .find({ deleteStatus: false })
                 .skip((page - 1) * skip)
                 .limit(4)
                 .sort({ _id: -1 });
             const categoryCollection = await categoryModel.findOne({
                 category: { $exists: true },
             });
-            
-            const message = req.query.message;
-            const errMessage = req.query.errMessage;
-            const updMessage = req.query.updMessage;
-            const updtErrMessage = req.query.updtErrMessage;
-            const dltMessage = req.query.dltMessage;
-            const dltErrMessage = req.query.dltErrMessage;
+
+            const message = req.flash('message');
+            const errMessage = req.flash('errMessage');
+            const updMessage = req.flash('updMessage');
+            const updtErrMessage = req.flash('updtErrMessage');
+            const dltMessage = req.flash('dltMessage');
+            const dltErrMessage = req.flash('dltErrMessage');
             res.render("admin/productMangement", {
                 productData,
                 categoryCollection,
@@ -73,7 +73,6 @@ module.exports = {
             const ProductData = await productItemModel.findById(req.params.id);
             const CatAndBrand = await categoryModel.findOne();
             const cat = ProductData.category;
-            
             res.render("admin/editProduct", { ProductData, CatAndBrand, cat });
         } catch (error) {
             next(error)
@@ -92,27 +91,27 @@ module.exports = {
     },
     productStock: async (req, res, next) => {
         try {
-            const id=req.params.id
-            if(!id&&typeof id!=='string')throw new Error('id not found')
-            const product=await productItemModel.findById(id)
-            res.render('admin/productStock',{product})  
-    
+            const id = req.params.id
+            if (!id && typeof id !== 'string') throw new Error('id not found')
+            const product = await productItemModel.findById(id)
+            res.render('admin/productStock', { product })
+
         } catch (error) {
-         next(error)   
+            next(error)
         }
-       
+
     },
     setProductMgtSorted: async (req, res, next) => {
         try {
             if (req.body.category == "Men") {
                 const productData = await productItemModel.find({ category: "Men" });
                 res.render("admin/productMangement", { productData });
-            }else if(req.body.category==='all'){
+            } else if (req.body.category === 'all') {
 
                 res.redirect("/admin/product-management");
             }
-             else if (req.body.category == "Women") {
-                
+            else if (req.body.category == "Women") {
+
                 const productData = await productItemModel.find({ category: "Women" });
                 res.render("admin/productMangement", { productData });
             } else if (req.body.category == "kids") {
@@ -243,13 +242,9 @@ module.exports = {
             for (let i = 0; i < userData.length; i++) {
                 userData[i].formatedDate = dateFunction.Invoice(userData[i].created_at);
             }
-            const unBlockMessage = req.query.unBlockMessage;
-            const blockMessage = req.query.blockMessage;
             const dltMessage = req.query.dltMessage;
             res.render("admin/userManagement", {
                 userData,
-                unBlockMessage,
-                blockMessage,
                 dltMessage,
                 dynamicPageArray,
             });
@@ -261,10 +256,9 @@ module.exports = {
     categoryManagement: async (req, res, next) => {
         try {
             let newdoc = await categoryModel.findOne({ category: { $exists: true } });
-            let catMessage = req.query.catMessage;
-            let editedMessage = req.query.editMessage;
-            let dltMessage = req.query.dltMessage;
-           
+            let catMessage = req.flash('catMessage')
+            let editedMessage = req.flash('editedMessage')
+            let dltMessage = req.flash('dltMessage');
             res.render("admin/categoryManagement", {
                 newdoc,
                 catMessage,
@@ -310,9 +304,9 @@ module.exports = {
         try {
             if (req.query.To === "brand") {
                 let newdoc = await categoryModel.findOne({ brand: { $exists: true } });
-                let brandAddedMessage = req.query.brandAddedMessage;
-                let brandEditedMessage = req.query.brandEditedMessage;
-                let dltMessage = req.query.dltMessage;
+                let brandAddedMessage = req.flash('brandAddedMessage');
+                let brandEditedMessage = req.flash('brandEditedMessage');
+                let dltMessage = req.flash('dltMessage');
                 res.render("admin/brandManagement", {
                     newdoc,
                     brandAddedMessage,
@@ -451,7 +445,7 @@ module.exports = {
                         category,
                     });
                 } catch (error) {
-                   next(error)
+                    next(error)
                 }
             }
         } catch (error) {

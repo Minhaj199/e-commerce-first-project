@@ -5,9 +5,6 @@ const cloudinary=require('cloudinary')
 
 dotenv.config({path:'configaration.env'})
 
-const cloud_name=process.env.CLOUD_NAME
-const api_key=process.env.CLOUD_API_KEY
-const api_secret=process.env.CLOUD_API_KEY  
 
 
 cloudinary.config({

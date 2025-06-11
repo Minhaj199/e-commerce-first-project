@@ -3,7 +3,7 @@ const addressModel = require("../../model/address");
 const { ObjectId } = require("mongodb");
 
 module.exports = {
-  renderAdressMgt: async (req, res,next) => {
+  renderAdressMgt: async (req, res, next) => {
 
     ///////////rendering address management page///////////
     try {
@@ -56,7 +56,7 @@ module.exports = {
       next(error)
     }
   },
-  submitAddress: async (req, res,next) => {
+  submitAddress: async (req, res, next) => {
     ///////////submitting address from add address page///////////
     try {
       await addressModel.updateMany(
@@ -94,7 +94,7 @@ module.exports = {
       };
       await addressModel
         .create(addressData)
-        .then((result) => {
+        .then(() => {
           req.session.addressAdded = "Address Added Successfully";
         })
         .catch((error) => {
@@ -106,7 +106,7 @@ module.exports = {
       next(error)
     }
   },
-  resetingDefualtAddress: async (req, res,next) => {
+  resetingDefualtAddress: async (req, res, next) => {
     ///////////resetting default address from manage address page///////////
     try {
       if (req.body.from === "selectBotton") {
@@ -118,14 +118,14 @@ module.exports = {
         await addressModel
           .updateOne({ _id: req.body.id }, { status: true })
 
-          return res.send("success");
-        
+        return res.send("success");
+
       }
-    } catch (error) { 
+    } catch (error) {
       next(error)
     }
   },
-  editAddress: async (req, res,next) => {
+  editAddress: async (req, res, next) => {
     ///////////editing address from manage address page///////////
     try {
       if (req.query.from === "editAddress") {
@@ -146,7 +146,6 @@ module.exports = {
           { _id: req.body.id },
           { $set: data }
         );
-        const idd = req.session.customerId;
         req.session.editedInfo = "Edited Successfully";
         res.redirect(`/user/getManageAddress?from=getManage`);
       } else if (req.body.from === "checkOutModalin") {
@@ -155,7 +154,7 @@ module.exports = {
 
         await addressModel
           .findByIdAndUpdate(id, req.body)
-          .then((result) => {
+          .then(() => {
             res.json("ok");
           })
           .catch((error) => {
@@ -166,7 +165,7 @@ module.exports = {
       next(error)
     }
   },
-  deleteAddress: async (req, res,next) => {
+  deleteAddress: async (req, res, next) => {
     try {
       await addressModel.deleteOne({ _id: req.body.id });
       req.session.deleteAddress = "Deleted Successfully";
@@ -175,12 +174,12 @@ module.exports = {
           { UserId: req.session.customerId },
           { $set: { status: true } }
         )
-        .then((result) => { })
+        .then(() => { })
         .catch((error) => {
           console.log(error);
         });
       res.send("recieved");
-    } catch (error) { 
+    } catch (error) {
       next(error)
     }
   },

@@ -31,15 +31,15 @@ module.exports = {
   fetchData: async (req, res, next) => {
     try {
       if (req.query.from === "coupen") {
-        const {code,name}=req.query
-        if(!code||!name){
-          return res.status(400).json({message:'in sufficient data'})
+        const { code, name } = req.query
+        if (!code || !name) {
+          return res.status(400).json({ message: 'in sufficient data' })
         }
-        const result = await coupenModel.findOne({$or:[{code:code},{name:name}]})
+        const result = await coupenModel.findOne({ $or: [{ code: code }, { name: name }] })
         if (result) {
-          if(result.name===name){
+          if (result.name === name) {
             return res.json("name used");
-          }else if(result.code===code){
+          } else if (result.code === code) {
             return res.json("name code");
           }
         } else {
@@ -66,7 +66,7 @@ module.exports = {
                 { CoupenID: validateCoupen[0]._id },
               ],
             });
-          
+
             if (checkUsage) {
               res.json("Code Already used");
             } else {
@@ -86,7 +86,7 @@ module.exports = {
           $and: [
             { category: req.query.category },
             { offer_rate: { $exists: false } },
-            {deleteStatus:false}
+            { deleteStatus: false }
           ],
         });
 
@@ -121,7 +121,7 @@ module.exports = {
         ]);
 
         const categorylist = await categoryModel.find();
-      
+
         res.json({ category, categorylist });
       } else if (req.query.from === "salesActual") {
         const data = await orderModel.aggregate([
@@ -145,14 +145,14 @@ module.exports = {
 
         res.json(array);
       } else if (req.query.from === "coupenEdit") {
-        const {code,name}=req.body
-        const result = await coupenModel.findOne({$or:[{code},{name}] });
+        const { code, name } = req.body
+        const result = await coupenModel.findOne({ $or: [{ code }, { name }] });
         const id = result?._id.toString();
         if (result) {
           if (id === req.query.ID) {
             res.json("unUsed");
           } else {
-            
+
             return res.json("used");
           }
         } else {

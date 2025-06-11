@@ -6,26 +6,23 @@ const coupenTrackingModel = require("../../model/coupenTracking");
 const walletModel = require("../../model/wallets");
 const user = require("../../model/user");
 const RazorPay = require("razorpay");
-const lodash = require("lodash");
-const path = require("path");
 const { Types } = require("mongoose");
 const productItemModel = require("../../model/prouctItems");
 
 
 module.exports = {
-    checkoutUtilityRouter: async (req, res,next) => {
+    checkoutUtilityRouter: async (req, res, next) => {
         try {
             if (req.query.from === "retryPayment") {
                 ////////// retray payment from failed order ////////////
                 const jcolor = decodeURIComponent(req.query.color);
                 const jsize = decodeURIComponent(req.query.size);
                 const jIDs = decodeURIComponent(req.query.IDs);
-                const jQunaties=decodeURIComponent(req.query.encodeQuantity)
 
                 const colors = jcolor.split(",");
                 const sizes = jsize.split(",");
                 const IDs = jIDs.split(",");
-                const quantiy=JSON.parse(req.query.quantiy)
+                const quantiy = JSON.parse(req.query.quantiy)
 
 
                 const qty = [];
@@ -36,32 +33,32 @@ module.exports = {
                 let sizesArray = [];
 
                 for (let i = 0; i < qty.length; i++) {
-                    let path = qty[i]?.variants?.find(proudct=>{
-                        return proudct.size===sizes[i]&&proudct.color===colors[i]
+                    let path = qty[i]?.variants?.find(proudct => {
+                        return proudct.size === sizes[i] && proudct.color === colors[i]
                     });
-                    
-                sizesArray.push(path?.stock||0);
+
+                    sizesArray.push(path?.stock || 0);
                 }
                 let count = 0;
                 for (let i = 0; i < sizesArray.length; i++) {
-                    if (sizesArray[i] === 0||quantiy[i]>sizesArray[i]) {
+                    if (sizesArray[i] === 0 || quantiy[i] > sizesArray[i]) {
                         count++;
                         break
                     }
                 }
-               
+
                 if (count !== 0) {
                     res.json("no stock");
                 } else {
                     res.json("stock");
                 }
             } else if (req.query.from === "validateCoupen") {
-                
+
                 //////checking applied coupen for in checkout//////
-                const id=req.session.customerId
-                const isTotalValid=await cartModel.aggregate([{$match:{UserId:new Types.ObjectId(id)}},{$group:{_id:null,sum:{$sum:'$Total'}}}])
-                const totalOrderPrice=(isTotalValid.length&&isTotalValid[0]?.sum)?isTotalValid[0]?.sum+60:0
-                if(totalOrderPrice<1000){
+                const id = req.session.customerId
+                const isTotalValid = await cartModel.aggregate([{ $match: { UserId: new Types.ObjectId(id) } }, { $group: { _id: null, sum: { $sum: '$Total' } } }])
+                const totalOrderPrice = (isTotalValid.length && isTotalValid[0]?.sum) ? isTotalValid[0]?.sum + 60 : 0
+                if (totalOrderPrice < 1000) {
                     return res.json("Total order less than should be above 1000");
                 }
                 const validateCoupen = await coupenModel.find({
@@ -71,16 +68,16 @@ module.exports = {
                 if (validateCoupen.length !== 0) {
                     const expiry = validateCoupen[0].expiry;
                     const starting = validateCoupen[0].startingDate;
-                   
+
                     const currentDate = new Date();
 
                     if (expiry < currentDate) {
                         res.json("Code Expird");
                         return
-                    }else if(starting>currentDate){
-                       return res.json('This code is will be redeamable from '+ starting.toLocaleDateString())
+                    } else if (starting > currentDate) {
+                        return res.json('This code is will be redeamable from ' + starting.toLocaleDateString())
                     }
-                     else {
+                    else {
                         const checkUsage = await coupenTrackingModel.findOne({
                             $and: [
                                 { UserID: req.session.customerId },
@@ -108,8 +105,8 @@ module.exports = {
                 const WalletAmount = await walletModel.findOne({
                     UserID: req.session.customerId,
                 });
-                if(!WalletAmount){
-                    await walletModel.create({UserID: req.session.customerId})
+                if (!WalletAmount) {
+                    await walletModel.create({ UserID: req.session.customerId })
                 }
                 const amount = WalletAmount?.Amount || 0;
 
@@ -119,13 +116,13 @@ module.exports = {
             next(error)
         }
     },
-    placeOrder: async (req, res,next) => {
+    placeOrder: async (req, res, next) => {
         ///////////placing order from checkout page/////////// 
-       
-        const {orderDetails}=req.body
-        const {customerId}=req.session
-        if(!orderDetails||!customerId){
-            res.status(400).json({message:'in sufficient data'})
+
+        const { orderDetails } = req.body
+        const { customerId } = req.session
+        if (!orderDetails || !customerId) {
+            res.status(400).json({ message: 'in sufficient data' })
             return
         }
         try {
@@ -171,7 +168,7 @@ module.exports = {
                     { UserID: customerId },
                     { $inc: { Amount: -amount } }
                 );
-                const result = await walletModel.updateOne(
+                 await walletModel.updateOne(
                     { UserID: customerId },
                     {
                         $push: {
@@ -185,26 +182,26 @@ module.exports = {
                     }
                 );
             }
-            for (let i = 0; i <orderDetails.CartIDs.length; i++) {
+            for (let i = 0; i < orderDetails.CartIDs.length; i++) {
                 await cartModel.deleteOne({ _id: orderDetails.CartIDs[i] });
             }
             for (let i = 0; i < orderDetails.productID.length; i++) {
-                quantity = orderDetails.Order[i].quantity;
+               let quantity = orderDetails.Order[i].quantity;
                 await productItemModel
                     .findOneAndUpdate(
                         { _id: orderDetails.productID[i] },
                         { $inc: { 'variants.$[elem].stock': -quantity } },
                         {
                             arrayFilters: [
-                              {
-                                'elem.size': orderDetails.sizes[i],
-                                'elem.color': orderDetails.colors[i],
-                                'elem.stock': { $gt: 0 }
-                              }
+                                {
+                                    'elem.size': orderDetails.sizes[i],
+                                    'elem.color': orderDetails.colors[i],
+                                    'elem.stock': { $gt: 0 }
+                                }
                             ]
-                          }
+                        }
                     )
-                    .then((result) => { })
+                    .then(() => { })
                     .catch((error) => {
                         console.log(error);
                     });
@@ -214,14 +211,14 @@ module.exports = {
             next(error)
         }
     },
-    handleFailed: async (req, res,next) => {
+    handleFailed: async (req, res, next) => {
         ///////////handling failed order from checkout page///////////
         try {
-            const {orderDetails} = req.body  
-            const {customerId}=req.session
-            if(!orderDetails||!customerId){
+            const { orderDetails } = req.body
+            const { customerId } = req.session
+            if (!orderDetails || !customerId) {
                 return
-            }       
+            }
             const Order = {
                 UserId: customerId,
                 PaymentOption: orderDetails.paymentOption,
@@ -248,10 +245,10 @@ module.exports = {
                     console.log(error);
                 });
         } catch (error) {
-           next(error)
+            next(error)
         }
     },
-    handleRetryOrder: async (req, res,next) => {
+    handleRetryOrder: async (req, res, next) => {
         ///////////retrying order from failed order page///////////
         try {
             const result = await orderModel.findById(req.body.retryObj.id);
@@ -271,10 +268,11 @@ module.exports = {
                 numberOfOrders: IDs.length,
             });
 
-            for (let i = 0; i < IDs.length; i++) {              
-                 await productItemModel.findOneAndUpdate({_id:IDs[i]}, {
-                    $inc: { 'variants.$[elem].stock': -quantity[i] }},
-                    {arrayFilters:[{'elem.color':color[i],'elem.size':size[i],'elem.stock':{$gt:0}}]}
+            for (let i = 0; i < IDs.length; i++) {
+                await productItemModel.findOneAndUpdate({ _id: IDs[i] }, {
+                    $inc: { 'variants.$[elem].stock': -quantity[i] }
+                },
+                    { arrayFilters: [{ 'elem.color': color[i], 'elem.size': size[i], 'elem.stock': { $gt: 0 } }] }
                 );
             }
             if (req.body.retryObj.coupenID != "") {
@@ -289,7 +287,7 @@ module.exports = {
         }
         res.json("success");
     },
-    removeProduct: async (req, res,next) => {
+    removeProduct: async (req, res, next) => {
         ///////////removing product from cart or checkout///////////
         try {
             await cartModel
@@ -302,7 +300,7 @@ module.exports = {
             next(error)
         }
     },
-    cancelOreder: async (req, res,next) => {
+    cancelOreder: async (req, res, next) => {
         /////canceling order from my order page//////
         if (req.body.from === "return order") {
             try {
@@ -314,29 +312,30 @@ module.exports = {
 
                 await orderModel
                     .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
-                    .then((result) => {
+                    .then(() => {
                         res.json("ok")
                     });
-            } catch (error) { }
+            } catch (error) { 
+                
+            }
         } else {
             ///////////////canceling order////////
             try {
-            
                 const path = `Order.${req.body.index}.status`;
                 let updateObject = {};
                 updateObject[path] = "Requested for Cancelation";
-                
+
                 await orderModel
                     .findByIdAndUpdate({ _id: req.body.ID }, { $set: updateObject })
-                    .then((result) => {
+                    .then(() => {
                         res.json("ok");
                     });
             } catch (error) {
-               next(error)
+                next(error)
             }
         }
     },
-    paymentGateway: async (req, res,next) => {
+    paymentGateway: async (req, res, next) => {
         ///////////payment gateway from checkout page///////////
         try {
             const razorpay = new RazorPay({
@@ -356,7 +355,7 @@ module.exports = {
             next(error)
         }
     },
-    retryPayment: async (req, res,next) => {
+    retryPayment: async (req, res, next) => {
         try {
             const razorpay = new RazorPay({
                 key_id: process.env.key_id,
@@ -375,7 +374,7 @@ module.exports = {
             next(error)
         }
     },
-    getUserInfo: async (req, res,next) => {
+    getUserInfo: async (req, res, next) => {
         /////////////get user info for payment gateway///////
         try {
             const userData = await user.findById(req.session.customerId);

@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
             login.hidden=false
             logout.hidden=true
         }
-        console.log(isAuthenticated) 
     } catch (error) {
         showToast(error.message||'internal server error')
     }

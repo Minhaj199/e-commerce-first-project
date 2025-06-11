@@ -6,6 +6,7 @@ const hbs = require("hbs");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const fs=require('fs')
+const flash=require('connect-flash')
 
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
@@ -16,7 +17,10 @@ const database = require("./model/connection");
 
 
 dotenv.config({ path: "./configaration.env" });
-
+app.patch('/api/:id',(req)=>{
+  console.log(req.body)
+  console.log(req.params.id)
+})
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs")
@@ -28,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(methodOverride("_method"))
+app.use(flash())
 app.use(
   session({
     secret: "secret-key",
@@ -96,6 +101,10 @@ hbs.registerHelper('formatHelper',dateFormater)
 hbs.registerHelper('isArrayEmpty',isArrayEmpty)
 hbs.registerHelper('stringEqualityChecker',isStringsEqual)
 
+
+app.get('/api',(req,res)=>{
+  res.send('server')
+})
 app.use(erro404);
 
 app.use(errorHandler);
