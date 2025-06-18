@@ -291,6 +291,7 @@ module.exports = {
       if (!couponData) {
         return res.status(400).json({ message: 'coupen data not found' })
       }
+  
       res.json(couponData)
     } catch (error) {
       res.status(400).json({ message: error.message || 'coupen error' })

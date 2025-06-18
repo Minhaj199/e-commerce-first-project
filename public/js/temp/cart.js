@@ -100,7 +100,7 @@ async function submitToCart(id) {
           
           if (!response.ok) {
             const error =await response.json()
-            console.log(error)
+            
             throw new Error(error.message || 'internal server error')
           }else{
             sessionStorage.removeItem("size");
@@ -109,6 +109,7 @@ async function submitToCart(id) {
             location.href = "/user/getpages?from=afterAddedToCart";
           }
         } catch (error) {
+         
           showToast(error.message || 'internal server error')
         }
 

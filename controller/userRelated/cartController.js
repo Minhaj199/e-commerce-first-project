@@ -20,7 +20,7 @@ module.exports = {
     if (!id || !count || !size || !price || !color || !from || !total || !customerId || !name) {
       return res.status(400).json({ message: 'in sufficient data' })
     }
-    const isDuplicate = await cartModel.findOne({ name, Size: size, Color: color })
+    const isDuplicate = await cartModel.findOne({ name, Size: size, Color: color,UserId:customerId })
     if (isDuplicate) {
       res.status(400).json({ message: 'already exist' })
       return

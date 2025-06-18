@@ -42,7 +42,7 @@ async function deleteFunction(ID) {
   }
 }
 async function ChangeStatus(status, ID, index,element) {
-  console.log(element)
+
   try {
     if (status === "Canceled") {
       const propt = await showAlertPropt("Are you Sure To cancel ?");
@@ -63,7 +63,7 @@ async function ChangeStatus(status, ID, index,element) {
             from: "changeStatus",
           }),
           success: function (response) {
-            console.log(response)
+         
              manageOrderAmount(response,index)
              document.getElementById('del-col-'+index).textContent='Canceled'
              element.hidden=true
@@ -215,7 +215,7 @@ async function productReturn(status, ID, index) {
           from: "changeStatus",
         }),
         success: function (response) {
-          console.log(response)
+       
           if (response.status === "accepted") {
             document.getElementById('drop-item-'+index).hidden=true
             
@@ -276,7 +276,7 @@ async function showAlertPropt(message) {
 }
 
 function manageOrderAmount(updatedOrder){
-console.log(updatedOrder)
+
   ///////////// updating order amounts after cancelation ///////////
   const updatedData={discount:updatedOrder.Discount||0,subTotal:updatedOrder.SubTotal||0
     ,totalValue:updatedOrder.TotalOrderPrice,shipping:updatedOrder.ShippingCharge||0

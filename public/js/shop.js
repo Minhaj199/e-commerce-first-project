@@ -46,8 +46,6 @@ document.querySelector(".brand-filter").addEventListener("click", () => {
     }
 
     if (category) {
-      console.log(category,maxValue,minValue,sort,stringBrand)
-      return
       location.href = `/user/cat?cat=${category}&maxValue=${maxValue}&minValue=${minValue}&sort=${sort}&from=sorting&brand=${stringBrand}`;
     } else {
       location.href = `/user/all?maxValue=${maxValue}&minValue=${minValue}&sort=${sort}&from=sorting&brand=${stringBrand}`;

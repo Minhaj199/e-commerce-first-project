@@ -11,8 +11,7 @@ async function deleteUser(id,name,index) {
       })
       const response=await responseDraft.json()
       if(response==='success'){
-        console.log('here')
-        console.log(document.getElementById('btn-tr-'+index))
+
         document.getElementById('btn-tr-'+index).hidden=true
         showToast(name +' user deleted')
         setTimeout(()=>{

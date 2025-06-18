@@ -38,11 +38,14 @@ function increment(value){
     return value==0
   }
   const dateFormater=(date)=>{
-  
-    const day=date.getDay()
-    const month=date.getMonth()+1
-    const year=date.getFullYear()
-  
+    console.log(new Date(date).toLocaleDateString())
+    const currentDate=new Date(date)
+    const day=currentDate.getDate()
+    const month=currentDate.getMonth()+1
+    const year=currentDate.getFullYear()
+    console.log(day)
+    console.log(month)
+    console.log(year)
     return `${day}-${month}-${year}`
   }
    const isArrayEmpty=(array)=>{

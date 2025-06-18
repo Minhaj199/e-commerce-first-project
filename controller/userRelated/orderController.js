@@ -315,8 +315,8 @@ module.exports = {
                     .then(() => {
                         res.json("ok")
                     });
-            } catch (error) { 
-                
+            } catch  { 
+                throw new Error('internal server errro')
             }
         } else {
             ///////////////canceling order////////
