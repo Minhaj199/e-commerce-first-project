@@ -43,7 +43,15 @@ app.use(
     }),
     
 );
-
+app.use((req, res, next) => {
+    console.log({
+        ip: req.ip,
+        ips: req.ips,
+        forwarded: req.headers["x-forwarded-for"],
+        realIp: req.headers["x-real-ip"],
+    });
+    next();
+});
 app.use(methodOverride("_method"))
 app.use(flash())
 app.use(
