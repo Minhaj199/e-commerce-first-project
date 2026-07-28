@@ -7,7 +7,7 @@ const session = require("express-session");
 const methodOverride = require("method-override");
 const fs=require('fs')
 const flash=require('connect-flash')
-
+const morgan = require('morgan')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
 
@@ -17,19 +17,30 @@ const database = require("./model/connection");
 
 
 dotenv.config({ path: "./configaration.env" });
-app.patch('/api/:id',(req)=>{
-  console.log(req.body)
-  console.log(req.params.id)
-})
+
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs")
 app.set("view cache", false);
-
+app.use(morgan('dev'));
 hbs.registerPartials(path.join(__dirname, "views/partials"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+const logsDir = path.join(__dirname, "logs");
+
+if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir);}
+const accessLogStream = fs.createWriteStream(
+    path.join(logsDir, "access.log"),
+    { flags: "a" } 
+);
+app.use(
+    morgan("combined", {
+        skip: (req, res) => res.statusCode >= 400,
+        stream: accessLogStream,
+    })
+);
 
 app.use(methodOverride("_method"))
 app.use(flash())
@@ -60,9 +71,8 @@ try {
 
 
 app.get("/", async (req, res) => {
-  try {
-   
-    res.redirect("/user");
+  try { 
+  res.redirect("/user");
   } catch (error) {
     
   }
