@@ -36,7 +36,12 @@ const accessLogStream = fs.createWriteStream(
 );
 app.set("trust proxy", true);
 app.use(
-    morgan(":remote-addr :method :url :status :response-time ms")
+    morgan(":remote-addr :method :url :status :response-time ms",{
+        skip: (req) => {
+            return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.url);
+        },
+    }),
+    
 );
 
 app.use(methodOverride("_method"))
