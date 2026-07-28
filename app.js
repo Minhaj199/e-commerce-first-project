@@ -22,7 +22,6 @@ dotenv.config({ path: "./configaration.env" });
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs")
 app.set("view cache", false);
-app.use(morgan('dev'));
 hbs.registerPartials(path.join(__dirname, "views/partials"));
 
 app.use(express.urlencoded({ extended: true }));
@@ -35,11 +34,9 @@ const accessLogStream = fs.createWriteStream(
     path.join(logsDir, "access.log"),
     { flags: "a" } 
 );
+app.set("trust proxy", true);
 app.use(
-    morgan("combined", {
-        skip: (req, res) => res.statusCode >= 400,
-        stream: accessLogStream,
-    })
+    morgan(":remote-addr :method :url :status :response-time ms")
 );
 
 app.use(methodOverride("_method"))
