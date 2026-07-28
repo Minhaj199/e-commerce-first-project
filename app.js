@@ -35,7 +35,7 @@ const accessLogStream = fs.createWriteStream(
   path.join(logsDir, "access.log"),
   { flags: "a" }
 );
-app.set("trust proxy", true);
+app.set("trust proxy", 2);
 app.use(
   morgan("[:date[iso]] :remote-addr :method :url :status :res[content-length] B :response-time ms", {
     skip: (req) => {

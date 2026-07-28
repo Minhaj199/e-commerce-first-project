@@ -11,6 +11,14 @@ let data = {};
 let email;
 let globalEmail;
 let otp = null;
+
+function renderRegistration(res, data = {}) {
+    return res.render("user/registration", {
+        ...data,
+        turnstileSitekey: process.env.TURNSTILE_SITEKEY,
+    });
+}
+
 module.exports = {
     renderLoginPage: (req, res) => {
         let message;
@@ -88,7 +96,12 @@ module.exports = {
     },
     renderSignUpPage: (req, res) => {
         //// get sign up page////
-        res.render("./user/registration");
+        renderRegistration(res);
+    },
+    renderSignupTurnstileFailure: (req, res) => {
+        return renderRegistration(res.status(403), {
+            error: "Please complete the security check and try again.",
+        });
     },
     handleSignupPost: async (req, res, next) => {
         ////////////// handle submitt data and ridirect to naviagation page////////
@@ -104,7 +117,7 @@ module.exports = {
             const check = await user.findOne({ Email: req.body.Email });
 
             if (check) {
-                res.render("user/registration", { error: "Email already exists" });
+                renderRegistration(res, { error: "Email already exists" });
             } else {
                 otp = otpGenerator.generate(6, {
                     upperCaseAlphabets: false,

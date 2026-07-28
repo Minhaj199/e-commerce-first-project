@@ -7,6 +7,7 @@ const userControl=require('../controller/userRelated/mainUserController')
 const userAuthenticated=require('../middleware/userAuthenticated')
 const isUserAuthenticated=require('../middleware/isUserAuthenticated')
 const isUserBlocked=require('../middleware/userBlocked')
+const verifyTurnstile=require('../middleware/verifyTurnstile')
 const auth=require('../controller/userRelated/authController')
 const orderController=require('../controller/userRelated/orderController')
 const addressController = require('../controller/userRelated/addressController')
@@ -36,7 +37,7 @@ router.post('/log-in',auth.handleLoginSubmission)
 
 //sign up
 router.get('/registration',userAuthenticated,auth.renderSignUpPage)
-router.post('/registration',otpLimiter,auth.handleSignupPost)
+router.post('/registration',otpLimiter,verifyTurnstile('signup', auth.renderSignupTurnstileFailure),auth.handleSignupPost)
 router.post('/log-in/forgotOtpEnter',userAuthenticated,auth.validateEmail)
 //forgot
 router.get('/log-in/forgot',isUserBlocked,auth.renderForgot)
