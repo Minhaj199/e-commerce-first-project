@@ -36,22 +36,13 @@ const accessLogStream = fs.createWriteStream(
 );
 app.set("trust proxy", true);
 app.use(
-    morgan(":remote-addr :method :url :status :response-time ms",{
+    morgan("[:date[iso]] :remote-addr :method :url :status :res[content-length] B :response-time ms",{
         skip: (req) => {
             return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.url);
         },
     }),
     
 );
-app.use((req, res, next) => {
-    console.log({
-        ip: req.ip,
-        ips: req.ips,
-        forwarded: req.headers["x-forwarded-for"],
-        realIp: req.headers["x-real-ip"],
-    });
-    next();
-});
 app.use(methodOverride("_method"))
 app.use(flash())
 app.use(
