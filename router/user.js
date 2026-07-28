@@ -1,5 +1,6 @@
 const express=require('express')
 const router=express.Router()
+const otpLimiter=require(".././utils/ratelimit")
 
 
 const userControl=require('../controller/userRelated/mainUserController')
@@ -35,14 +36,14 @@ router.post('/log-in',auth.handleLoginSubmission)
 
 //sign up
 router.get('/registration',userAuthenticated,auth.renderSignUpPage)
-router.post('/registration',auth.handleSignupPost)
+router.post('/registration',otpLimiter,auth.handleSignupPost)
 router.post('/log-in/forgotOtpEnter',userAuthenticated,auth.validateEmail)
 //forgot
 router.get('/log-in/forgot',isUserBlocked,auth.renderForgot)
 router.post('/log-in/forgotOtpEnter',isUserBlocked,userAuthenticated,auth.validateEmail)
 router.post('/log-in/validateOTP',isUserBlocked,userAuthenticated,auth.validateOTP)
 router.post('/log-in/OTP',isUserBlocked,auth.handleOtpSharing)
-router.post('/log-in/otpResend',isUserBlocked,auth.handleResendOtp)
+router.post('/log-in/otpResend',isUserBlocked,otpLimiter,auth.handleResendOtp)
 router.put('/log-in/passwordReseted',isUserBlocked,auth.resetPassword)
 
 /////////// cetegory and serarching/////////////

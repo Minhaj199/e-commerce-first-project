@@ -5,8 +5,8 @@ const dotenv = require("dotenv");
 const hbs = require("hbs");
 const session = require("express-session");
 const methodOverride = require("method-override");
-const fs=require('fs')
-const flash=require('connect-flash')
+const fs = require('fs')
+const flash = require('connect-flash')
 const morgan = require('morgan')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
@@ -29,19 +29,20 @@ app.use(express.json());
 const logsDir = path.join(__dirname, "logs");
 
 if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir);}
+  fs.mkdirSync(logsDir);
+}
 const accessLogStream = fs.createWriteStream(
-    path.join(logsDir, "access.log"),
-    { flags: "a" } 
+  path.join(logsDir, "access.log"),
+  { flags: "a" }
 );
 app.set("trust proxy", true);
 app.use(
-    morgan("[:date[iso]] :remote-addr :method :url :status :res[content-length] B :response-time ms",{
-        skip: (req) => {
-            return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.url);
-        },
-    }),
-    
+  morgan("[:date[iso]] :remote-addr :method :url :status :res[content-length] B :response-time ms", {
+    skip: (req) => {
+      return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.url);
+    },
+  }),
+
 );
 app.use(methodOverride("_method"))
 app.use(flash())
@@ -65,17 +66,17 @@ app.use(require("./middleware/cacheControl"));
 //////////database/////////
 try {
   database()
-  
+
 } catch (error) {
   process.exit(1)
 }
 
 
 app.get("/", async (req, res) => {
-  try { 
-  res.redirect("/user");
+  try {
+    res.redirect("/user");
   } catch (error) {
-    
+
   }
 });
 
@@ -83,10 +84,10 @@ app.get("/", async (req, res) => {
 // routes require
 
 ///////////checkin upload folder exitest and create//////////
-(()=>{
-  const isExist=fs.existsSync('uploads')
-  if(!isExist){
-    fs.mkdir('uploads',()=>{})
+(() => {
+  const isExist = fs.existsSync('uploads')
+  if (!isExist) {
+    fs.mkdir('uploads', () => { })
   }
 
 })()
@@ -101,23 +102,23 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 ///helper
-hbs.registerHelper("isEqual",isEqual);
-hbs.registerHelper("increment",increment)
-hbs.registerHelper("calculatePersatage",calculatePersatage);
-hbs.registerHelper('lookupQuantity',lookupQuantity);
-hbs.registerHelper('sumStock',sumStock)
-hbs.registerHelper('stockWarning',stockWarning)
-hbs.registerHelper('isZero',isZero)
-hbs.registerHelper('formatHelper',dateFormater)
-hbs.registerHelper('isArrayEmpty',isArrayEmpty)
-hbs.registerHelper('stringEqualityChecker',isStringsEqual)
+hbs.registerHelper("isEqual", isEqual);
+hbs.registerHelper("increment", increment)
+hbs.registerHelper("calculatePersatage", calculatePersatage);
+hbs.registerHelper('lookupQuantity', lookupQuantity);
+hbs.registerHelper('sumStock', sumStock)
+hbs.registerHelper('stockWarning', stockWarning)
+hbs.registerHelper('isZero', isZero)
+hbs.registerHelper('formatHelper', dateFormater)
+hbs.registerHelper('isArrayEmpty', isArrayEmpty)
+hbs.registerHelper('stringEqualityChecker', isStringsEqual)
 
 
-app.get('/api',(req,res)=>{
+app.get('/api', (req, res) => {
   res.send('server')
 })
 app.use(erro404);
 
 app.use(errorHandler);
-app.listen(process.env.PORT,()=>console.log(`server is running on http://localhost:${process.env.PORT}`))
-module.exports=app
+app.listen(process.env.PORT, () => console.log(`server is running on http://localhost:${process.env.PORT}`))
+module.exports = app
