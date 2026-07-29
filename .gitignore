@@ -2,3 +2,4 @@ configaration.env
 /node_modules
 eslint.config.mjs
 logs
+.vscode/
