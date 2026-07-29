@@ -10,7 +10,7 @@ const flash = require('connect-flash')
 const morgan = require('morgan')
 const errorHandler = require("./middleware/errorHandler");
 const erro404 = require("./middleware/page404");
-
+const helmet=require('helmet')
 const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero, dateFormater, isArrayEmpty, isStringsEqual } = require("./utils/hbsHelpers");
 const database = require("./model/connection");
 
@@ -43,6 +43,12 @@ app.use(
     },
   }),
 
+);
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
 );
 app.use(methodOverride("_method"))
 app.use(flash())
