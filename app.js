@@ -13,6 +13,8 @@ const erro404 = require("./middleware/page404");
 const helmet=require('helmet')
 const { isEqual, increment, calculatePersatage, lookupQuantity, sumStock, stockWarning, isZero, dateFormater, isArrayEmpty, isStringsEqual } = require("./utils/hbsHelpers");
 const database = require("./model/connection");
+const logger = require("./utils/logger");
+const requestLogger = require("./middleware/requestLogger");
 
 
 
@@ -36,14 +38,15 @@ const accessLogStream = fs.createWriteStream(
   { flags: "a" }
 );
 app.set("trust proxy", 2);
+
 app.use(
   morgan("[:date[iso]] :remote-addr :method :url :status :res[content-length] B :response-time ms", {
     skip: (req) => {
-      return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.url);
+      return /\.(css|js|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot|map)$/i.test(req.path);
     },
   }),
-
 );
+app.use(requestLogger)
 app.use(
   helmet({
     contentSecurityPolicy: false,
